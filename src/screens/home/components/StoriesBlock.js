@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     categoryContainer: {
         borderRadius: 10,
         marginRight: 10,
-        backgroundColor: 'red'
     },
     image: {
         width: 90,

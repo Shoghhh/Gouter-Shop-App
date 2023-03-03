@@ -28,15 +28,14 @@ export default function OrderingScreen({ navigation }) {
         { id: 1, text: 'Не звонить и подобрать аналог' },
     ])
     const [showPopup, setShowPopup] = useState(false)
-    // const [delivery, setDelivery] = useState([
-    //     {}
-    // ])
-    const [date, setDate] = useState(new Date())
+
+    const [deliveryAddress, setDeliveryAddress] = useState('2/10с2, Манежная улица, Москва')
+    const [date, setDate] = useState('21.02.2023')
     const [phone, setPhone] = useState('+7 (999) 977-79-97')
     const [name, setName] = useState('Name Surname')
     const [email, setEmail] = useState('usermail@mail.com')
-
-
+    const [comment, setComment] = useState('')
+    const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(0)
 
 
     function onPressOk() {
@@ -48,14 +47,14 @@ export default function OrderingScreen({ navigation }) {
     return <View style={[Styles.container, { paddingTop: 20 }]}>
         <ScrollView style={{ paddingHorizontal: 20 }}>
             <Text style={[Styles.blackSemiBold18, { marginBottom: 15 }]}>Укажите информация для доставки</Text>
-            <OrderInput label={'Адрес доставки'} addressButton />
-            <OrderInput label={'Способ доставки'} dropdown />
-            <OrderInput label={'Дата доставки'} date />
-            <OrderInput label={'Телефон'} value={phone} phone />
-            <OrderInput label={'Имя'} />
-            <OrderInput label={'Электронная почта'} />
-            <OrderInput label={'Комментарий'} />
-            
+            <OrderInput label={'Адрес доставки'} value={deliveryAddress} setValue={setDeliveryAddress} addressButton />
+            <OrderInput label={'Способ доставки'} value={selectedDeliveryMethod} setValue={setSelectedDeliveryMethod} dropdown />
+            <OrderInput label={'Дата доставки'} value={date} setValue={setDate} date />
+            <OrderInput label={'Телефон'} value={phone} setValue={setPhone} phone />
+            <OrderInput label={'Имя'} value={name} setValue={setName} />
+            <OrderInput label={'Электронная почта'} value={email} setValue={setEmail} />
+            <OrderInput label={'Комментарий'} value={comment} setValue={setComment} />
+
             <Text style={[Styles.blackSemiBold18, { marginBottom: 15 }]}>Выберите способ оплаты</Text>
             <Select data={paymentTypes} selectedIndex={selectedPaymentType} setSelectedIndex={setSelectedPaymentType} />
             <Text style={[Styles.blackSemiBold18, { marginBottom: 15 }]}>Проверьте ваш заказ</Text>

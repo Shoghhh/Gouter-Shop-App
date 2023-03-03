@@ -34,9 +34,7 @@ export const HomeNavigator = () => {
                 options={({ navigation }) => ({
                     title: '',
                     headerTransparent: true,
-                    header: () => (
-                        <Header navigation={navigation} title={''} searchIcon address />
-                    ),
+                    header: () => <Header navigation={navigation} title={''} searchIcon address />,
                 })}
             />
             <Stack.Screen

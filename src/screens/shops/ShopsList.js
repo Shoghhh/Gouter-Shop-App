@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
 import SearchInput from "../../components/SearchInput";
-import { AppColors } from "../../styles/AppColors";
-import { Styles } from "../../styles/Styles";
 import ShopsDropDown from "./ShopsDropDown";
 import SingleShopScreen from "./SingleShopScreen";
 

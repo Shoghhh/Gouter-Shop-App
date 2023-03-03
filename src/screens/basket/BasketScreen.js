@@ -24,7 +24,7 @@ export default function BasketScreen({ navigation }) {
         if (index !== -1)
             setProductsInfo([...productsInfo.slice(0, index), ...productsInfo.slice(index + 1, productsInfo.length)])
     }
-    
+
     function incrementCount(id) {
         setProductsInfo(
             productsInfo.map((item) => {
@@ -71,8 +71,8 @@ export default function BasketScreen({ navigation }) {
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
                 <Text style={[Styles.greySemiBold24, { textAlign: 'center', color: AppColors.GREEN_COLOR }]}>Внимание</Text>
                 <Text style={[Styles.greySemiBold12, { textAlign: 'center', marginVertical: 15, color: AppColors.GREEN_COLOR }]}>Выбирайте товары из католога или из списка избранных</Text>
-                <Button text={'Войти'} width={'100%'} marginBottom={10} onPress={() => navigation.navigate('Profile', { screen: 'AuthScreen', params: { page: 'login' } })} />
-                <Button text={'Зарегистрироваться'} width={'100%'} noFill onPress={() => navigation.navigate('Profile', { screen: 'AuthScreen', params: { page: 'register' } })} />
+                <Button text={'Войти'} width={'100%'} marginBottom={10} onPress={() => navigation.navigate('Profile')} />
+                <Button text={'Зарегистрироваться'} width={'100%'} noFill onPress={() => navigation.navigate('Profile')} />
             </View>
         }
     </View>
