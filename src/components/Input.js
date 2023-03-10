@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { createRef, useRef, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { StyleSheet, TextInput, View } from "react-native";
-import { CrossedEye, OpenedEye } from "../../assets/svgs/ProfileSvgs";
+import { CrossedEye, EditIcon, OpenedEye } from "../../assets/svgs/ProfileSvgs";
 import { AppColors } from "../styles/AppColors";
 import { Styles } from "../styles/Styles";
 
 
-export default function Input({ placeholder, inputType, value, setValue }) {
+export default function Input({ placeholder, inputType, value, setValue, notEditable, onPressEdit, isCurrentEditingField }) {
     const [isOpenEye, setIsOpenEye] = useState(false)
     const [isFocused, setIsFocused] = useState(false)
 
@@ -21,16 +21,20 @@ export default function Input({ placeholder, inputType, value, setValue }) {
             placeholderTextColor={AppColors.GREY_COLOR}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            editable={(notEditable && !isCurrentEditingField) ? false : true}
         />
-
-        {inputType === 'pass' && (isOpenEye ?
-            <TouchableOpacity onPress={() => setIsOpenEye(false)}>
-                <OpenedEye />
+        {notEditable && !isCurrentEditingField ?
+            <TouchableOpacity onPress={onPressEdit}>
+                <EditIcon />
             </TouchableOpacity>
-            :
-            <TouchableOpacity onPress={() => setIsOpenEye(true)}>
-                <CrossedEye />
-            </TouchableOpacity>)
+            : inputType === 'pass' && (isOpenEye ?
+                <TouchableOpacity onPress={() => setIsOpenEye(false)}>
+                    <OpenedEye />
+                </TouchableOpacity>
+                :
+                <TouchableOpacity onPress={() => setIsOpenEye(true)}>
+                    <CrossedEye />
+                </TouchableOpacity>)
         }
     </View>
 }

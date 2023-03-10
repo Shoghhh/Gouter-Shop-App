@@ -38,6 +38,11 @@ export const Styles = StyleSheet.create({
     color: AppColors.BLACK_COLOR,
     fontFamily: 'OpenSans-Regular'
   },
+  greyRegular13: {
+    fontSize: 13,
+    color: AppColors.GREY_COLOR,
+    fontFamily: 'OpenSans-Regular'
+  },
   blackSemiBold13: {
     fontSize: 13,
     color: AppColors.BLACK_COLOR,

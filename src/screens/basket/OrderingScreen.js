@@ -6,6 +6,7 @@ import Popup from "../../components/Popup";
 import Select from "../../components/Select";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
+import OrderInfoBlock from "./OrderInfoBlock";
 
 export default function OrderingScreen({ navigation }) {
 
@@ -54,10 +55,10 @@ export default function OrderingScreen({ navigation }) {
             <OrderInput label={'Имя'} value={name} setValue={setName} />
             <OrderInput label={'Электронная почта'} value={email} setValue={setEmail} />
             <OrderInput label={'Комментарий'} value={comment} setValue={setComment} />
-
             <Text style={[Styles.blackSemiBold18, { marginBottom: 15 }]}>Выберите способ оплаты</Text>
             <Select data={paymentTypes} selectedIndex={selectedPaymentType} setSelectedIndex={setSelectedPaymentType} />
             <Text style={[Styles.blackSemiBold18, { marginBottom: 15 }]}>Проверьте ваш заказ</Text>
+            <OrderInfoBlock />
             <Text style={[Styles.blackSemiBold18, { marginBottom: 15 }]}>Что делать, если какой-то товар закончился?</Text>
             <Select data={toDos} selectedIndex={selectedToDo} setSelectedIndex={setSelectedToDo} />
             <Text style={[Styles.blackSemiBold18, { marginBottom: 15 }]}>Укажите удобный способ коммуникации по заказу с Вами</Text>

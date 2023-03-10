@@ -26,27 +26,11 @@ export default function BasketScreen({ navigation }) {
     }
 
     function incrementCount(id) {
-        setProductsInfo(
-            productsInfo.map((item) => {
-                if (item.id === id) {
-                    return { ...item, count: ++item.count };
-                } else {
-                    return item;
-                }
-            })
-        );
+        setProductsInfo([...productsInfo, { ...productsInfo[id], count: ++productsInfo[id].count }]);
     }
 
     function decrementCount(id) {
-        setProductsInfo(
-            productsInfo.map((item) => {
-                if (item.id === id && item.count != 1) {
-                    return { ...item, count: --item.count };
-                } else {
-                    return item;
-                }
-            })
-        );
+        productsInfo[id].count !== 1 && setProductsInfo([...productsInfo, { ...productsInfo[id], count: --productsInfo[id].count }]);
     }
 
     return <View style={Styles.container}>

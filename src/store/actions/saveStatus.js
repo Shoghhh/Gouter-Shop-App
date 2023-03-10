@@ -9,9 +9,13 @@ export function saveStatus() {
     )
     dispatch({
       type: STATUS,
-      payload: true,
+      payload: 'true',
     })
   }
+  // return ({
+  //   type: STATUS,
+  //   payload: '',
+  // })
 }
 
 export function deleteStatus() {
@@ -22,6 +26,10 @@ export function deleteStatus() {
       payload: '',
     })
   }
+  // return ({
+  //   type: STATUS,
+  //   payload: '',
+  // })
 }
 
 
@@ -31,8 +39,12 @@ export function checkStatus() {
     if (value) {
       await dispatch({
         type: STATUS,
-        payload: true,
+        payload: 'true',
       })
     }
   }
+  // return ({
+  //   type: STATUS,
+  //   payload: '',
+  // })
 }

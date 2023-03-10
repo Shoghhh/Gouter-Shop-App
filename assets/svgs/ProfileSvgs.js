@@ -1,4 +1,4 @@
-import { Svg, Path } from "react-native-svg";
+import { Svg, Path, G, ClipPath, Defs } from "react-native-svg";
 
 export const OpenedEye = () => {
     return <Svg
@@ -78,4 +78,27 @@ export const LogoutIcon = () => {
             strokeLinejoin="round"
         />
     </Svg>
+}
+
+
+export const EditIcon = () => {
+    return     <Svg
+    width={21}
+    height={21}
+    viewBox="0 0 21 21"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <G clipPath="url(#clip0_167_2544)">
+      <Path
+        d="M2 20.7c-.55 0-1.021-.196-1.413-.587A1.921 1.921 0 010 18.7v-14c0-.55.196-1.021.588-1.413A1.922 1.922 0 012 2.7h8.925l-2 2H2v14h14v-6.95l2-2v8.95c0 .55-.196 1.021-.588 1.413A1.922 1.922 0 0116 20.7H2zM13.175 3.275l1.425 1.4-6.6 6.6V12.7h1.4l6.625-6.625 1.425 1.4-7.2 7.225H6v-4.25l7.175-7.175zm4.275 4.2l-4.275-4.2 2.5-2.5c.4-.4.88-.6 1.438-.6.559 0 1.03.2 1.412.6l1.4 1.425c.383.383.575.85.575 1.4 0 .55-.192 1.017-.575 1.4L17.45 7.475z"
+        fill="#52BB85"
+      />
+    </G>
+    <Defs>
+      <ClipPath id="clip0_167_2544">
+        <Path fill="#fff" d="M0 0H21V21H0z" />
+      </ClipPath>
+    </Defs>
+  </Svg>
 }

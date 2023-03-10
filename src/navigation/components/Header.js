@@ -13,14 +13,14 @@ export default function Header({ title, navigation, backIcon, searchIcon, onPres
     const dispatch = useDispatch()
     const [showPopup, setShowPopup] = useState(false)
 
-    function onPressLogout(){
+    function onPressLogout() {
         setShowPopup(false);
         navigation.navigate('Home')
         dispatch(deleteStatus())
     }
 
     return <View style={[styles.container, hideBorder && { borderBottomWidth: 0 }]}>
-        {address ? <TouchableOpacity style={styles.addressContainer}>
+        {address ? <TouchableOpacity style={styles.addressContainer} onPress={() => navigation.navigate('DeliveryAddressScreen')}>
             <Text style={styles.addressText}>Укажите адрес доставки</Text>
         </TouchableOpacity> :
             <Text style={[Styles.blackSemiBold18, { marginBottom: 12, width: '58%', alignSelf: 'center', textAlign: 'center' }]} numberOfLines={1}>{title}</Text>}
@@ -36,7 +36,7 @@ export default function Header({ title, navigation, backIcon, searchIcon, onPres
         {logoutIcon && <TouchableOpacity style={styles.searchIcon} onPress={() => setShowPopup(true)}>
             <LogoutIcon />
         </TouchableOpacity>}
-        {logoutIcon && <Popup showPopup={showPopup} title={'Выход'} text={'Вы уверены, что хотите выйти?'} firstBtnText={'Да'} secondBtnText={'Нет'} firstOnPress={onPressLogout} secondOnPress={() => setShowPopup(false)}/>}
+        {logoutIcon && <Popup showPopup={showPopup} title={'Выход'} text={'Вы уверены, что хотите выйти?'} firstBtnText={'Да'} secondBtnText={'Нет'} firstOnPress={onPressLogout} secondOnPress={() => setShowPopup(false)} />}
     </View>
 }
 

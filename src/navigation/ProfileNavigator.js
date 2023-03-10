@@ -14,6 +14,10 @@ import AboutCompany from '../screens/profile/AboutCompany';
 import PersonalInfoScreen from '../screens/profile/PersonalInfoScreen';
 import PurchaseHistoryScreen from '../screens/profile/PurchaseHistoryScreen';
 import { FavoritesScreen } from '../screens/profile/FavoritesScreen';
+import ChangePasswordScreen from '../screens/profile/ChangePasswordScreen';
+import ChangeEmailScreen from '../screens/profile/ChangeEmailScreen';
+import EmailVerificationScreen from '../screens/profile/EmailVerificationScreen';
+import EmailChangedSuccess from '../screens/profile/EmailChangedSuccess';
 
 const Stack = createNativeStackNavigator();
 
@@ -148,6 +152,50 @@ export const ProfileNavigator = () => {
                     headerTransparent: true,
                     header: () => (
                         <Header navigation={navigation} title={'Избранное'} backIcon />
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="ChangePasswordScreen"
+                component={ChangePasswordScreen}
+                options={({ navigation }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => (
+                        <Header navigation={navigation} title={'Изменение пароля'} backIcon />
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="ChangeEmailScreen"
+                component={ChangeEmailScreen}
+                options={({ navigation }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => (
+                        <Header navigation={navigation} title={'Изменить эл. почту'} backIcon />
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="EmailVerificationScreen"
+                component={EmailVerificationScreen}
+                options={({ navigation }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => (
+                        <Header navigation={navigation} title={'Изменить эл. почту'} backIcon />
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="EmailChangedSuccess"
+                component={EmailChangedSuccess}
+                options={({ navigation }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => (
+                        <Header navigation={navigation} title={'Успешно'} backIcon />
                     ),
                 })}
             />

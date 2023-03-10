@@ -30,7 +30,7 @@ export default function SingleShopScreen({ shopInfo, setCurrentShop }) {
                     <Text style={[Styles.blackRegular15, { marginLeft: 10 }]}>{shopInfo.phone}</Text>
                 </View>
                 <Text style={[Styles.blackRegular14, { marginVertical: 15 }]}>{shopInfo.description}</Text>
-                <Image source={require('../../../assets/pngs/Shop.png')} resizeMode="contain" style={{ height: 250, width: '100%', marginBottom: 20 }} borderRadius={5} />
+                <Image source={shopInfo.imgPath} resizeMode="contain" style={{ height: 250, width: '100%', marginBottom: 20 }} borderRadius={5} />
             </View>
         </ScrollView>
     </View>
@@ -41,6 +41,5 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         borderColor: AppColors.WHITE_SMOKE_COLOR,
         paddingVertical: 15,
-        marginBottom: 30
     }
 })

@@ -10,7 +10,6 @@ import RegisterScreen from "./RegisterScreen";
 const { width } = Dimensions.get('window')
 
 export default function AuthScreen({ navigation, route }) {
-    // const { page } = route.params;
     const [currentPage, setCurrentPage] = useState(route.params.page)
 
     useEffect(() => {

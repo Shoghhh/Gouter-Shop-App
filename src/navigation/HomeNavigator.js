@@ -8,7 +8,6 @@ import FeedScreen from '../screens/home/feed/FeedScreen';
 import PostSingleScreen from '../screens/home/feed/PostSingleScreen';
 import CategoryScreen from '../screens/catalog/CategoryScreen';
 import ProductSearchScreen from '../screens/catalog/ProductSearchScreen';
-import { CatalogNavigator } from './CatalogNavigator';
 import ProductScreen from '../screens/catalog/ProductScreen';
 import ReviewsScreen from '../screens/home/reviews/ReviewsScreen';
 import LeaveAReviewAboutScreen from '../screens/home/reviews/LeaveAReviewAboutScreen';
@@ -16,7 +15,7 @@ import ReviewAboutProductScreen from '../screens/home/reviews/ReviewAboutProduct
 import ReviewAboutPurchaseScreen from '../screens/home/reviews/ReviewAboutPurchaseScreen';
 import ReviewAboutGalleryScreen from '../screens/home/reviews/ReviewAboutGalleryScreen';
 import LeaveAReviewScreen from '../screens/home/reviews/LeaveAReviewScreen';
-import StoryScreen from '../screens/home/StoryScreen';
+import DeliveryAddressScreen from '../screens/home/DeliveryAddressScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -97,11 +96,12 @@ export const HomeNavigator = () => {
                     ),
                 })}
             />
-            <Stack.Screen
-                name="StoryScreen"
-                component={StoryScreen}
-                options={({ navigation }) => ({
+              <Stack.Screen
+                name="DeliveryAddressScreen"
+                component={DeliveryAddressScreen}
+                options={({ navigation, route }) => ({
                     title: '',
+                    headerTransparent: true,
                     headerShown: false
                 })}
             />
