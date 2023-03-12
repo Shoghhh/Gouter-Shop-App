@@ -1,6 +1,5 @@
 import React from "react";
 import { Text } from "react-native";
-import { ScrollView } from "react-native";
 import { View } from "react-native";
 import Button from "../../components/Button";
 import { Styles } from "../../styles/Styles";

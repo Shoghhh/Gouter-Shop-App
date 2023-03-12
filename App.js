@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import Context from './src/Context';
 import NavigationMenu from './src/navigation/NavigationMenu';
 import { store } from './src/store/configureStore';
-import 'react-native-gesture-handler';
 
 function App() {
   const value = {};
