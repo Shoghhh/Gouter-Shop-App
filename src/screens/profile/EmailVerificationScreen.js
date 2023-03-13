@@ -18,8 +18,8 @@ export default function EmailVerificationScreen({ navigation }) {
             <Text style={[Styles.greyRegular16, { textAlign: 'center', marginBottom: 20 }]}>Введите код безопасности для подтверждения эл. почты</Text>
             <Input value={code} setValue={setCode} placeholder={'Код безопасности'} inputType={'code'} />
             <Button text={'Подтвердить'} onPress={() => {
-                dispatch(deleteStatus())
-                navigation.popToTop()
+                // dispatch(deleteStatus())
+                // navigation.popToTop()
                 navigation.navigate('EmailChangedSuccess')
             }} />
         </ScrollView>

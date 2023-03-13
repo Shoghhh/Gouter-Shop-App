@@ -52,6 +52,7 @@ export const ProfileNavigator = () => {
                     headerTransparent: true,
                     header: () => (
                         <Header navigation={navigation} title={'Авторизация'} backIcon hideBorder />
+                        //todo back behavior
                     ),
                 })}
             />
@@ -62,7 +63,7 @@ export const ProfileNavigator = () => {
                     title: '',
                     headerTransparent: true,
                     header: () => (
-                        <Header navigation={navigation} title={'Подтверждение'} backIcon hideBorder />
+                        <Header navigation={navigation} title={'Подтверждение'} hideBorder />
                     ),
                 })}
             />

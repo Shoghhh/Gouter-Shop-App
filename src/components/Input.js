@@ -6,11 +6,11 @@ import { AppColors } from "../styles/AppColors";
 import { Styles } from "../styles/Styles";
 
 
-export default function Input({ placeholder, inputType, value, setValue, notEditable, onPressEdit, isCurrentEditingField }) {
+export default function Input({ placeholder, inputType, value, setValue, notEditable, onPressEdit, isCurrentEditingField, error }) {
     const [isOpenEye, setIsOpenEye] = useState(false)
     const [isFocused, setIsFocused] = useState(false)
 
-    return <View style={[styles.inputContainer, Styles.flexRowJustifyBetween, isFocused && { borderColor: AppColors.GREEN_COLOR }]}>
+    return <View style={[styles.inputContainer, Styles.flexRowJustifyBetween, isFocused && { borderColor: AppColors.GREEN_COLOR }, error && {borderColor: AppColors.RED_COLOR}]}>
         <TextInput
             style={[styles.input, Styles.blackSemiBold14]}
             value={value}

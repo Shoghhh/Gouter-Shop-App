@@ -1,4 +1,4 @@
-const url = 'https://justearn.justcode.am/api/';
+const url = 'https://kantata.justcode.am/api/';
 
 export async function postRequest(api, body) {
   return await fetch(`${url}${api}`, {
