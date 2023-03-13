@@ -18,6 +18,7 @@ export default function Input({ placeholder, inputType, value, setValue, notEdit
             placeholder={placeholder}
             keyboardType={inputType === 'phone' || inputType === 'code' ? 'numeric' : 'default'}
             secureTextEntry={inputType === 'pass' && !isOpenEye ? true : false}
+            maxLength={inputType === 'code' ? 6 : 255}
             placeholderTextColor={AppColors.GREY_COLOR}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
