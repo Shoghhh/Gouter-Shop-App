@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { LogoutIcon } from "../../../assets/svgs/ProfileSvgs";
 import Popup from "../../components/Popup";
-import { deleteStatus } from "../../store/actions/saveStatus";
+import { deleteToken } from "../../store/actions/saveToken";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 import { BackIcon, SearchIcon, ShareIcon } from "./NavigationMenuSvgs";
@@ -16,7 +16,7 @@ export default function Header({ title, navigation, backIcon, searchIcon, onPres
     function onPressLogout() {
         setShowPopup(false);
         navigation.navigate('Home')
-        dispatch(deleteStatus())
+        dispatch(deleteToken())
     }
 
     return <View style={[styles.container, hideBorder && { borderBottomWidth: 0 }]}>

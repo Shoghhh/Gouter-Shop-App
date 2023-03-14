@@ -1,1 +1,4 @@
-export const STATUS = 'STATUS';
+export const TOKEN = 'STATUS';
+
+export const REGISTER_STATUS_CODE = 'REGISTER_STATUS_CODE'
+export const LOGIN_STATUS_CODE = 'REGISTER_STATUS_CODE'

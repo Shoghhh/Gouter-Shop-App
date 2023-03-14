@@ -5,7 +5,7 @@ import {postRequestOld} from '../../../api/RequestHelpers';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import Popup from '../../../components/Popup';
-import {saveStatus} from '../../../store/actions/saveStatus';
+import {saveToken} from '../../../store/actions/saveToken';
 import {Styles} from '../../../styles/Styles';
 
 export default function VerificationScreen({navigation, route}) {
@@ -23,7 +23,7 @@ export default function VerificationScreen({navigation, route}) {
   function onPressConfirm() {
     navigation.popToTop();
     navigation.navigate('Home');
-    dispatch(saveStatus());
+    dispatch(saveToken());
     setShowPopup(false);
   }
   function onPressVerify() {

@@ -1,50 +1,38 @@
-import { STATUS } from "../constants";
+import { TOKEN } from "..";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export function saveStatus() {
+export function saveToken() {
   return async function (dispatch) {
     await AsyncStorage.setItem(
       'logged',
       JSON.stringify(true),
     )
     dispatch({
-      type: STATUS,
+      type: TOKEN,
       payload: 'true',
     })
   }
-  // return ({
-  //   type: STATUS,
-  //   payload: '',
-  // })
 }
 
-export function deleteStatus() {
+export function deleteToken() {
   return async function (dispatch) {
     await AsyncStorage.removeItem('logged')
     dispatch({
-      type: STATUS,
+      type: TOKEN,
       payload: '',
     })
   }
-  // return ({
-  //   type: STATUS,
-  //   payload: '',
-  // })
 }
 
 
-export function checkStatus() {
+export function checkToken() {
   return async function (dispatch) {
     const value = await AsyncStorage.getItem('logged');
     if (value) {
       await dispatch({
-        type: STATUS,
+        type: TOKEN,
         payload: 'true',
       })
     }
   }
-  // return ({
-  //   type: STATUS,
-  //   payload: '',
-  // })
 }

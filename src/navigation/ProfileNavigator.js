@@ -22,7 +22,7 @@ import EmailChangedSuccess from '../screens/profile/EmailChangedSuccess';
 const Stack = createNativeStackNavigator();
 
 export const ProfileNavigator = () => {
-    const status = useSelector((state) => state.auth.status)
+    const status = useSelector((state) => state.auth.token)
     useEffect(() => {
         console.log(status);
     })

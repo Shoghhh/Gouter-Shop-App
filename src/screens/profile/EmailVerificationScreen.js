@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { useDispatch } from "react-redux";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
-import { deleteStatus } from "../../store/actions/saveStatus";
+import { deleteToken } from "../../store/actions/saveToken";
 import { Styles } from "../../styles/Styles";
 
 
@@ -18,7 +18,7 @@ export default function EmailVerificationScreen({ navigation }) {
             <Text style={[Styles.greyRegular16, { textAlign: 'center', marginBottom: 20 }]}>Введите код безопасности для подтверждения эл. почты</Text>
             <Input value={code} setValue={setCode} placeholder={'Код безопасности'} inputType={'code'} />
             <Button text={'Подтвердить'} onPress={() => {
-                // dispatch(deleteStatus())
+                // dispatch(deleteToken())
                 // navigation.popToTop()
                 navigation.navigate('EmailChangedSuccess')
             }} />

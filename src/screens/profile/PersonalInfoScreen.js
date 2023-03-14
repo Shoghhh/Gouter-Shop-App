@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import Popup from "../../components/Popup";
-import { deleteStatus } from "../../store/actions/saveStatus";
+import { deleteToken } from "../../store/actions/saveToken";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 
@@ -26,7 +26,7 @@ export default function PersonalInfoScreen({ navigation }) {
         setShowPopup(false);
         navigation.popToTop()
         navigation.navigate('Home')
-        dispatch(deleteStatus())
+        dispatch(deleteToken())
     }
 
     return <View style={[Styles.container, { paddingTop: 20 }]}>

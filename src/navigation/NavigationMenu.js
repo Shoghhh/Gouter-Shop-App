@@ -9,7 +9,7 @@ import { CatalogNavigator } from './CatalogNavigator';
 import { HomeNavigator } from './HomeNavigator';
 import { BasketNavigator } from './BasketNavigator';
 import ShopsScreen from '../screens/shops/ShopsScreen';
-import { checkStatus } from '../store/actions/saveStatus';
+import { checkToken } from '../store/actions/saveToken';
 import { useDispatch } from 'react-redux';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 const Tab = createBottomTabNavigator();
@@ -18,7 +18,7 @@ export default function NavigationMenu() {
   const dispatch = useDispatch()
 
   React.useEffect(()=> {
-    dispatch(checkStatus())
+    dispatch(checkToken())
   }, [])
 
   return (

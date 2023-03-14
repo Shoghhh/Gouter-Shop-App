@@ -8,7 +8,7 @@ import { Styles } from "../../styles/Styles";
 import ProfileField from "./ProfileField";
 
 export default function ProfileScreen({ navigation }) {
-    const status = useSelector((state) => state.auth.status)
+    const status = useSelector((state) => state.auth.token)
 
     return <View style={[Styles.containerPadding, { paddingTop: 20 }]}>
         {status ? <>
