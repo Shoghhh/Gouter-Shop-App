@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Text, View } from 'react-native';
 import { useDispatch, useSelector } from "react-redux";
 import { FilledHeartIcon } from "../../../assets/svgs/CatalogSvgs";
@@ -8,10 +8,14 @@ import { Styles } from "../../styles/Styles";
 import ProfileField from "./ProfileField";
 
 export default function ProfileScreen({ navigation }) {
-    const status = useSelector((state) => state.auth.token)
+    const token = useSelector((state) => state.auth.token)
+
+    useEffect(()=>{
+        console.log('token - profile screen', token);
+    })
 
     return <View style={[Styles.containerPadding, { paddingTop: 20 }]}>
-        {status ? <>
+        {token ? <>
             <ProfileField Icon={CardsIcon} text={'Личные данные'} onPress={() => navigation.navigate('PersonalInfoScreen')}/>
             <ProfileField Icon={FilledHeartIcon} text={'Избранное'} onPress={() => navigation.navigate('FavoritesScreen')} />
             <ProfileField Icon={HistoryIcon} text={'История покупок'} onPress={() => navigation.navigate('PurchaseHistoryScreen')}/>

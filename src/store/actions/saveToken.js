@@ -1,22 +1,22 @@
-import { TOKEN } from "..";
+import { TOKEN } from "../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export function saveToken() {
+export function saveToken(token) {
   return async function (dispatch) {
     await AsyncStorage.setItem(
-      'logged',
-      JSON.stringify(true),
+      'token',
+      JSON.stringify(token),
     )
     dispatch({
       type: TOKEN,
-      payload: 'true',
+      payload: token,
     })
   }
 }
 
 export function deleteToken() {
   return async function (dispatch) {
-    await AsyncStorage.removeItem('logged')
+    await AsyncStorage.removeItem('token')
     dispatch({
       type: TOKEN,
       payload: '',
@@ -27,11 +27,11 @@ export function deleteToken() {
 
 export function checkToken() {
   return async function (dispatch) {
-    const value = await AsyncStorage.getItem('logged');
-    if (value) {
+    const token = await AsyncStorage.getItem('token');
+    if (token) {
       await dispatch({
         type: TOKEN,
-        payload: 'true',
+        payload: token,
       })
     }
   }

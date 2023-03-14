@@ -6,7 +6,6 @@ import { Styles } from "../../../styles/Styles";
 import LoginScreen from "./LoginScreen";
 import RegisterScreen from "./RegisterScreen";
 
-
 const { width } = Dimensions.get('window')
 
 export default function AuthScreen({ navigation, route }) {

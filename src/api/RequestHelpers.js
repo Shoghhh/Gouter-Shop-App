@@ -17,7 +17,6 @@ export async function postRequest(api, body) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   }).then(response => {
-    console.log(response.status);
     return Promise.all([response.status, response.json()])
   });
 }

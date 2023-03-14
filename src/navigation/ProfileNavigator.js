@@ -22,9 +22,9 @@ import EmailChangedSuccess from '../screens/profile/EmailChangedSuccess';
 const Stack = createNativeStackNavigator();
 
 export const ProfileNavigator = () => {
-    const status = useSelector((state) => state.auth.token)
+    const token = useSelector((state) => state.auth.token)
     useEffect(() => {
-        console.log(status);
+        console.log(token);
     })
     return (
         <Stack.Navigator
@@ -40,7 +40,7 @@ export const ProfileNavigator = () => {
                     title: '',
                     headerTransparent: true,
                     header: () => (
-                        <Header navigation={navigation} title={'Профиль'} logoutIcon={status ? true : false} />
+                        <Header navigation={navigation} title={'Профиль'} logoutIcon={token ? true : false} />
                     ),
                 })}
             />

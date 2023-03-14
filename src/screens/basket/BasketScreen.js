@@ -8,7 +8,7 @@ import Productitem from "../catalog/components/ProductItem";
 
 
 export default function BasketScreen({ navigation }) {
-    const status = useSelector(state => state.auth.token)
+    const token = useSelector(state => state.auth.token)
 
     const [productsInfo, setProductsInfo] = useState([
         { id: 0, productName: 'Ил Дивино1', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '1' },
@@ -34,7 +34,7 @@ export default function BasketScreen({ navigation }) {
     }
 
     return <View style={Styles.container}>
-        {status ? (productsInfo.length > 0 ?
+        {token ? (productsInfo.length > 0 ?
             <>
                 <Text style={[Styles.blackSemiBold20, { padding: 20, borderBottomWidth: 2, borderColor: AppColors.WHITE_SMOKE_COLOR }]}>Товаров на: 3500,65 Р</Text>
                 <ScrollView>
