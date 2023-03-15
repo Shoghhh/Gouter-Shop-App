@@ -1,16 +1,5 @@
 const url = 'https://kantata.justcode.am/api/';
 
-export async function postRequestOld(api, body) {
-  return await fetch(`${url}${api}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  }).then(response => {
-    console.log(response);
-    return response.json();
-  });
-}
-
 export async function postRequest(api, body) {
   return await fetch(`${url}${api}`, {
     method: 'POST',
@@ -18,7 +7,7 @@ export async function postRequest(api, body) {
     body: JSON.stringify(body),
   }).then(response => {
     return Promise.all([response.status, response.json()])
-  });
+  }).catch((error) => console.log(error));
 }
 
 export async function getRequest(api) {

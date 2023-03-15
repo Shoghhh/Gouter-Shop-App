@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import {Text, View} from 'react-native';
-import {postRequestOld} from '../../../api/RequestHelpers';
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
+import { postRequest } from '../../../api/RequestHelpers';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
-import {AppColors} from '../../../styles/AppColors';
-import {Styles} from '../../../styles/Styles';
+import { AppColors } from '../../../styles/AppColors';
+import { Styles } from '../../../styles/Styles';
 
-export default function RegisterScreen({navigation}) {
+export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
@@ -14,6 +14,7 @@ export default function RegisterScreen({navigation}) {
   const [confirmPass, setConfirmPass] = useState('');
   const [phone, setPhone] = useState('');
 
+  const [emailError, setEmailError] = useState(false)
   const [errors, setErrors] = useState({
     name: false,
     surname: false,
@@ -27,7 +28,7 @@ export default function RegisterScreen({navigation}) {
   });
 
   function validate() {
-    let items = {...errors};
+    let items = { ...errors };
     let error = false;
     setErrors({
       name: false,
@@ -57,12 +58,17 @@ export default function RegisterScreen({navigation}) {
       items.email = true;
       items.emailMsg = false;
       error = true;
+    } else if (!validateEmail()) {
+      items.pass = true
+      items.emailMsg = true
+      error = true
     } else {
       items.email = false;
       items.emailMsg = false;
     }
     if (!pass) {
       items.pass = true;
+      items.passMsg = false;
       error = true;
     } else if (pass && pass.length < 6) {
       items.pass = true;
@@ -75,8 +81,9 @@ export default function RegisterScreen({navigation}) {
 
     if (!confirmPass) {
       items.confirmPass = true;
+      items.confirmPassMsg = false;
       error = true;
-    } else if ((pass && confirmPass ) && (pass != confirmPass)) {
+    } else if ((pass && confirmPass) && (pass != confirmPass)) {
       items.confirmPassMsg = true;
       error = true;
     } else {
@@ -91,33 +98,36 @@ export default function RegisterScreen({navigation}) {
       items.phone = false;
     }
 
-    console.log(items);
+    // console.log(items);
     setErrors(items);
-    console.log(errors);
+    // console.log(errors);
     return error ? false : true;
   }
 
-  function register() {
-    let areValid = validate();
+  const validateEmail = () => {
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return pattern.test(email);
+  };
 
-    areValid &&
-      postRequestOld('registration', {
+
+  function register() {
+    let isValidData = validate();
+    console.log(isValidData);
+    isValidData &&
+      postRequest('registration', {
         name: name,
         last_name: surname,
         email: email,
         password: pass,
         phone: phone,
-      }).then(res => {
-        console.log('res', res);
-        if (res.status) {
-          navigation.navigate('VerificationScreen', {email: email});
-        } else {
-          // this user registred !
-          let myErrors = {...errors};
-          myErrors.emailMsg  = res.message === 'this user registred !' ? 'Этот эл. адрес уже зарегистрирован.' :'Введите корректный адрес эл. почты.'
-          setErrors(myErrors);
+      }).then(([status, body]) => {
+        console.log(body);
+        if(status === 201 || status ===  400) {
+          navigation.navigate('VerificationScreen', { email: email });
+        } else if(status === 401){
+          setEmailError(true)
         }
-      });
+      })
   }
 
   return (
@@ -143,7 +153,12 @@ export default function RegisterScreen({navigation}) {
       />
       {errors.emailMsg && (
         <Text style={Styles.redRegular12}>
-          {errors.emailMsg}
+          Введите корректный адрес эл. почты.
+        </Text>
+      )}
+      {emailError && (
+        <Text style={Styles.redRegular12}>
+          Этот эл. адрес уже зарегистрирован.
         </Text>
       )}
       <Input
@@ -175,7 +190,7 @@ export default function RegisterScreen({navigation}) {
         inputType={'phone'}
         error={errors.phone}
       />
-      <View style={{marginTop: 10}}>
+      <View style={{ marginTop: 10 }}>
         <Button text={'Зарегистрироваться'} onPress={register} />
       </View>
     </>

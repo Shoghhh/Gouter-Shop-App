@@ -1,15 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {postRequestOld} from '../../../api/RequestHelpers';
+import React, { useEffect, useState } from 'react';
+import { BackHandler } from 'react-native';
+import { Text, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { postRequest } from '../../../api/RequestHelpers';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import Popup from '../../../components/Popup';
-import {saveToken} from '../../../store/actions/saveToken';
-import {Styles} from '../../../styles/Styles';
+import { saveToken } from '../../../store/actions/saveToken';
+import { Styles } from '../../../styles/Styles';
 
-export default function VerificationScreen({navigation, route}) {
-  const {email} = route.params;
+export default function VerificationScreen({ navigation, route }) {
+  const { email } = route.params;
   const dispatch = useDispatch();
   const [code, setCode] = useState('');
   const [showPopup, setShowPopup] = useState(false);
@@ -19,11 +20,15 @@ export default function VerificationScreen({navigation, route}) {
   useEffect(() => {
     console.log(email);
   }, []);
-  
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+    return () => backHandler.remove()
+  }, [])
+
   function onPressConfirm() {
     navigation.popToTop();
     navigation.navigate('Home');
-    dispatch(saveToken());
     setShowPopup(false);
   }
   function onPressVerify() {
@@ -38,14 +43,15 @@ export default function VerificationScreen({navigation, route}) {
     } else {
       setCodeError(false);
       setShowErrorMsg(false);
-      postRequestOld('user_verification', {
+
+      postRequest('user_verification', {
         mail: email,
         mail_code: code,
-      }).then(res => {
-        console.log(res);
-        if (res.status) {
+      }).then(([status, body])=> {
+        if(status === 200){
           setShowPopup(true);
-        } else if (res.message === 'wrong mail_code') {
+          dispatch(saveToken(body.token));
+        } else if(422) {
           setCodeError(true);
           setShowErrorMsg('Неверный код');
         }
@@ -58,7 +64,7 @@ export default function VerificationScreen({navigation, route}) {
       <Text
         style={[
           Styles.greyRegular16,
-          {textAlign: 'center', marginVertical: 20},
+          { textAlign: 'center', marginVertical: 20 },
         ]}>
         Мы отправили код безопасности на вашу эл. почту,введите её ниже для
         подтверждения

@@ -1,16 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {postRequest} from '../../../api/RequestHelpers';
+import React, { useEffect, useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { postRequest } from '../../../api/RequestHelpers';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
+import Popup from '../../../components/Popup';
 import { saveToken } from '../../../store/actions/saveToken';
-import {Styles} from '../../../styles/Styles';
+import { Styles } from '../../../styles/Styles';
 
-export default function LoginScreen({navigation}) {
+export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
+  const [showPopup, setShowPopup] = useState(false)
   const [passError, setPassError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [error, setError] = useState(false);
@@ -37,8 +39,7 @@ export default function LoginScreen({navigation}) {
         } else if (status === 402 || status === 403 || status === 405) {
           setError('Неверный ввод данных. Повторите попытку.');
         } else if (status === 401) {
-          //show popup
-          //navigate verification screen
+          setShowPopup(true)
         }
       });
   }
@@ -49,7 +50,7 @@ export default function LoginScreen({navigation}) {
   };
 
   function validateData() {
-    let myErrors = {...errors};
+    let myErrors = { ...errors };
     let error = false;
 
     if (!pass) {
@@ -101,19 +102,19 @@ export default function LoginScreen({navigation}) {
       />
       {passError && <Text style={Styles.redRegular12}>{passError}</Text>}
       {error && <Text style={Styles.redRegular12}>{error}</Text>}
-
-      {/* 402 kam 403 Неверный ввод данных. Повторите попытку. */}
-      {/* 401 User not verifed */}
-      {/* 405 validations errors */}
-      <View style={{marginTop: 10}}>
+      <View style={{ marginTop: 10 }}>
         <Button text={'Войти'} onPress={onPressLogin} />
         <TouchableOpacity
           onPress={() => navigation.navigate('ForgotPasswordScreen')}>
-          <Text style={[Styles.greySemiBold12, {textAlign: 'center'}]}>
+          <Text style={[Styles.greySemiBold12, { textAlign: 'center' }]}>
             Забыли пароль?
           </Text>
         </TouchableOpacity>
       </View>
+      <Popup showPopup={showPopup} title={'Мы отправили вам код подтверждения на эл.почту для прохождения верификации'} text={''} btnText={'Ок'} onPressBtn={() => {
+        setShowPopup(false)
+        navigation.navigate('VerificationScreen', { email: email })
+      }} />
     </>
   );
 }
