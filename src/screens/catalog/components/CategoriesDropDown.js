@@ -73,14 +73,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 10,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    
+    // flex: 1,
+    // flexWrap: 'wrap',
+    // justifyContent: 'space-evenly',
     // justifyContent: 'space-around',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    // alignContent: 'stretch',
+    backgroundColor: 'red',
   },
   categoryContainer: {
     borderRadius: 10,
-    width: '30%',
-    marginBottom: 12
+    // width: '30%',
+    width: 105,
+    height: 90,
+    marginBottom: 12,
+    
+    // marginRight: 30
   },
   image: {
     width: '100%',
@@ -88,6 +97,8 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     color: AppColors.WHITE_COLOR,
+    backgroundColor: AppColors.GREY_COLOR,
+    // color: AppColors.BLACK_COLOR,
     fontSize: 12,
     fontFamily: 'OpenSans-SemiBold',
     margin: 8,

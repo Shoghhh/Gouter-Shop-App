@@ -28,7 +28,7 @@ export default function ForgotPasswordVerificationScreen({navigation, route}) {
         remember_code: code,
       }).then(([status, body]) => {
         if (status === 200) {
-          navigation.navigate('NewPasswordScreen');
+          navigation.navigate('NewPasswordScreen', {email: email});
         } else if (402) {
           setCodeError(true);
           setShowErrorMsg('Неверный код');
