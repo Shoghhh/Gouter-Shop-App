@@ -47,8 +47,8 @@ export default function CategoriesDropDown({ data, defaultOpenedId, navigation }
         </TouchableOpacity>
         {isOpened && (
           <View style={styles.categoriesContainer}>
-            {data.categories.map((item, i) => <TouchableOpacity style={styles.categoryContainer} key={i} onPress={() => navigation.navigate('CategoryScreen', { title: item.title, productsInfo: item.productsInfo })}>
-              <ImageBackground source={item.imgPath} resizeMode="cover" style={styles.image} borderRadius={10} >
+            {data.subcategories.map((item, i) => <TouchableOpacity style={styles.categoryContainer} key={i} onPress={() => navigation.navigate('CategoryScreen', { title: item.title, productsInfo: item.productsInfo })}>
+              <ImageBackground source={{uri: `https://kantata.justcode.am/uploads/${item.image}`}} resizeMode="cover" style={styles.image} borderRadius={10} >
                 <Text style={styles.categoryName}>{item.title}</Text>
               </ImageBackground>
             </TouchableOpacity>)}
@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
+    // justifyContent: 'space-around',
     flexWrap: 'wrap'
   },
   categoryContainer: {

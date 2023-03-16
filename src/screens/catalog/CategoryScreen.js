@@ -6,7 +6,15 @@ import Productitem from "./components/ProductItem";
 
 
 export default function CategoryScreen({ navigation, route }) {
-    const { productsInfo } = route.params;
+    // const { id } = route.params;
+    const productsInfo = [
+        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png') },
+        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р', isFavorite: true },
+        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png') },
+        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png') },
+        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png') },
+        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png') },
+    ]
 
     return <View style={Styles.container}>
         <View style={[Styles.flexRowJustifyBetween, { padding: 20 }]}>
