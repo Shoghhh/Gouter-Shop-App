@@ -1,14 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { ArrowRightIcon, FilledHeartIcon, GreyArrowRightIcon, HeartIcon, YellowStarIcon } from "../../../assets/svgs/CatalogSvgs";
+import { FilledHeartIcon, GreyArrowRightIcon, HeartIcon, YellowStarIcon } from "../../../assets/svgs/CatalogSvgs";
+import { getRequest, url } from "../../api/RequestHelpers";
 import Button from "../../components/Button";
 import Count from "../../components/Count";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 
 export default function ProductScreen({ navigation, route }) {
-    const { productInfo } = route.params;
+    const { id, subcategory } = route.params;
     const [count, setCount] = useState('1');
+    const [productInfo, setProductInfo] = useState({})
+
+    useEffect(()=>{
+        getRequest(`getProducts/${id}`).then(res => {
+            console.log(res.data);
+            let product = {
+                id: res.data.id,
+                title: res.data.title,
+                degreeOfRoast: res.data.degreeOfRoast, 
+                subcategory: subcategory, 
+                price: res.data.price, 
+                description: res.data.description, 
+                compound: res.data.compound,
+                imgPath: res.data.get_product_image[0].image
+            }
+            setProductInfo(product)
+        })
+    },[])
+
 
     function ComplementProductItem() {
         return <TouchableOpacity style={styles.productContainer}>
@@ -29,18 +49,18 @@ export default function ProductScreen({ navigation, route }) {
 
     return <View style={Styles.container}>
         <ScrollView style={{ paddingHorizontal: 20 }}>
-            <Image source={productInfo.imgPath} style={{ width: '100%', height: 230 }} />
+            <Image source={{uri:  `${url}uploads/${productInfo.imgPath}`}} style={{ width: '100%', height: 230, marginVertical: 15 }} />
             <View style={Styles.flexRowJustifyBetween}>
                 <View>
-                    <Text style={[Styles.greyRegular14, { marginBottom: 5 }]} >{productInfo.category}</Text>
-                    <Text style={Styles.blackSemiBold18}>{productInfo.productName}</Text>
+                    <Text style={[Styles.greyRegular14, { marginBottom: 5 }]} >{productInfo.subcategory}</Text>
+                    <Text style={Styles.blackSemiBold18}>{productInfo.title}</Text>
                 </View>
                 <TouchableOpacity style={styles.favoriteIconContainer}>
-                    {productInfo.isFavorite ? <FilledHeartIcon /> : <HeartIcon />}
+                    {false ? <FilledHeartIcon /> : <HeartIcon />}
                 </TouchableOpacity>
             </View>
             <View style={[Styles.flexRow, { marginVertical: 15 }]}>
-                <Text style={Styles.blackSemiBold13}>{productInfo.price}  </Text>
+                <Text style={Styles.blackSemiBold13}>{productInfo.price} </Text>
                 <Text style={Styles.greySemiBold13}>100г</Text>
             </View>
             <View style={Styles.flexRowJustifyBetween}>
@@ -55,24 +75,16 @@ export default function ProductScreen({ navigation, route }) {
                     <GreyArrowRightIcon />
                 </View>
             </TouchableOpacity>
-            <Text style={Styles.greyRegular14}>{` Нежный бленд бразильской и гондурасской арабики светлой обжарки. Обладает мягким вкусом тропических фруктов, белого шоколада и лесного ореха.
-
-Основа вкуса этого кофе - баланс кислинки и горчинки, который дарит ощущение свежести и законченности. Сбалансированный, спокойный вкус раскрывается нотами тропических фруктов, белого шоколада и лесного ореха. В послевкусии едва _уловимы кардамон и гвоздика.
-Чашечка крепкого ароматного кофе из эспрессо-машины - один из популярнейших напитков для бодрого начала дня. Благодаря высокому давлению при приготовлении, кофе получается ярким и дерзким. Поэтому традиционно для эспрессо подбираются сорта сильной обжарки.
-Однако, у каждого свои вкусовые предпочтения - иногда хочется нежности и воздушности. Для такого случая отлично подойдёт «Ил Дивино». С итальянского его название переводится как «божественный», что подчёркивает мягкость и приятный вкус.
-
-Как и в случае с классическим рецептом эспрессо, «Ил Дивино» - тоже бленд нескольких сортов кофе, но уже светлой обжарки, которая раскрывает природные ноты арабики. Учитывая, что под давлением в эспрессо-машине все вкусы особенно заметны, наши бельгийские партнеры
-CoffeeRoots создали бленд из сортов арабики, лишенных явной кислотности.`}
-            </Text>
+            <Text style={Styles.greyRegular14}>{productInfo.description}</Text>
             <Text style={[Styles.blackSemiBold14, { marginTop: 10, marginBottom: 5 }]}>Состав:</Text>
-            <Text style={Styles.greyRegular14}>100% арабика (Бразилия, Гондурас)</Text>
+            <Text style={Styles.greyRegular14}>{productInfo.compound}</Text>
             <Text style={[Styles.blackSemiBold14, { marginTop: 10, marginBottom: 5 }]}>Степень обжарки:</Text>
-            <Text style={Styles.greyRegular14}>слабая</Text>
-            <Text style={[Styles.blackSemiBold18, { marginVertical: 30 }]}>Этот товар отлично дополняют</Text>
+            <Text style={Styles.greyRegular14}>{productInfo.degreeOfRoast}</Text>
+            {/* <Text style={[Styles.blackSemiBold18, { marginVertical: 30 }]}>Этот товар отлично дополняют</Text>
             <View style={Styles.flexRowJustifyBetween}>
                 <ComplementProductItem />
                 <ComplementProductItem />
-            </View>
+            </View> */}
         </ScrollView>
     </View>
 }

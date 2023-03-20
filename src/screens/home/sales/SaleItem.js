@@ -1,12 +1,13 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { url } from "../../../api/RequestHelpers";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
 
 export default function SaleItem({ saleInfo, onPressItem }) {
     return <TouchableOpacity style={styles.container} onPress={onPressItem}>
-        <Image source={saleInfo.imgPath} style={styles.image} />
-        <Text style={[Styles.greyRegular14, {marginVertical: 10}]}>{saleInfo.text}</Text>
+        <Image source={{uri: `${url}uploads/${saleInfo.img}`}} style={styles.image} />
+        <Text style={[Styles.greyRegular14, {marginVertical: 10}]}>{saleInfo.title}</Text>
     </TouchableOpacity>
 }
 

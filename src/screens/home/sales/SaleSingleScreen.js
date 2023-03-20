@@ -1,17 +1,19 @@
 import React from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { url } from "../../../api/RequestHelpers";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
 
 
 export default function SaleSingleScreen({ navigation, route }) {
-    const { itemInfo } = route.params
+    const { itemInfo } = route.params;
+
     return <View style={Styles.container}>
         <ScrollView >
             <Text style={[Styles.blackSemiBold24, { margin: 20 }]}>{itemInfo.title}</Text>
-            <Image style={{ width: '100%', height: 220 }} source={itemInfo.imgPath} />
-            <Text style={[Styles.dimGreyBold20, styles.text]}>{itemInfo.mainText}</Text>
-            <Text style={[Styles.blackRegular16, { paddingHorizontal: 20 }]}>{itemInfo.text}</Text>
+            <Image style={{ width: '100%', height: 220 }} source={{uri: `${url}uploads/${itemInfo.img}`}} />
+            <Text style={[Styles.dimGreyBold20, styles.text]}>{itemInfo.short_description}</Text>
+            <Text style={[Styles.blackRegular16, { paddingHorizontal: 20 }]}>{itemInfo.long_description}</Text>
             <Text style={styles.greenSemiBold16}>Полный условия акции</Text>
         </ScrollView>
     </View>

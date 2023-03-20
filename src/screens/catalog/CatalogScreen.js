@@ -48,10 +48,9 @@ export default function CatalogScreen({navigation}) {
         return {
           id: el.id,
           title: el.title,
-          subcategories: [{"id": 1, "image": "1678718955.png", "title": "adasd"}, {"id": 4, "image": "1678778587.png", "title": "subcategory 22"}, {"id": 1, "image": "1678718955.png", "title": "adasd"}, {"id": 1, "image": "1678718955.png", "title": "adasd"}]
-          // el.get_sub_category.map(el => {
-          //   return {id: el.id, title: el.title, image: el.image};
-          // }),
+          subcategories: el.get_sub_category.map(el => {
+            return {id: el.id, title: el.title, image: el.image};
+          })
         };
       });
       categories.forEach(el => console.log(el));

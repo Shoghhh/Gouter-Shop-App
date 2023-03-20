@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Image, Dimensions, View, StyleSheet, ScrollView } from "react-native";
+import { url } from "../../../api/RequestHelpers";
 import { AppColors } from "../../../styles/AppColors";
 const { width } = Dimensions.get('window')
 
@@ -16,7 +17,7 @@ export default function Slider({ images }) {
 
     return <>
         <ScrollView horizontal style={styles.container} pagingEnabled onScroll={handleScroll}>
-            {images.map((image, i) => <Image source={image.imgPath} style={styles.image} resizeMode={'cover'} key={i} />)}
+            {images.map((image, i) => <Image source={{uri: `${url}uploads/${image.imgPath}`}} style={styles.image} resizeMode={'cover'} key={i} />)}
         </ScrollView>
         <View style={styles.circlesContainer}>
             {images.map((item, i) => <View style={[styles.circle, index === i && { opacity: 1 }]} key={i} />)}

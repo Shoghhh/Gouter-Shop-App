@@ -12,6 +12,7 @@ import {
 import { Styles } from '../../../styles/Styles';
 import { AppColors } from '../../../styles/AppColors';
 import { ArrowDownIcon, ArrowUpIcon } from '../../../../assets/svgs/CatalogSvgs';
+import { url } from '../../../api/RequestHelpers';
 
 export default function CategoriesDropDown({ data, defaultOpenedId, navigation }) {
   const [selectedItem, setSelectedItem] = useState(defaultOpenedId);
@@ -47,8 +48,8 @@ export default function CategoriesDropDown({ data, defaultOpenedId, navigation }
         </TouchableOpacity>
         {isOpened && (
           <View style={styles.categoriesContainer}>
-            {data.subcategories.map((item, i) => <TouchableOpacity style={styles.categoryContainer} key={i} onPress={() => navigation.navigate('CategoryScreen', { title: item.title, productsInfo: item.productsInfo })}>
-              <ImageBackground source={{uri: `https://kantata.justcode.am/uploads/${item.image}`}} resizeMode="cover" style={styles.image} borderRadius={10} >
+            {data.subcategories.map((item, i) => <TouchableOpacity style={styles.categoryContainer} key={i} onPress={() => navigation.navigate('CategoryScreen', { id: item.id, title: item.title })}>
+              <ImageBackground source={{uri: `${url}uploads/${item.image}`}} resizeMode="cover" style={styles.image} borderRadius={10} >
                 <Text style={styles.categoryName}>{item.title}</Text>
               </ImageBackground>
             </TouchableOpacity>)}
@@ -77,10 +78,10 @@ const styles = StyleSheet.create({
     // flex: 1,
     // flexWrap: 'wrap',
     // justifyContent: 'space-evenly',
-    // justifyContent: 'space-around',
+    justifyContent: 'space-around',
     flexWrap: 'wrap',
     // alignContent: 'stretch',
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
   },
   categoryContainer: {
     borderRadius: 10,

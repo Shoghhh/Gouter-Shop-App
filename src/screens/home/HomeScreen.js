@@ -1,6 +1,7 @@
-import React from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View, Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ScrollView, View, Dimensions } from "react-native";
 import { WhiteArrowRight } from "../../../assets/svgs/HomeSvgs";
+import { getRequest } from "../../api/RequestHelpers";
 import Button from "../../components/Button";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
@@ -29,13 +30,69 @@ export default function HomeScreen({ navigation }) {
         { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
         { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
     ]
-    const sliderImages = [
-        { imgPath: require('../../../assets/pngs/home/Slider.png') },
-        { imgPath: require('../../../assets/pngs/home/Slider.png') },
-        { imgPath: require('../../../assets/pngs/home/Slider.png') },
-        { imgPath: require('../../../assets/pngs/home/Slider.png') },
-        { imgPath: require('../../../assets/pngs/home/Slider.png') },
-    ]
+    const [sliderImages, setSliderImages] = useState([])
+    const [salesInfo, setSalesInfo] = useState([])
+
+    useEffect(() => {
+        getSliderImages()
+        getStories()
+        // getSectionsInfo()
+        // getNews()
+        // getNewsList()
+        getStocks()
+    }, [])
+
+    function getSliderImages(){
+        getRequest('header_slider').then((res) => {
+            let imgs = res.headerSlides.map((el) => {
+                return {imgPath: el.image, id: el.id, number: el.number}
+            })
+            // console.log('header_slider', res);
+            setSliderImages(imgs)
+        })
+    }
+
+    function getStories(){
+        getRequest(`getAllHistory`).then((res) => {
+            console.log('getAllHistory',res);
+        })
+    }
+
+    function getSectionsInfo(){
+        getRequest('getSection/3').then(res => {
+            console.log('getSection', res);
+        })
+    }
+
+    function getNews(){
+        getRequest('get_news').then(res => {
+            console.log('get_news', res.data)
+            let news = res.data.map(el => {
+                return {id: el.id, image:el.image, title: el.title, news: el.get_news}
+            })
+            
+        })
+    }
+
+    function getNewsList(){
+        getRequest('get_news_lists').then(res => {
+            // console.log('get_news_lists', res.data)
+            let news_list = res.data.map(el => {
+                return {id: el.id, image:el.image, title: el.title, news: el.get_news}
+            })
+            // console.log('news',news_list[0]);
+            // console.log('get_news_lists.news',news[0]);
+        })
+    }
+
+    function getStocks(){
+        getRequest('getStocks').then(res => {
+            let sales = res.data.map(el => {
+                return { id: el.id, img: el.image, long_description: el.long_description, short_description: el.short_description, title: el.title}
+            })
+            setSalesInfo(sales)
+        })
+    }
 
     const productsInfo = [
         { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/home/product.png') },
@@ -61,7 +118,7 @@ export default function HomeScreen({ navigation }) {
                 {pleasantPricesProducts.map((item, i) => <Productitem key={i} productInfo={item} width={150} marginRight={10} hideFavorite />)}
             </ScrollView>
             <FavoritesBlock />
-            <SalesBlock navigation={navigation} />
+            <SalesBlock navigation={navigation} data={salesInfo}/>
             <ProServicesContainer />
             <FeedBlock navigation={navigation} />
             <ReviewsBlock navigation={navigation}/>

@@ -1,7 +1,7 @@
-const url = 'https://kantata.justcode.am/api/';
+export const url = 'https://kantata.justcode.am/';
 
 export async function postRequest(api, body) {
-  return await fetch(`${url}${api}`, {
+  return await fetch(`${url}api/${api}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -12,14 +12,14 @@ export async function postRequest(api, body) {
 }
 
 export async function getRequest(api) {
-  return await fetch(`${url}${api}`, {
+  return await fetch(`${url}api/${api}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
-  }).then(response => response.json());
+  }).then(response =>response.json()).catch((err) => console.log(err));
 }
 
 export async function postRequestAuth(api, token, body) {
-  return await fetch(`${url}${api}`, {
+  return await fetch(`${url}api/${api}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export async function postRequestAuth(api, token, body) {
 }
 
 export async function getRequestAuth(api, token) {
-  return await fetch(`${url}${api}`, {
+  return await fetch(`${url}api/${api}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
