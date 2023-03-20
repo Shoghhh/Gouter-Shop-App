@@ -7,16 +7,27 @@ import Productitem from "./components/ProductItem";
 
 
 export default function CategoryScreen({ navigation, route }) {
-    const { id, title } = route.params;
+    const { id } = route.params;
     const [products, setProducts] = useState([])
-    useEffect(()=>{
+    useEffect(() => {
         getProducts()
     }, [])
-    
-    function getProducts(){
+
+    function getProducts() {
         getRequest(`getSubcategores/${id}`).then((res) => {
+            console.log(res.data.get_products[0].getp, 'get_products');
             let products = res.data.get_products.map(el => {
-                return {id: el.id, productName: el.title, category: res.data.title, price: el.price, imgPath: require('../../../assets/pngs/categories/product.png'), rating: '4.6'  }
+                return {
+                    id: el.id,
+                    productName: el.title,
+                    subcategory: res.data.title,
+                    price: el.price,
+                    description: el.description,
+                    degreeOfRoast: el.degreeOfRoast,
+                    compound: el.compound,
+                    images: el.get_product_image.map(e => e.image),
+                    rating: '4.6'
+                }
             })
             setProducts(products)
         })
@@ -33,7 +44,7 @@ export default function CategoryScreen({ navigation, route }) {
         </View>
         <ScrollView style={{ paddingHorizontal: 20 }}>
             <View style={[Styles.flexRowJustifyBetween, { flexWrap: 'wrap' }]}>
-                {products.map((item, i) => <Productitem key={i} productInfo={item} onPressProduct={() => navigation.navigate('ProductScreen', { productInfo: item, id: item.id, subcategory: title })} />)}
+                {products.map((item, i) => <Productitem key={i} productInfo={item} onPressProduct={() => navigation.navigate('ProductScreen', { productInfo: item, id: item.id })} />)}
             </View>
         </ScrollView>
     </View>

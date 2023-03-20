@@ -2,15 +2,16 @@ import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BasketIcon, CrossIcon, FilledHeartIcon, HeartIcon, YellowStarIcon } from "../../../../assets/svgs/CatalogSvgs";
 import { CheckMark, WhiteCheckMark } from "../../../../assets/svgs/HomeSvgs";
+import { url } from "../../../api/RequestHelpers";
 import Count from "../../../components/Count";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
 
 export default function Productitem({ productInfo, onPressProduct, width, marginRight, hideFavorite, selectMode, onPressSelect, historyMode, onPressCross, basketMode, incrementCount, decrementCount, favoritesMode, onPressBasket }) {
     return <TouchableOpacity style={[styles.productContainer, width && { width: width }, marginRight && { marginRight: marginRight }]} onPress={onPressProduct}>
-        <Image source={productInfo.imgPath} style={styles.image} resizeMode={'cover'} />
+        <Image source={{uri: `${url}uploads/${productInfo.images[0]}`}} style={styles.image} resizeMode={'cover'} />
         <Text style={Styles.blackSemiBold12}>{productInfo.productName}</Text>
-        <Text style={[Styles.greySemiBold12, { marginVertical: 3 }]}>{productInfo.category}</Text>
+        <Text style={[Styles.greySemiBold12, { marginVertical: 3 }]}>{productInfo.subcategory}</Text>
         <View style={Styles.flexRow}>
             <YellowStarIcon />
             <Text style={styles.rating}>{productInfo.rating}</Text>

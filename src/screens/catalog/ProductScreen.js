@@ -8,26 +8,8 @@ import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 
 export default function ProductScreen({ navigation, route }) {
-    const { id, subcategory } = route.params;
+    const { productInfo } = route.params;
     const [count, setCount] = useState('1');
-    const [productInfo, setProductInfo] = useState({})
-
-    useEffect(()=>{
-        getRequest(`getProducts/${id}`).then(res => {
-            console.log(res.data);
-            let product = {
-                id: res.data.id,
-                title: res.data.title,
-                degreeOfRoast: res.data.degreeOfRoast, 
-                subcategory: subcategory, 
-                price: res.data.price, 
-                description: res.data.description, 
-                compound: res.data.compound,
-                imgPath: res.data.get_product_image[0].image
-            }
-            setProductInfo(product)
-        })
-    },[])
 
 
     function ComplementProductItem() {
@@ -49,11 +31,11 @@ export default function ProductScreen({ navigation, route }) {
 
     return <View style={Styles.container}>
         <ScrollView style={{ paddingHorizontal: 20 }}>
-            <Image source={{uri:  `${url}uploads/${productInfo.imgPath}`}} style={{ width: '100%', height: 230, marginVertical: 15 }} />
+            <Image source={{uri: `${url}uploads/${productInfo.images[0]}`}} style={{ width: '100%', height: 230, marginVertical: 15 }} />
             <View style={Styles.flexRowJustifyBetween}>
                 <View>
                     <Text style={[Styles.greyRegular14, { marginBottom: 5 }]} >{productInfo.subcategory}</Text>
-                    <Text style={Styles.blackSemiBold18}>{productInfo.title}</Text>
+                    <Text style={Styles.blackSemiBold18}>{productInfo.productName}</Text>
                 </View>
                 <TouchableOpacity style={styles.favoriteIconContainer}>
                     {false ? <FilledHeartIcon /> : <HeartIcon />}

@@ -1,22 +1,17 @@
 import React from "react";
 import { ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { url } from "../../../api/RequestHelpers";
 import { AppColors } from "../../../styles/AppColors";
-import { Styles } from "../../../styles/Styles";
 import TitleAll from "./TitleAll";
 
-export default function StoriesBlock({navigation}) {
-    const stories = [
-        { title: 'Дарим купоны', imgPath: require('../../../../assets/pngs/home/storyBlock.png') },
-        { title: 'Дарим купоны', imgPath: require('../../../../assets/pngs/home/storyBlock.png') },
-        { title: 'Дарим купоны', imgPath: require('../../../../assets/pngs/home/storyBlock.png') },
-        { title: 'Дарим купоны', imgPath: require('../../../../assets/pngs/home/storyBlock.png') },
-        { title: 'Дарим купоны', imgPath: require('../../../../assets/pngs/home/storyBlock.png') },
-    ]
+export default function StoriesBlock({ navigation, stories }) {
 
     function StoryItem({ storyInfo }) {
         return <TouchableOpacity style={styles.categoryContainer} >
-            <ImageBackground source={storyInfo.imgPath} resizeMode="contain" style={styles.image} borderRadius={10} >
-                <Text style={styles.categoryName}>{storyInfo.title}</Text>
+            <ImageBackground source={{ uri: `${url}uploads/${storyInfo.images[0]}` }} resizeMode="contain" style={styles.image} borderRadius={10} >
+                <View style={styles.blackBack}>
+                    <Text style={styles.categoryName}>{storyInfo.title}</Text>
+                </View>
             </ImageBackground>
         </TouchableOpacity>
     }
@@ -37,13 +32,18 @@ const styles = StyleSheet.create({
     image: {
         width: 90,
         height: 90,
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
     categoryName: {
         color: AppColors.WHITE_COLOR,
         fontSize: 12,
         fontFamily: 'OpenSans-SemiBold',
-        margin: 8,
-    }
-
+        padding: 8,
+    },
+    blackBack: {
+        backgroundColor: '#00000050',
+        borderRadius: 10,
+        height: '100%',
+        justifyContent: 'flex-end'
+    },
 });

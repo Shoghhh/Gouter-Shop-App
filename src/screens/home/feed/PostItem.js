@@ -1,12 +1,13 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { url } from "../../../api/RequestHelpers";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
 
 export default function PostItem({ postInfo, onPressItem }) {
     return <TouchableOpacity style={styles.container} onPress={onPressItem}>
-        <Image source={postInfo.imgPath} style={styles.image} />
-        <Text style={[Styles.greyRegular14, {marginVertical: 10}]}>{postInfo.text}</Text>
+        <Image source={{uri: `${url}uploads/${postInfo.image}`}} style={styles.image} />
+        <Text style={[Styles.greyRegular14, {marginVertical: 10}]}>{postInfo.title}</Text>
     </TouchableOpacity>
 }
 

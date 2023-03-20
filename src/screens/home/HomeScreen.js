@@ -19,96 +19,88 @@ const { width } = Dimensions.get('window')
 
 export default function HomeScreen({ navigation }) {
     const pleasantPricesProducts = [
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
+        { productName: 'Ил Дивино', subcategory: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
+        { productName: 'Ил Дивино', subcategory: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
+        { productName: 'Ил Дивино', subcategory: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
+        { productName: 'Ил Дивино', subcategory: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
     ]
     const giftProducts = [
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/home/product.png'), oldPrice: '400 Р' },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
+        { productName: 'Ил Дивино', subcategory: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/home/product.png'), oldPrice: '400 Р' },
+        { productName: 'Ил Дивино', subcategory: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
+        { productName: 'Ил Дивино', subcategory: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
+        { productName: 'Ил Дивино', subcategory: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), oldPrice: '400 Р' },
     ]
     const [sliderImages, setSliderImages] = useState([])
     const [salesInfo, setSalesInfo] = useState([])
+    const [stories, setStories] = useState([])
+    const [news, setNews] = useState([])
+    const [sections, setSections] = useState([])
 
     useEffect(() => {
         getSliderImages()
         getStories()
         // getSectionsInfo()
-        // getNews()
-        // getNewsList()
+        getNews()
         getStocks()
     }, [])
 
-    function getSliderImages(){
+    function getSliderImages() {
         getRequest('header_slider').then((res) => {
             let imgs = res.headerSlides.map((el) => {
-                return {imgPath: el.image, id: el.id, number: el.number}
+                return { imgPath: el.image, id: el.id, number: el.number }
             })
-            // console.log('header_slider', res);
             setSliderImages(imgs)
         })
     }
 
-    function getStories(){
+    function getStories() {
         getRequest(`getAllHistory`).then((res) => {
-            console.log('getAllHistory',res);
-        })
-    }
-
-    function getSectionsInfo(){
-        getRequest('getSection/3').then(res => {
-            console.log('getSection', res);
-        })
-    }
-
-    function getNews(){
-        getRequest('get_news').then(res => {
-            console.log('get_news', res.data)
-            let news = res.data.map(el => {
-                return {id: el.id, image:el.image, title: el.title, news: el.get_news}
+            let stories = res.data.map(el => {
+                return { id: el.id, title: el.title, images: el.history_image.map(el => el.image) }
             })
-            
+            setStories(stories)
         })
     }
 
-    function getNewsList(){
+    function getSectionsInfo() {
+        getRequest('getSections').then(res => {
+            console.log('getSections', res.data[0]);
+            let sections = res.data.map(el => {
+                return { id: el.id, title: el.title, products: el.get_product }
+            })
+        })
+    }
+
+    function getNews() {
         getRequest('get_news_lists').then(res => {
-            // console.log('get_news_lists', res.data)
-            let news_list = res.data.map(el => {
-                return {id: el.id, image:el.image, title: el.title, news: el.get_news}
+            console.log('get_news_lists', res.data[0])
+            let news = res.data.map(el => {
+                return {
+                    id: el.id, image: el.image, title: el.title, news: el.get_news.map(e => {
+                        return { id: e.id, image: e.image, longText: e.longText, shortText: e.short_text, shortTextTitle: e.short_text_title, }
+                    })
+                }
             })
-            // console.log('news',news_list[0]);
-            // console.log('get_news_lists.news',news[0]);
+            console.log(news);
+            setNews(news)
         })
     }
 
-    function getStocks(){
+    function getStocks() {
         getRequest('getStocks').then(res => {
             let sales = res.data.map(el => {
-                return { id: el.id, img: el.image, long_description: el.long_description, short_description: el.short_description, title: el.title}
+                return { id: el.id, img: el.image, long_description: el.long_description, short_description: el.short_description, title: el.title }
             })
             setSalesInfo(sales)
         })
     }
 
-    const productsInfo = [
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/home/product.png') },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/home/product.png') },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/home/product.png') },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/home/product.png') },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/home/product.png') },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/home/product.png') },
-    ]
-    
     return <View style={Styles.container}>
         <ScrollView style={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
             <Slider images={sliderImages} />
-            <StoriesBlock navigation={navigation}/>
-            <TitleAll title={'Подарки на 23 Февраля'} onPressAll={() =>
-                navigation.navigate('CategoryScreen', { title: 'Подарки на 23 Февраля', productsInfo: productsInfo })
+            <StoriesBlock navigation={navigation} stories={stories} />
+            {/* <TitleAll title={'Подарки на 23 Февраля'} onPressAll={() =>
+                navigation.navigate('CategoryScreen', { title: 'Подарки на 23 Февраля' })
             } />
             <ScrollView horizontal style={{ marginLeft: 20 }} showsHorizontalScrollIndicator={false}>
                 {giftProducts.map((item, i) => <Productitem key={i} productInfo={item} width={150} marginRight={10} hideFavorite />)}
@@ -117,11 +109,12 @@ export default function HomeScreen({ navigation }) {
             <ScrollView horizontal style={{ marginLeft: 20 }} showsHorizontalScrollIndicator={false}>
                 {pleasantPricesProducts.map((item, i) => <Productitem key={i} productInfo={item} width={150} marginRight={10} hideFavorite />)}
             </ScrollView>
-            <FavoritesBlock />
-            <SalesBlock navigation={navigation} data={salesInfo}/>
+            <FavoritesBlock /> */}
+
+            <SalesBlock navigation={navigation} data={salesInfo} />
             <ProServicesContainer />
-            <FeedBlock navigation={navigation} />
-            <ReviewsBlock navigation={navigation}/>
+            <FeedBlock navigation={navigation} data={news} />
+            <ReviewsBlock navigation={navigation} />
         </ScrollView>
         <View style={Styles.absoluteButton}>
             <Button text={'Весь каталог'} Icon={WhiteArrowRight} onPress={() => navigation.navigate('Catalog')} />
