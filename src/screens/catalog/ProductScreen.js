@@ -11,7 +11,6 @@ export default function ProductScreen({ navigation, route }) {
     const { productInfo } = route.params;
     const [count, setCount] = useState('1');
 
-
     function ComplementProductItem() {
         return <TouchableOpacity style={styles.productContainer}>
             <Image source={productInfo.imgPath} style={styles.image} resizeMode={'cover'} />

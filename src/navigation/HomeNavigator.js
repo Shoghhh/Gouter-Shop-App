@@ -16,6 +16,7 @@ import ReviewAboutPurchaseScreen from '../screens/home/reviews/ReviewAboutPurcha
 import ReviewAboutGalleryScreen from '../screens/home/reviews/ReviewAboutGalleryScreen';
 import LeaveAReviewScreen from '../screens/home/reviews/LeaveAReviewScreen';
 import DeliveryAddressScreen from '../screens/home/DeliveryAddressScreen';
+import ProductsScreen from '../screens/catalog/ProductsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -66,6 +67,17 @@ export const HomeNavigator = () => {
             <Stack.Screen
                 name="CategoryScreen"
                 component={CategoryScreen}
+                options={({ navigation, route }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => (
+                        <Header navigation={navigation} title={route.params.title} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')} backIcon />
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="ProductsScreen"
+                component={ProductsScreen}
                 options={({ navigation, route }) => ({
                     title: '',
                     headerTransparent: true,

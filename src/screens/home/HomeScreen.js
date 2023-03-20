@@ -39,7 +39,7 @@ export default function HomeScreen({ navigation }) {
     useEffect(() => {
         getSliderImages()
         getStories()
-        // getSectionsInfo()
+        getSectionsInfo()
         getNews()
         getStocks()
     }, [])
@@ -64,16 +64,28 @@ export default function HomeScreen({ navigation }) {
 
     function getSectionsInfo() {
         getRequest('getSections').then(res => {
-            console.log('getSections', res.data[0]);
             let sections = res.data.map(el => {
-                return { id: el.id, title: el.title, products: el.get_product }
+                return { id: el.id, title: el.title, products: el.get_product.map(e => {
+                        return {
+                            id: e.id,
+                            productName: e.title,
+                            subcategory: res.data.title,
+                            price: e.price,
+                            description: e.description,
+                            degreeOfRoast: e.degreeOfRoast,
+                            compound: e.compound,
+                            images: e.get_product_image.map(e => e.image),
+                            rating: '4.6'
+                        }
+                    })
+                }
             })
+            setSections(sections)
         })
     }
 
     function getNews() {
         getRequest('get_news_lists').then(res => {
-            console.log('get_news_lists', res.data[0])
             let news = res.data.map(el => {
                 return {
                     id: el.id, image: el.image, title: el.title, news: el.get_news.map(e => {
@@ -81,7 +93,6 @@ export default function HomeScreen({ navigation }) {
                     })
                 }
             })
-            console.log(news);
             setNews(news)
         })
     }
@@ -99,18 +110,16 @@ export default function HomeScreen({ navigation }) {
         <ScrollView style={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
             <Slider images={sliderImages} />
             <StoriesBlock navigation={navigation} stories={stories} />
-            {/* <TitleAll title={'Подарки на 23 Февраля'} onPressAll={() =>
-                navigation.navigate('CategoryScreen', { title: 'Подарки на 23 Февраля' })
-            } />
-            <ScrollView horizontal style={{ marginLeft: 20 }} showsHorizontalScrollIndicator={false}>
-                {giftProducts.map((item, i) => <Productitem key={i} productInfo={item} width={150} marginRight={10} hideFavorite />)}
-            </ScrollView>
-            <TitleAll title={'Приятные цены'} />
-            <ScrollView horizontal style={{ marginLeft: 20 }} showsHorizontalScrollIndicator={false}>
-                {pleasantPricesProducts.map((item, i) => <Productitem key={i} productInfo={item} width={150} marginRight={10} hideFavorite />)}
-            </ScrollView>
-            <FavoritesBlock /> */}
-
+            {sections.map(el => {
+                return <>
+                    <TitleAll title={el.title} onPressAll={() =>
+                        navigation.navigate('ProductsScreen', { title: el.title, products: el.products })
+                    } />
+                    <ScrollView horizontal style={{ marginLeft: 20 }} showsHorizontalScrollIndicator={false}>
+                        {el.products.map((item, i) => <Productitem key={i} productInfo={item} width={150} marginRight={10} hideFavorite />)}
+                    </ScrollView>
+                </>
+            })}
             <SalesBlock navigation={navigation} data={salesInfo} />
             <ProServicesContainer />
             <FeedBlock navigation={navigation} data={news} />

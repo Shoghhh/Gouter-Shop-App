@@ -31,7 +31,6 @@ export default function CategoryScreen({ navigation, route }) {
             })
             setProducts(products)
         })
-
     }
 
     return <View style={Styles.container}>
@@ -44,7 +43,7 @@ export default function CategoryScreen({ navigation, route }) {
         </View>
         <ScrollView style={{ paddingHorizontal: 20 }}>
             <View style={[Styles.flexRowJustifyBetween, { flexWrap: 'wrap' }]}>
-                {products.map((item, i) => <Productitem key={i} productInfo={item} onPressProduct={() => navigation.navigate('ProductScreen', { productInfo: item, id: item.id })} />)}
+                {products.map((item, i) => <Productitem key={i} productInfo={item} onPressProduct={() => navigation.navigate('ProductScreen', { productInfo: item})} />)}
             </View>
         </ScrollView>
     </View>
