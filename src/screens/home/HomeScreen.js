@@ -64,9 +64,11 @@ export default function HomeScreen({ navigation }) {
 
     function getSectionsInfo() {
         getRequest('getSections').then(res => {
+            // console.log(res.data);
             let sections = res.data.map(el => {
+                console.log('aaaaaaaaaaaaa', el);    
                 return { id: el.id, title: el.title, products: el.get_product.map(e => {
-                        return {
+                    return {
                             id: e.id,
                             productName: e.title,
                             subcategory: res.data.title,
@@ -80,6 +82,7 @@ export default function HomeScreen({ navigation }) {
                     })
                 }
             })
+            // console.log(sections);
             setSections(sections)
         })
     }
@@ -110,15 +113,16 @@ export default function HomeScreen({ navigation }) {
         <ScrollView style={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
             <Slider images={sliderImages} />
             <StoriesBlock navigation={navigation} stories={stories} />
-            {sections.map(el => {
-                return <>
+            {sections.map((el, i) => {
+                // console.log(el.products);
+                return <View key={i}>
                     <TitleAll title={el.title} onPressAll={() =>
                         navigation.navigate('ProductsScreen', { title: el.title, products: el.products })
                     } />
                     <ScrollView horizontal style={{ marginLeft: 20 }} showsHorizontalScrollIndicator={false}>
                         {el.products.map((item, i) => <Productitem key={i} productInfo={item} width={150} marginRight={10} hideFavorite />)}
                     </ScrollView>
-                </>
+                </View>
             })}
             <SalesBlock navigation={navigation} data={salesInfo} />
             <ProServicesContainer />
