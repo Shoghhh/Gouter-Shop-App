@@ -3,19 +3,23 @@ export const url = 'https://kantata.justcode.am/';
 export async function postRequest(api, body) {
   return await fetch(`${url}api/${api}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(body),
-  }).then(response => {
-    console.log(response.status);
-    return Promise.all([response.status, response.json()])
-  }).catch((error) => console.log(error));
+  })
+    .then(response => {
+      console.log(response.status);
+      return Promise.all([response.status, response.json()]);
+    })
+    .catch(error => console.log(error));
 }
 
 export async function getRequest(api) {
   return await fetch(`${url}api/${api}`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  }).then(response =>response.json()).catch((err) => console.log(err));
+    headers: {'Content-Type': 'application/json'},
+  })
+    .then(response => response.json())
+    .catch(err => console.log(err));
 }
 
 export async function postRequestAuth(api, token, body) {
@@ -34,7 +38,7 @@ export async function getRequestAuth(api, token) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
     },
   }).then(response => response.json());
 }

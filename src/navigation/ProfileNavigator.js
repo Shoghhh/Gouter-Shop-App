@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import react from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import Header from './components/Header';
-import { LogoutIcon } from '../../assets/svgs/ProfileSvgs';
 import { useSelector } from 'react-redux';
 import AuthScreen from '../screens/profile/auth/AuthScreen';
 import VerificationScreen from '../screens/profile/auth/VerificationScreen';
@@ -17,15 +16,12 @@ import { FavoritesScreen } from '../screens/profile/FavoritesScreen';
 import ChangePasswordScreen from '../screens/profile/ChangePasswordScreen';
 import ChangeEmailScreen from '../screens/profile/ChangeEmailScreen';
 import EmailVerificationScreen from '../screens/profile/EmailVerificationScreen';
-import EmailChangedSuccess from '../screens/profile/EmailChangedSuccess';
 
 const Stack = createNativeStackNavigator();
 
 export const ProfileNavigator = () => {
     const token = useSelector((state) => state.auth.token)
-    useEffect(() => {
-        console.log(token);
-    })
+
     return (
         <Stack.Navigator
             initialRouteName={'ProfileScreen'}
@@ -186,17 +182,6 @@ export const ProfileNavigator = () => {
                     headerTransparent: true,
                     header: () => (
                         <Header navigation={navigation} title={'Изменить эл. почту'} backIcon />
-                    ),
-                })}
-            />
-            <Stack.Screen
-                name="EmailChangedSuccess"
-                component={EmailChangedSuccess}
-                options={({ navigation }) => ({
-                    title: '',
-                    headerTransparent: true,
-                    header: () => (
-                        <Header navigation={navigation} title={'Успешно'} backIcon />
                     ),
                 })}
             />

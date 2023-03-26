@@ -8,7 +8,7 @@ import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 
 
-export default function DeliveryAddressScreen() {
+export default function DeliveryAddressScreen({navigation}) {
 
     const [selectedIndex, setSelectedIndex] = useState(1)
 
@@ -28,7 +28,7 @@ export default function DeliveryAddressScreen() {
             </View>
         </View>
         <View style={Styles.absoluteButton}>
-            <Button text={'Сохранить'} />
+            <Button text={'Сохранить'} onPress={() => navigation.navigate('HomeScreen')} marginBottom={40}/>
         </View>
     </View>
 }

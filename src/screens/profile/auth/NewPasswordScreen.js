@@ -18,8 +18,10 @@ export default function NewPasswordScreen({ navigation, route }) {
 
 
     function updatePass() {
-        console.log(validateData())
-        postRequest('update_password', {
+        let isValid = validateData()
+        console.log(email, newPass, confirmPass);
+        //test api 500 todo
+        isValid && postRequest('update_password', {
             email: email,
             password: newPass,
             password_confirmation: confirmPass

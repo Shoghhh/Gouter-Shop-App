@@ -9,15 +9,14 @@ import Productitem from "../../catalog/components/ProductItem";
 
 export default function ReviewAboutPurchaseScreen({ navigation }) {
     const [searchValue, setSearchValue] = useState('')
-    const [selectedItems, setSelectedItems] = useState()
 
     const [purchasesInfo, setPurchasesInfo] = useState([
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../../assets/pngs/home/product.png'), date: '11 февраля 2023', isSelected: false },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../../assets/pngs/home/product.png'), date: '11 февраля 2023', isSelected: false },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../../assets/pngs/home/product.png'), date: '11 февраля 2023', isSelected: false },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../../assets/pngs/home/product.png'), date: '11 февраля 2023', isSelected: false },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../../assets/pngs/home/product.png'), date: '11 февраля 2023', isSelected: false },
-        { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../../assets/pngs/home/product.png'), date: '11 февраля 2023', isSelected: false },
+        // { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../../assets/pngs/home/product.png'), date: '11 февраля 2023', isSelected: false },
+        // { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../../assets/pngs/home/product.png'), date: '11 февраля 2023', isSelected: false },
+        // { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../../assets/pngs/home/product.png'), date: '11 февраля 2023', isSelected: false },
+        // { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../../assets/pngs/home/product.png'), date: '11 февраля 2023', isSelected: false },
+        // { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../../assets/pngs/home/product.png'), date: '11 февраля 2023', isSelected: false },
+        // { productName: 'Ил Дивино', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../../assets/pngs/home/product.png'), date: '11 февраля 2023', isSelected: false },
     ])
 
     function onSelectItem(i) {

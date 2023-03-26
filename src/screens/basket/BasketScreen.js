@@ -11,12 +11,12 @@ export default function BasketScreen({ navigation }) {
     const token = useSelector(state => state.auth.token)
 
     const [productsInfo, setProductsInfo] = useState([
-        { id: 0, productName: 'Ил Дивино1', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '1' },
-        { id: 1, productName: 'Ил Дивино2', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '2' },
-        { id: 2, productName: 'Ил Дивино3', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '1' },
-        { id: 3, productName: 'Ил Дивино4', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '1' },
-        { id: 4, productName: 'Ил Дивино5', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '1' },
-        { id: 5, productName: 'Ил Дивино6', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '1' },
+        // { id: 0, productName: 'Ил Дивино1', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '1' },
+        // { id: 1, productName: 'Ил Дивино2', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '2' },
+        // { id: 2, productName: 'Ил Дивино3', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '1' },
+        // { id: 3, productName: 'Ил Дивино4', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '1' },
+        // { id: 4, productName: 'Ил Дивино5', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '1' },
+        // { id: 5, productName: 'Ил Дивино6', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023', count: '1' },
     ])
 
     function onPressDelete(item) {
@@ -39,7 +39,7 @@ export default function BasketScreen({ navigation }) {
                 <Text style={[Styles.blackSemiBold20, { padding: 20, borderBottomWidth: 2, borderColor: AppColors.WHITE_SMOKE_COLOR }]}>Товаров на: 3500,65 Р</Text>
                 <ScrollView>
                     <View style={[Styles.flexRowJustifyBetween, { flexWrap: 'wrap', paddingHorizontal: 20, marginBottom: 80 }]}>
-                        {productsInfo.map((item, i) => <Productitem productInfo={item} basketMode incrementCount={() => incrementCount(item.id)} decrementCount={() => decrementCount(item.id)} onPressCross={() => onPressDelete(item)} key={i} />)}
+                        {/* {productsInfo.map((item, i) => <Productitem productInfo={item} basketMode incrementCount={() => incrementCount(item.id)} decrementCount={() => decrementCount(item.id)} onPressCross={() => onPressDelete(item)} key={i} />)} */}
                     </View>
                 </ScrollView>
                 <View style={Styles.absoluteButton}>

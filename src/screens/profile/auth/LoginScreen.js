@@ -23,6 +23,8 @@ export default function LoginScreen({ navigation }) {
 
   function onPressLogin() {
     setError(false)
+    setPassError(false)
+    setEmailError(false)
     let isValidInfo = validateData();
 
     isValidInfo &&
@@ -35,10 +37,12 @@ export default function LoginScreen({ navigation }) {
           dispatch(saveToken(data.token));
           navigation.popToTop();
           navigation.navigate('Home');
-          setError(false);
-        } else if (status === 402 || status === 403 || status === 405) {
+        } else if (status === 402 || status === 405) {
           setError('Неверный ввод данных. Повторите попытку.');
-        } else if (status === 401) {
+        } else if(status === 403){
+          setError('Данная эл. почта не зарегистрирована')
+        }
+        else if (status === 401) {
           setShowPopup(true)
         }
       });
@@ -56,26 +60,25 @@ export default function LoginScreen({ navigation }) {
     if (!pass) {
       myErrors.pass = true;
       error = true;
-      setPassError(false);
     } else if (pass.length < 6) {
+      myErrors.pass = false;
       error = true;
-      setPassError('Пароль должен содержать не менее 6-ти символов.');
+      setError('Неверный ввод данных. Повторите попытку.')
+      // setPassError(true);
     } else {
       myErrors.pass = false;
-      setPassError(false);
     }
 
     if (!email) {
       myErrors.email = true;
       error = true;
-      setEmailError(false);
     } else if (!validateEmail()) {
-      myErrors.email = true;
+      myErrors.email = false;
       error = true;
-      setEmailError('Введите корректный адрес эл. почты');
+      setError('Неверный ввод данных. Повторите попытку.')
+      // setEmailError(true);
     } else {
       myErrors.email = false;
-      setEmailError(false);
     }
 
     setErrors(myErrors);
@@ -91,17 +94,15 @@ export default function LoginScreen({ navigation }) {
         inputType={'default'}
         error={errors.email}
       />
-      {emailError && <Text style={Styles.redRegular12}>{emailError}</Text>}
       <Input
         placeholder={'Пароль'}
         value={pass}
         setValue={setPass}
         inputType={'pass'}
-        error={errors.pass || passError}
+        error={errors.pass}
         secure
       />
-      {passError && <Text style={Styles.redRegular12}>{passError}</Text>}
-      {error && <Text style={Styles.redRegular12}>{error}</Text>}
+      {(error || passError || emailError) && <Text style={Styles.redRegular12}>{error}</Text>}
       <View style={{ marginTop: 10 }}>
         <Button text={'Войти'} onPress={onPressLogin} />
         <TouchableOpacity

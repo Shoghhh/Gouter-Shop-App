@@ -36,10 +36,10 @@ export default function ReviewAboutProductScreen({ navigation }) {
 
     return <View style={[Styles.container, { paddingTop: 20 }]}>
         <SearchInput value={searchValue} onChangeValue={setSearchValue} placeholder={'Поиск...'}/>
-        <ScrollView style={{ paddingHorizontal: 20 }}>
+        {searchValue && <ScrollView style={{ paddingHorizontal: 20 }}>
             {productsInfo.map((item, i) => <HorizontalProductItem productInfo={item} key={i} hideBasket selectMode onPress={() => onSelectItem(i)} />)}
             {productsInfo.some((el) => el.isSelected === true) && <View style={{ height: 70 }} />}
-        </ScrollView>
+        </ScrollView>}
         {productsInfo.some((el) => el.isSelected === true) && <View style={Styles.absoluteButton}>
             <Button text={'Далее'} backgroundColor={AppColors.GREEN_COLOR} onPress={() => navigation.navigate('LeaveAReviewScreen')} />
         </View>}

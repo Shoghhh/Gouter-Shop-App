@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { GreyArrowRightIcon, YellowStarIcon } from "../../../assets/svgs/CatalogSvgs";
+import { YellowStarIcon } from "../../../assets/svgs/CatalogSvgs";
+import { getRequest } from "../../api/RequestHelpers";
 import Button from "../../components/Button";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
@@ -22,6 +23,17 @@ export default function ProductReviewsScreen({ navigation }) {
             { username: 'Екатерина К', date: '11 февраля 2023', rating: 5, comment: 'Кофе очень вкусный - аромат потрясающий, вкус нежный и мягкий, очень приятное послевкусие. Идеально для завтрака' },
             { username: 'Екатерина К', date: '11 февраля 2023', rating: 5, comment: 'Кофе очень вкусный - аромат потрясающий, вкус нежный и мягкий, очень приятное послевкусие. Идеально для завтрака' },
         ]
+    }
+
+    useEffect(() =>{
+        getProductReviews()
+    }, [])
+
+    function getProductReviews(){
+        getRequest('get_product_reviews').then(res => {
+            console.log(res.data);  
+            //todo subcategory name, image null, 
+        })
     }
 
     return <View style={Styles.container}>

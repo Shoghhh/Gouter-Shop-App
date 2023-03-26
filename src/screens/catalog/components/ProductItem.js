@@ -7,7 +7,7 @@ import Count from "../../../components/Count";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
 
-export default function Productitem({ productInfo, onPressProduct, width, marginRight, hideFavorite, selectMode, onPressSelect, historyMode, onPressCross, basketMode, incrementCount, decrementCount, favoritesMode, onPressBasket }) {
+export default function Productitem({ productInfo, onPressProduct, width, marginRight, hideFavorite, selectMode, onPressSelect, historyMode, onPressCross, basketMode, incrementCount, decrementCount, favoritesMode, onPressBasket, onPressHeart }) {
     return <TouchableOpacity style={[styles.productContainer, width && { width: width }, marginRight && { marginRight: marginRight }]} onPress={onPressProduct}>
         <Image source={{uri: `${url}uploads/${productInfo.images[0]}`}} style={styles.image} resizeMode={'cover'} />
         <Text style={Styles.blackSemiBold12}>{productInfo.productName}</Text>
@@ -56,7 +56,7 @@ export default function Productitem({ productInfo, onPressProduct, width, margin
                                     <TouchableOpacity style={styles.button} onPress={onPressBasket}>
                                         <BasketIcon />
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.button}>
+                                    <TouchableOpacity style={styles.button} onPress={onPressHeart}>
                                         {productInfo.isFavorite ? <FilledHeartIcon /> : <HeartIcon />}
                                     </TouchableOpacity>
                                 </View>

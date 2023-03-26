@@ -7,12 +7,12 @@ import Productitem from "../catalog/components/ProductItem";
 export default function PurchaseHistoryScreen({navigation}) {
 
     const [purchasesInfo, setPurchasesInfo] = useState([
-        { productName: 'Ил Дивино1', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
-        { productName: 'Ил Дивино2', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
-        { productName: 'Ил Дивино3', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
-        { productName: 'Ил Дивино4', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
-        { productName: 'Ил Дивино5', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
-        { productName: 'Ил Дивино6', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
+        // { productName: 'Ил Дивино1', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
+        // { productName: 'Ил Дивино2', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
+        // { productName: 'Ил Дивино3', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
+        // { productName: 'Ил Дивино4', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
+        // { productName: 'Ил Дивино5', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
+        // { productName: 'Ил Дивино6', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
     ])
 
     function onPressDelete(item) {
@@ -23,7 +23,7 @@ export default function PurchaseHistoryScreen({navigation}) {
     return <View style={Styles.container}>
         {purchasesInfo.length > 0 ? <ScrollView style={{ paddingHorizontal: 20 }}>
             <View style={[Styles.flexRowJustifyBetween, { flexWrap: 'wrap' }]}>
-                {purchasesInfo.map((item, i) => <Productitem productInfo={item} historyMode onPressCross={() => onPressDelete(item)} key={i} />)}
+                {/* {purchasesInfo.map((item, i) => <Productitem productInfo={item} historyMode onPressCross={() => onPressDelete(item)} key={i} />)} */}
             </View>
         </ScrollView> : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
             <Text style={[Styles.greySemiBold24, { textAlign: 'center' }]}>История покупок пуста</Text>

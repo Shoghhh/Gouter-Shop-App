@@ -15,7 +15,6 @@ export default function CategoryScreen({ navigation, route }) {
 
     function getProducts() {
         getRequest(`getSubcategores/${id}`).then((res) => {
-            console.log(res.data.get_products[0].getp, 'get_products');
             let products = res.data.get_products.map(el => {
                 return {
                     id: el.id,

@@ -41,6 +41,7 @@ export default function RegisterScreen({ navigation }) {
       passMsg: false,
       emailMsg: false,
     })
+    setEmailError(false)
 
     if (!name) {
       items.name = true;
@@ -98,9 +99,7 @@ export default function RegisterScreen({ navigation }) {
       items.phone = false;
     }
 
-    // console.log(items);
     setErrors(items);
-    // console.log(errors);
     return error ? false : true;
   }
 
@@ -112,7 +111,6 @@ export default function RegisterScreen({ navigation }) {
 
   function register() {
     let isValidData = validate();
-    console.log(isValidData);
     isValidData &&
       postRequest('registration', {
         name: name,

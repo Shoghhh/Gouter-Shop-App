@@ -7,11 +7,9 @@ import {
     LayoutAnimation,
     Platform,
     View,
-    ImageBackground,
 } from 'react-native';
 import { Styles } from '../../styles/Styles';
 import { AppColors } from '../../styles/AppColors';
-import { ArrowDownIcon, ArrowUpIcon } from '../../../assets/svgs/CatalogSvgs';
 import { GreenCircleIcon, GreyArrowDown, GreyArrowUp, RedCircleIcon, YellowCircleIcon } from '../../../assets/svgs/ShopSvgs';
 
 export default function ShopsDropDown({ data, defaultOpenedId, setCurrentShop }) {
@@ -48,9 +46,9 @@ export default function ShopsDropDown({ data, defaultOpenedId, setCurrentShop })
                     {isOpened ? <GreyArrowUp /> : <GreyArrowDown />}
                 </TouchableOpacity>
                 {isOpened && data.shops.map((item, i) => <TouchableOpacity style={{ paddingVertical: 15 }} key={i} onPress={() => setCurrentShop(item)}>
-                    <Text style={Styles.blackSemiBold16}>{item.name}</Text>
+                    <Text style={Styles.blackSemiBold16}>{item.title}</Text>
                     <Text style={Styles.greyRegular14}>{item.address}</Text>
-                    <Text style={Styles.greyRegular14}>{item.workingHours}</Text>
+                    <Text style={Styles.greyRegular14}>{item.workTime}</Text>
                 </TouchableOpacity>)}
             </View>
         );
