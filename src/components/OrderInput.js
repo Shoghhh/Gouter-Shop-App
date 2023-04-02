@@ -29,7 +29,7 @@ export default function OrderInput({ label, placeholder, value, setValue, addres
                 <Text>{value}</Text>
             </TouchableOpacity>
             : dropdown ?
-            //todo
+            //todo dropdown
             <></>
                 : date ? <>
                     <TouchableOpacity style={styles.input} onPress={() => setOpenDatePicker(true)}>

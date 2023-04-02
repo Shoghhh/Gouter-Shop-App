@@ -49,7 +49,7 @@ export default function BasketScreen({ navigation }) {
             : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
                 <Text style={[Styles.greySemiBold24, { textAlign: 'center' }]}>Корзина пуста!</Text>
                 <Text style={[Styles.greySemiBold12, { textAlign: 'center', marginVertical: 15 }]}>Выбирайте товары из католога или из списка избранных</Text>
-                <Button text={'Перейти в избранное'} width={'100%'} marginBottom={10} />
+                <Button text={'Перейти в избранное'} width={'100%'} marginBottom={10} />  
                 <Button text={'Выбрать из каталога'} width={'100%'} noFill onPress={() => navigation.navigate('Catalog')} />
             </View>) :
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
@@ -60,5 +60,6 @@ export default function BasketScreen({ navigation }) {
             </View>
         }
         {/* navigation.navigate('AuthScreen', { page: 'login' }) */}
+        {/* {screen: 'FavoritesScreen'}     onPress={() => navigation.navigate('Profile')}*/}
     </View>
 }

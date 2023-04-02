@@ -6,34 +6,12 @@ import { Styles } from "../../../styles/Styles";
 import ReviewItem from "./ReviewItem";
 
 
-export default function ReviewsScreen({ navigation }) {
-    const reviewsInfo = [
-        {
-            username: 'Екатерина К', date: '11 февраля 2023', rating: 5, comment: 'Кофе очень вкусный - аромат потрясающий, вкус нежный и мягкий, очень приятное послевкусие. Идеально для завтрака', productInfo: {
-                productName: 'Ил Дивино, 100г',
-                imgPath: require('../../../../assets/pngs/categories/product.png'),
-                category: 'Классический кофе'
-            }
-        },
-        {
-            username: 'Екатерина К', date: '11 февраля 2023', rating: 5, comment: 'Кофе очень вкусный - аромат потрясающий, вкус нежный и мягкий, очень приятное послевкусие. Идеально для завтрака', productInfo: {
-                productName: 'Ил Дивино, 100г',
-                imgPath: require('../../../../assets/pngs/categories/product.png'),
-                category: 'Классический кофе'
-            }
-        },
-        {
-            username: 'Екатерина К', date: '11 февраля 2023', rating: 5, comment: 'Кофе очень вкусный - аромат потрясающий, вкус нежный и мягкий, очень приятное послевкусие. Идеально для завтрака', productInfo: {
-                productName: 'Ил Дивино, 100г',
-                imgPath: require('../../../../assets/pngs/categories/product.png'),
-                category: 'Классический кофе'
-            }
-        },
-    ]
+export default function ReviewsScreen({ navigation, route }) {
+    const {data} = route.params
     return <View style={Styles.container}>
         <ScrollView>
-            {reviewsInfo.map((item, i) => <View style={(i === reviewsInfo.length - 1) && { marginBottom: 80 }} key={i}>
-                <ReviewItem reviewInfo={item} />
+            {data.map((item, i) => <View style={(i === data.length - 1) && { marginBottom: 80 }} key={i}>
+                <ReviewItem navigation={navigation} reviewInfo={item} />
             </View>)}
         </ScrollView>
         <View style={Styles.absoluteButton}>

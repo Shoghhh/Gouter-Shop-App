@@ -56,7 +56,7 @@ export default function Productitem({ productInfo, onPressProduct, width, margin
                                     <TouchableOpacity style={styles.button} onPress={onPressBasket}>
                                         <BasketIcon />
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.button} onPress={onPressHeart}>
+                                    <TouchableOpacity style={styles.button} onPress={() => onPressHeart(productInfo)}>
                                         {productInfo.isFavorite ? <FilledHeartIcon /> : <HeartIcon />}
                                     </TouchableOpacity>
                                 </View>

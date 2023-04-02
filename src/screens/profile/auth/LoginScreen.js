@@ -20,21 +20,23 @@ export default function LoginScreen({ navigation }) {
     pass: false,
     email: false,
   });
+  const [loading, setLoading] = useState(false)
 
   function onPressLogin() {
+    setLoading(true)
     setError(false)
     setPassError(false)
     setEmailError(false)
     let isValidInfo = validateData();
 
-    isValidInfo &&
-      postRequest('user_login', {
-        email: email,
-        password: pass,
-      }).then(([status, data]) => {
-        console.log('response =====>>>>', status, data);
-        if (status === 200) {
-          dispatch(saveToken(data.token));
+    isValidInfo ?
+    postRequest('user_login', {
+      email: email,
+      password: pass,
+    }).then(([status, data]) => {
+      console.log('response =====>>>>', status, data);
+      if (status === 200) {
+        dispatch(saveToken(data.token));
           navigation.popToTop();
           navigation.navigate('Home');
         } else if (status === 402 || status === 405) {
@@ -45,7 +47,8 @@ export default function LoginScreen({ navigation }) {
         else if (status === 401) {
           setShowPopup(true)
         }
-      });
+        setLoading(false)
+      }) : setLoading(false)
   }
 
   const validateEmail = () => {
@@ -104,7 +107,7 @@ export default function LoginScreen({ navigation }) {
       />
       {(error || passError || emailError) && <Text style={Styles.redRegular12}>{error}</Text>}
       <View style={{ marginTop: 10 }}>
-        <Button text={'Войти'} onPress={onPressLogin} />
+        <Button text={'Войти'} onPress={onPressLogin} loading={loading} />
         <TouchableOpacity
           onPress={() => navigation.navigate('ForgotPasswordScreen')}>
           <Text style={[Styles.greySemiBold12, { textAlign: 'center' }]}>

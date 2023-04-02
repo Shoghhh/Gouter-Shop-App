@@ -7,7 +7,7 @@ export default function PostSingleScreen({route}) {
   const {width} = Dimensions.get('window');
   const {item} = route.params;
 
-  function NewsItem(item) {
+  function NewsItem({item}) {
     return (
       <View>
         <Image
@@ -30,7 +30,7 @@ export default function PostSingleScreen({route}) {
   return (
     <View style={Styles.container}>
       <ScrollView contentContainerStyle={{flexGrow: 1}}>
-        {item.map(el => NewsItem(el))}
+        {item.map(el => <NewsItem item={el} key={i}/>)}
       </ScrollView>
     </View>
   );

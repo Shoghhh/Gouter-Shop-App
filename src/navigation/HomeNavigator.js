@@ -173,7 +173,7 @@ const FeedNavigator = () => {
                     title: '',
                     headerTransparent: true,
                     header: () => (
-                        <Header navigation={navigation} title={'Акции'} backIcon />
+                        <Header navigation={navigation} title={'Лента'} backIcon />
                     ),
                 })}
             />

@@ -1,10 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { AppColors } from "../styles/AppColors";
 
-export default function Button({ text, noFill, onPress, width, Icon, marginBottom, backgroundColor }) {
-    return <TouchableOpacity style={[styles.button, noFill && {backgroundColor: AppColors.WHITE_COLOR}, width && {width: width, borderRadius: 10}, Icon && {justifyContent : 'space-between'}, marginBottom && {marginBottom: marginBottom}, backgroundColor && {backgroundColor: backgroundColor, borderWidth: 0}]} onPress={onPress}>
-        <Text style={[styles.text, noFill && {color: AppColors.GREEN_COLOR}]}>{text}</Text>
+export default function Button({ text, noFill, onPress, width, Icon, marginBottom, backgroundColor, loading }) {
+    return <TouchableOpacity style={[styles.button, noFill && {backgroundColor: AppColors.WHITE_COLOR}, width && {width: width, borderRadius: 10}, Icon && {justifyContent : 'space-between'}, marginBottom && {marginBottom: marginBottom}, backgroundColor && {backgroundColor: backgroundColor, borderWidth: 0}]} onPress={loading ? null : onPress}>
+        {loading ? <ActivityIndicator color={noFill ? AppColors.GREEN_COLOR : AppColors.WHITE_COLOR}  size="large"/>  : <Text style={[styles.text, noFill && {color: AppColors.GREEN_COLOR}]}>{text}</Text>}
         {Icon && <Icon />}
     </TouchableOpacity>
 }

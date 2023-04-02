@@ -8,7 +8,6 @@ import VerificationScreen from '../screens/profile/auth/VerificationScreen';
 import ForgotPasswordScreen from '../screens/profile/auth/ForgotPasswordScreen';
 import ForgotPasswordVerificationScreen from '../screens/profile/auth/ForgotPasswordVerificationScreen';
 import NewPasswordScreen from '../screens/profile/auth/NewPasswordScreen';
-import ForgotPasswordVerificationSuccessScreen from '../screens/profile/auth/ForgotPasswordVerificationSuccessScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -95,17 +94,6 @@ export const BasketNavigator = () => {
                     headerTransparent: true,
                     header: () => (
                         <Header navigation={navigation} title={'Забыли пароль?'} backIcon hideBorder />
-                    ),
-                })}
-            />
-            <Stack.Screen
-                name="ForgotPasswordVerificationSuccessScreen"
-                component={ForgotPasswordVerificationSuccessScreen}
-                options={({ navigation }) => ({
-                    title: '',
-                    headerTransparent: true,
-                    header: () => (
-                        <Header navigation={navigation} title={'Успешно'} backIcon hideBorder />
                     ),
                 })}
             />

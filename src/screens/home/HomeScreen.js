@@ -24,6 +24,7 @@ export default function HomeScreen({navigation}) {
   const [stories, setStories] = useState([]);
   const [news, setNews] = useState([]);
   const [sections, setSections] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [sliderLoading, setSliderLoading] = useState(true);
   const [storiesLoading, setStoriesLoading] = useState(true);
   const [sectionsLoading, setSectionsLoading] = useState(true);
@@ -66,25 +67,23 @@ export default function HomeScreen({navigation}) {
 
   function getSectionsInfo() {
     getRequest('getSections').then(res => {
-      let sections = res.data.map(el => {
-        return {
-          id: el.id,
-          title: el.title,
-          products: el.get_product.map(e => {
-            return {
-              id: e.id,
-              productName: e.title,
-              subcategory: res.data.title,
-              price: e.price,
-              description: e.description,
-              degreeOfRoast: e.degreeOfRoast,
-              compound: e.compound,
-              images: e.get_product_image.map(e => e.image),
-              rating: '4.6',
-            };
-          }),
-        };
-      });
+      let sections = res.data.map(el => ({
+        id: el.id,
+        title: el.title,
+        products: el.get_product.map(e => ({
+          id: e.id,
+          productName: e.title,
+          subcategory: res.data.title,
+          price: e.price,
+          description: e.description,
+          degreeOfRoast: e.degreeOfRoast,
+          compound: e.compound,
+          images: e.get_product_image.map(e => e.image),
+          isFavorite: el.get_favorites_authuser.length > 0 ? true : false,
+          reviewCount: el.review_count,
+          rating: el.review_avg_stars,
+        })),
+      }));
       setSections(sections);
       setSectionsLoading(false);
     });
@@ -131,8 +130,32 @@ export default function HomeScreen({navigation}) {
 
   function getReviews() {
     getRequest('get_all_reviews/Product').then(res => {
-      // console.log(res.data);
-      //todo wrong data
+      const reviews = res.data.map(el => ({
+        productInfo: {
+          productName: el.get_product.title,
+          id: el.get_product.id,
+          subcategory: el.get_product.get_subcategory.title,
+          price: el.get_product.price,
+          description: el.get_product.description,
+          degreeOfRoast: el.get_product.degreeOfRoast,
+          compound: el.get_product.compound,
+          images: el.get_product.get_product_image.map(e => e.image),
+          isFavorite: el.get_favorites_authuser.length > 0 ? true : false,
+          reviewCount: el.review_count,
+          rating: el.review_avg_stars,
+        },
+        username: el.user_name,
+        comment: el.text,
+        rating: el.stars,
+        date: new Date(el.created_at).toLocaleDateString('ru', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        }),
+      }));
+      setReviews(reviews);
+      setReviewsLoading(false);
+      console.log('reviews', reviews);
     });
   }
 
@@ -180,14 +203,22 @@ export default function HomeScreen({navigation}) {
             );
           })
         )}
-        {stocksLoading ? <Loading/> : <SalesBlock navigation={navigation} data={salesInfo} />}
+        {stocksLoading ? (
+          <Loading />
+        ) : (
+          <SalesBlock navigation={navigation} data={salesInfo} />
+        )}
         <ProServicesContainer />
         {newsLoading ? (
           <Loading />
         ) : (
           <FeedBlock navigation={navigation} data={news} />
         )}
-        <ReviewsBlock navigation={navigation} />
+        {reviewsLoading ? (
+          <Loading />
+        ) : (
+          <ReviewsBlock navigation={navigation} data={reviews} />
+        )}
       </ScrollView>
       <View style={Styles.absoluteButton}>
         <Button

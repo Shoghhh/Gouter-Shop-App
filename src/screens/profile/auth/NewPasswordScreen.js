@@ -15,21 +15,25 @@ export default function NewPasswordScreen({ navigation, route }) {
         pass: false,
         confirmPass: false,
     });
+    const [loading, setLoading] = useState(false)
 
 
     function updatePass() {
+        setLoading(true)
         let isValid = validateData()
         console.log(email, newPass, confirmPass);
-        //test api 500 todo
-        isValid && postRequest('update_password', {
+        //todo
+        isValid ? postRequest('update_password', {
             email: email,
             password: newPass,
             password_confirmation: confirmPass
         }).then(([status, body]) => {
-            if(status === 200) {
-                navigation.navigate('ForgotPasswordVerificationSuccessScreen')
-            }
-        })
+            console.log(status, body);
+            // if(status === 200) {
+            //     navigation.navigate('ForgotPasswordVerificationSuccessScreen')
+            // }
+            setLoading(false)
+        }) : setLoading(false)
     }
 
     function validateData() {
@@ -79,7 +83,7 @@ export default function NewPasswordScreen({ navigation, route }) {
             {confirmPassError && (
                 <Text style={Styles.redRegular12}>Пароли не совпадают.</Text>
             )}
-            <Button text={'Сохранить'} onPress={updatePass} />
+            <Button text={'Сохранить'} onPress={updatePass} loading={loading} />
         </View>
     )
 }

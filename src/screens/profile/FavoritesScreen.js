@@ -1,55 +1,81 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, Text, View} from 'react-native';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import {WhiteArrowRight} from '../../../assets/svgs/HomeSvgs';
-import { getRequestAuth } from '../../api/RequestHelpers';
+import {getRequestAuth} from '../../api/RequestHelpers';
 import Button from '../../components/Button';
+import Loading from '../../components/Loading';
 import {Styles} from '../../styles/Styles';
 import Productitem from '../catalog/components/ProductItem';
 
-export function FavoritesScreen() {
-const token = useSelector(state => state.auth.token);
-const [favories, setFavorites] = useState()
+export function FavoritesScreen({navigation}) {
+  const token = useSelector(state => state.auth.token);
+  const [favorites, setFavorites] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getFavorites()
+    getFavorites();
   }, []);
 
-  function getFavorites(){
+  function getFavorites() {
+    console.log(token);
     getRequestAuth('get_favorites', token).then(res => {
-      console.log(res.data)
-      //todo //empty
-    })
+      console.log(res);
+      res.data.forEach(element => {
+        console.log(element.product_id);
+      });
+      let products = res.data.map(el => ({
+          id: el.get_product.id,
+          productName: el.get_product.title,
+          subcategory: 'asdasda',
+          price: el.get_product.price,
+          description: el.get_product.description,
+          degreeOfRoast: el.get_product.degreeOfRoast,
+          compound: el.get_product.compound,
+          //todo subcategory
+          images: el.get_product.get_product_image.map(e => e.image),
+          isFavorite: el.get_favorites_authuser.length > 0 ? true : false,
+          reviewCount: el.review_count,
+          rating: el.review_avg_stars,
+        }));
+      console.log(products);
+      setFavorites(products);
+      setLoading(false);
+    });
   }
 
-  const [favoriteProducts, setFavoriteProducts] = useState([
-    // { productName: 'Ил Дивино1', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
-    // { productName: 'Ил Дивино2', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
-    // { productName: 'Ил Дивино3', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
-    // { productName: 'Ил Дивино4', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
-    // { productName: 'Ил Дивино5', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
-    // { productName: 'Ил Дивино6', category: 'Классический кофе', rating: '4.6', price: '397 Р', imgPath: require('../../../assets/pngs/categories/product.png'), date: '11 февраля 2023' },
-  ]);
-
   function onPressDelete(item) {
-    let index = favoriteProducts.indexOf(item);
-    if (index !== -1)
-      setFavoriteProducts([
-        ...favoriteProducts.slice(0, index),
-        ...favoriteProducts.slice(index + 1, favoriteProducts.length),
-      ]);
+    // let index = favoriteProducts.indexOf(item);
+    // if (index !== -1)
+    //   setFavoriteProducts([
+    //     ...favoriteProducts.slice(0, index),
+    //     ...favoriteProducts.slice(index + 1, favoriteProducts.length),
+    //   ]);
   }
 
   return (
     <View style={Styles.container}>
-      {favoriteProducts.length > 0 ? (
+      {loading ? (
+        <Loading />
+      ) : favorites.length > 0 ? (
         <ScrollView>
           <View
             style={[
               Styles.flexRowJustifyBetween,
               {flexWrap: 'wrap', paddingHorizontal: 20, marginBottom: 80},
             ]}>
-            {/* {favoriteProducts.map((item, i) => <Productitem productInfo={item} favoritesMode onPressBasket={() => null} onPressCross={() => onPressDelete(item)} key={i} />)} */}
+            {favorites.map((item, i) => (
+              <Productitem
+                productInfo={item}
+                favoritesMode
+                onPressProduct={() =>
+                  navigation.navigate('ProductScreen', {productInfo: item})
+                }
+                onPressBasket={() => null}
+                onPressCross={() => onPressDelete(item)}
+                key={i}
+              />
+            ))}
           </View>
         </ScrollView>
       ) : (

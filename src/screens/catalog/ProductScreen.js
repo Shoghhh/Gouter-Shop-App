@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FilledHeartIcon, GreyArrowRightIcon, HeartIcon, YellowStarIcon } from "../../../assets/svgs/CatalogSvgs";
-import { getRequest, url } from "../../api/RequestHelpers";
+import { url } from "../../api/RequestHelpers";
 import Button from "../../components/Button";
 import Count from "../../components/Count";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 
 export default function ProductScreen({ navigation, route }) {
-    const { productInfo } = route.params;
+    const { onPressHeart } = route.params;
+    const [productInfo, setProductInfo] = useState(route.params.productInfo)
     const [count, setCount] = useState('1');
 
     function ComplementProductItem() {
@@ -36,8 +37,8 @@ export default function ProductScreen({ navigation, route }) {
                     <Text style={[Styles.greyRegular14, { marginBottom: 5 }]} >{productInfo.subcategory}</Text>
                     <Text style={Styles.blackSemiBold18}>{productInfo.productName}</Text>
                 </View>
-                <TouchableOpacity style={styles.favoriteIconContainer}>
-                    {false ? <FilledHeartIcon /> : <HeartIcon />}
+                <TouchableOpacity style={styles.favoriteIconContainer} onPress={() =>  {onPressHeart(productInfo); setProductInfo({...productInfo, isFavorite: !productInfo.isFavorite})}}>
+                    {productInfo.isFavorite ? <FilledHeartIcon /> : <HeartIcon />}
                 </TouchableOpacity>
             </View>
             <View style={[Styles.flexRow, { marginVertical: 15 }]}>
@@ -48,14 +49,14 @@ export default function ProductScreen({ navigation, route }) {
                 <Count count={count} incrementCount={incrementCount} decrementCount={decrementCount} />
                 <Button text={'В корзину'} width={'48%'} />
             </View>
-            <TouchableOpacity style={[Styles.flexRowJustifyBetween, styles.reviewsContainer]} onPress={() => navigation.navigate('ProductReviewsScreen')}>
-                <Text style={Styles.greySemiBold14}> Отзывы: 16 </Text>
+            {+productInfo.reviewCount > 0 &&  <TouchableOpacity style={[Styles.flexRowJustifyBetween, styles.reviewsContainer]} onPress={() => navigation.navigate('ProductReviewsScreen', {id: productInfo.id})}>
+                <Text style={Styles.greySemiBold14}> Отзывы: {productInfo.reviewCount} </Text>
                 <View style={Styles.flexRow}>
                     <YellowStarIcon />
-                    <Text style={styles.rating} >4.6   </Text>
+                    <Text style={styles.rating} >{productInfo.rating}   </Text>
                     <GreyArrowRightIcon />
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity>}
             <Text style={Styles.greyRegular14}>{productInfo.description}</Text>
             <Text style={[Styles.blackSemiBold14, { marginTop: 10, marginBottom: 5 }]}>Состав:</Text>
             <Text style={Styles.greyRegular14}>{productInfo.compound}</Text>

@@ -8,7 +8,6 @@ import VerificationScreen from '../screens/profile/auth/VerificationScreen';
 import ForgotPasswordScreen from '../screens/profile/auth/ForgotPasswordScreen';
 import ForgotPasswordVerificationScreen from '../screens/profile/auth/ForgotPasswordVerificationScreen';
 import NewPasswordScreen from '../screens/profile/auth/NewPasswordScreen';
-import ForgotPasswordVerificationSuccessScreen from '../screens/profile/auth/ForgotPasswordVerificationSuccessScreen';
 import AboutCompany from '../screens/profile/AboutCompany';
 import PersonalInfoScreen from '../screens/profile/PersonalInfoScreen';
 import PurchaseHistoryScreen from '../screens/profile/PurchaseHistoryScreen';
@@ -59,7 +58,7 @@ export const ProfileNavigator = () => {
                     title: '',
                     headerTransparent: true,
                     header: () => (
-                        <Header navigation={navigation} title={'Подтверждение'} hideBorder />
+                        <Header navigation={navigation} title={'Подтверждение'} backIcon hideBorder />
                     ),
                 })}
             />
@@ -94,17 +93,6 @@ export const ProfileNavigator = () => {
                     headerTransparent: true,
                     header: () => (
                         <Header navigation={navigation} title={'Забыли пароль?'} backIcon hideBorder />
-                    ),
-                })}
-            />
-            <Stack.Screen
-                name="ForgotPasswordVerificationSuccessScreen"
-                component={ForgotPasswordVerificationSuccessScreen}
-                options={({ navigation }) => ({
-                    title: '',
-                    headerTransparent: true,
-                    header: () => (
-                        <Header navigation={navigation} title={'Успешно'} backIcon hideBorder />
                     ),
                 })}
             />

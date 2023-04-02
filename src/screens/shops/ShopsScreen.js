@@ -5,14 +5,16 @@ import {AppColors} from '../../styles/AppColors';
 import {Styles} from '../../styles/Styles';
 import MapScreen from './MapScreen';
 import ShopsList from './ShopsList';
+import Loading from '../../components/Loading';
 
 export default function ShopsScreen({navigation}) {
   const [selectedIndex, setSelectedIndex] = useState(1);
   const [cities, setCities] = useState();
   const [galleries, setGalleries] = useState();
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getCities();
+    // getCities();
     getGalleries();
   }, []);
 
@@ -44,8 +46,8 @@ export default function ShopsScreen({navigation}) {
           //todo state
         })),
       }));
-      console.log(galleries[0]);
       setGalleries(galleries)
+      setLoading(false)
     });
   }
 
@@ -80,9 +82,7 @@ export default function ShopsScreen({navigation}) {
       </View>
       {selectedIndex === 0 ? (
         <MapScreen />
-      ) : (
-        <ShopsList navigation={navigation} data={galleries}/>
-      )}
+      ) : loading ?  <Loading/>  : <ShopsList navigation={navigation} data={galleries}/>}
     </View>
   );
 }

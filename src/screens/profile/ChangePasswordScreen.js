@@ -15,9 +15,7 @@ export default function ChangePasswordScreen({ navigation }) {
             <Input value={oldPass} setValue={setOldPass} placeholder={'Старый пароль'} inputType={'pass'}/>
             <Input value={newPass} setValue={setNewPass} placeholder={'Новый пароль'} inputType={'pass'}/>
             <Input value={confirmPass} setValue={setConfirmPass} placeholder={'Повтор пароля'} inputType={'pass'}/>
-            <Button text={'Сохранить'} onPress={() => {
-                //todo
-            }} />
+            <Button text={'Сохранить'} />
         </ScrollView>
     </View>
 }

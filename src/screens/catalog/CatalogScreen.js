@@ -3,9 +3,11 @@ import { ScrollView, View} from 'react-native';
 import CategoriesDropDown from './components/CategoriesDropDown';
 import {Styles} from '../../styles/Styles';
 import {getRequest} from '../../api/RequestHelpers';
+import Loading from '../../components/Loading';
 
 export default function CatalogScreen({navigation}) {
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true)
 
   function getCategories() {
     getRequest('getCategores').then(res => {
@@ -18,8 +20,8 @@ export default function CatalogScreen({navigation}) {
           })
         };
       });
-      categories.forEach(el => console.log(el));
       setCategories(categories);
+      setLoading(false)
     });
   }
   useEffect(() => {
@@ -28,9 +30,9 @@ export default function CatalogScreen({navigation}) {
 
   return (
     <View style={Styles.container}>
-      <ScrollView>
+      {loading ? <Loading /> :  <ScrollView>
         <CategoriesDropDown data={categories} navigation={navigation} />
-      </ScrollView>
+      </ScrollView>}
     </View>
   );
 }

@@ -12,7 +12,7 @@ export default function ProductReviewItem({ reviewInfo }) {
         <Text style={[Styles.blackRegular14, { marginVertical: 10 }]}>{reviewInfo.comment}</Text>
         <Text style={Styles.greyRegular14}>{reviewInfo.date}</Text>
         <View style={Styles.flexRow}>
-            {[...Array(reviewInfo.rating)].map((item, i) => <View style={styles.star} key={i} >
+            {[...Array(+reviewInfo.rating)].map((item, i) => <View style={styles.star} key={i} >
                 <YellowStarIcon />
             </View>)}
         </View>

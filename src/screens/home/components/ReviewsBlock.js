@@ -6,23 +6,17 @@ import { Styles } from "../../../styles/Styles";
 import HorizontalProductItem from "../../catalog/components/HorizontalProductItem";
 import TitleAll from "./TitleAll";
 
-export default function ReviewsBlock({ navigation }) {
-    const reviewsInfo = [
-        { username: 'Екатерина К', productName: 'Ил Дивино, 100г', productCategory: 'Классический кофе', imgPath: require('../../../../assets/pngs/categories/product.png'), review: 'Приятно, граждане, наблюдать, как реплицированные с зарубежных источников, современные исследования призывают нас к новым свершениям, которые, в свою очередь, должны быть подвергнуты целой серии независимых исследований. С другой стороны, экономическая повестка сегодняшнего дня требует от нас анализа дальнейших направлений развития.' },
-        { username: 'Екатерина К', productName: 'Ил Дивино, 100г', productCategory: 'Классический кофе', imgPath: require('../../../../assets/pngs/categories/product.png'), review: 'Приятно, граждане, наблюдать, как реплицированные с зарубежных источников, современные исследования призывают нас к новым свершениям, которые, в свою очередь, должны быть подвергнуты целой серии независимых исследований. С другой стороны, экономическая повестка сегодняшнего дня требует от нас анализа дальнейших направлений развития.' },
-        { username: 'Екатерина К', productName: 'Ил Дивино, 100г', productCategory: 'Классический кофе', imgPath: require('../../../../assets/pngs/categories/product.png'), review: 'Приятно, граждане, наблюдать, как реплицированные с зарубежных источников, современные исследования призывают нас к новым свершениям, которые, в свою очередь, должны быть подвергнуты целой серии независимых исследований. С другой стороны, экономическая повестка сегодняшнего дня требует от нас анализа дальнейших направлений развития.' },
-        { username: 'Екатерина К', productName: 'Ил Дивино, 100г', productCategory: 'Классический кофе', imgPath: require('../../../../assets/pngs/categories/product.png'), review: 'Приятно, граждане, наблюдать, как реплицированные с зарубежных источников, современные исследования призывают нас к новым свершениям, которые, в свою очередь, должны быть подвергнуты целой серии независимых исследований. С другой стороны, экономическая повестка сегодняшнего дня требует от нас анализа дальнейших направлений развития.' },
-    ]
+export default function ReviewsBlock({ navigation, data }) {
     return <>
-        <TitleAll title={'Отзывы гостей'} onPressAll={() => navigation.navigate('ReviewsNavigator')} />
+        <TitleAll title={'Отзывы гостей'} onPressAll={() => navigation.navigate('ReviewsNavigator', {screen: 'ReviewsScreen', params: {data}}, )} />
         <ScrollView horizontal style={{ marginLeft: 20 }} showsHorizontalScrollIndicator={false}>
-            {reviewsInfo.map((item, i) => <View style={styles.reviewContainer} key={i}>
+            {data.map((item, i) => <View style={styles.reviewContainer} key={i}>
                 <View>
                     <Text style={Styles.blackSemiBold18}>{item.username}</Text>
-                    <Text style={Styles.blackRegular13}>{item.review}</Text>
+                    <Text style={Styles.blackRegular13}>{item.comment}</Text>
                 </View>
                 <View style={{ borderTopWidth: 1, borderColor: AppColors.GREY_COLOR, marginTop: 20 }}>
-                    <HorizontalProductItem productInfo={{ productName: item.productName, category: item.productCategory, imgPath: item.imgPath }} hideBasket hideLine />
+                    <HorizontalProductItem productInfo={item.productInfo} hideBasket hideLine onPress={() => navigation.navigate('ProductScreen', {productInfo: item.productInfo})} />
                 </View>
             </View>)}
         </ScrollView>

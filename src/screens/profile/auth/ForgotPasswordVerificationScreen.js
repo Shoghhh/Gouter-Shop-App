@@ -10,16 +10,20 @@ export default function ForgotPasswordVerificationScreen({navigation, route}) {
   const [code, setCode] = useState('');
   const [codeError, setCodeError] = useState(false);
   const [showErrorMsg, setShowErrorMsg] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   function confirm() {
+    setLoading(true)
     if (!code) {
       setCodeError(true);
       setShowErrorMsg(false);
+      setLoading(false)
     } else if (code.length < 6) {
       setCodeError(true);
       setShowErrorMsg(
         'Код безопасности должен содержать не менее 6-ти символов.',
       );
+      setLoading(false)
     } else {
       setCodeError(false);
       setShowErrorMsg(false);
@@ -33,6 +37,7 @@ export default function ForgotPasswordVerificationScreen({navigation, route}) {
           setCodeError(true);
           setShowErrorMsg('Неверный код');
         }
+        setLoading(false)
       });
     }
   }
@@ -55,7 +60,7 @@ export default function ForgotPasswordVerificationScreen({navigation, route}) {
         error={codeError || showErrorMsg}
       />
       {showErrorMsg && <Text style={Styles.redRegular12}>{showErrorMsg}</Text>}
-      <Button text={'Подтвердить'} onPress={confirm} />
+      <Button text={'Подтвердить'} onPress={confirm} loading={loading}/>
     </View>
   );
 }

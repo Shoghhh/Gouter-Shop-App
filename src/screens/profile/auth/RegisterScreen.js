@@ -13,7 +13,6 @@ export default function RegisterScreen({ navigation }) {
   const [pass, setPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
   const [phone, setPhone] = useState('');
-
   const [emailError, setEmailError] = useState(false)
   const [errors, setErrors] = useState({
     name: false,
@@ -26,6 +25,7 @@ export default function RegisterScreen({ navigation }) {
     passMsg: false,
     emailMsg: false,
   });
+  const [loading, setLoading] = useState(false)
 
   function validate() {
     let items = { ...errors };
@@ -110,8 +110,9 @@ export default function RegisterScreen({ navigation }) {
 
 
   function register() {
+    setLoading(true)
     let isValidData = validate();
-    isValidData &&
+    isValidData ?
       postRequest('registration', {
         name: name,
         last_name: surname,
@@ -125,7 +126,8 @@ export default function RegisterScreen({ navigation }) {
         } else if(status === 401){
           setEmailError(true)
         }
-      })
+        setLoading(false)
+      }) : setLoading(false)
   }
 
   return (
@@ -189,7 +191,7 @@ export default function RegisterScreen({ navigation }) {
         error={errors.phone}
       />
       <View style={{ marginTop: 10 }}>
-        <Button text={'Зарегистрироваться'} onPress={register} />
+        <Button text={'Зарегистрироваться'} loading={loading} onPress={register} />
       </View>
     </>
   );

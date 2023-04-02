@@ -16,15 +16,11 @@ export default function VerificationScreen({ navigation, route }) {
   const [showPopup, setShowPopup] = useState(false);
   const [codeError, setCodeError] = useState(false);
   const [showErrorMsg, setShowErrorMsg] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     console.log(email);
   }, []);
-
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
-    return () => backHandler.remove()
-  }, [])
 
   function onPressConfirm() {
     navigation.popToTop();
@@ -32,14 +28,17 @@ export default function VerificationScreen({ navigation, route }) {
     setShowPopup(false);
   }
   function onPressVerify() {
+    setLoading(true)
     if (!code) {
       setCodeError(true);
       setShowErrorMsg(false)
+      setLoading(false)
     } else if (code.length < 6) {
       setCodeError(true);
       setShowErrorMsg(
         'Код безопасности должен содержать не менее 6-ти символов.',
       );
+      setLoading(false)
     } else {
       setCodeError(false);
       setShowErrorMsg(false);
@@ -55,6 +54,7 @@ export default function VerificationScreen({ navigation, route }) {
           setCodeError(true);
           setShowErrorMsg('Неверный код');
         }
+        setLoading(false)
       });
     }
   }
@@ -77,7 +77,7 @@ export default function VerificationScreen({ navigation, route }) {
         error={codeError}
       />
       {showErrorMsg && <Text style={Styles.redRegular12}>{showErrorMsg}</Text>}
-      <Button text={'Подтвердить'} onPress={onPressVerify} />
+      <Button text={'Подтвердить'} onPress={onPressVerify} loading={loading} />
       <Popup
         showPopup={showPopup}
         title={'Ваш аккаунт успешно подтверждён'}
