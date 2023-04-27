@@ -2,19 +2,19 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { AppColors } from "../styles/AppColors";
 import { Styles } from "../styles/Styles";
+import { ActivityIndicator } from "react-native";
 
-
-export default function Count({ count, incrementCount, decrementCount, horizontal }) {
-    return <View style={[styles.selectAmountContainer, horizontal && { width: '70%', height: 30, marginBottom: 0, paddingRight: 2 }]}>
-        <Text style={Styles.blackSemiBold14}>{count} шт.</Text>
-        <View style={horizontal && { flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity style={horizontal ? { paddingHorizontal: 8, borderRightWidth: 1, borderColor: AppColors.GREY_COLOR } : styles.bottomBorder} onPress={incrementCount}>
-                <Text style={[Styles.blackSemiBold20, { textAlign: 'center', color : AppColors.GREEN_COLOR }]}>+</Text>
+export default function Count({ count, incrementCount, decrementCount, basket, loading }) {
+    return <View style={[styles.selectAmountContainer, basket && { width: '70%', height: 30, marginBottom: 0 }, loading && {justifyContent: 'center'}]}>
+        {loading ? <ActivityIndicator color={AppColors.GREEN_COLOR}/> : <>
+            <TouchableOpacity onPress={decrementCount}>
+                <Text style={[styles.text, basket && { fontSize: 24 }]}>–</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={horizontal && { paddingHorizontal: 8 }} onPress={decrementCount}>
-                <Text style={[Styles.blackSemiBold20, { textAlign: 'center', color : AppColors.GREEN_COLOR }]}>-</Text>
+            <Text style={Styles.blackSemiBold14}>{count} шт.</Text>
+            <TouchableOpacity onPress={incrementCount}>
+                <Text style={[styles.text, basket && { fontSize: 24 }]}>+</Text>
             </TouchableOpacity>
-        </View>
+        </>}
     </View>
 }
 
@@ -25,15 +25,21 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: '48%',
         marginBottom: 15,
-        paddingLeft: 15,
-        paddingRight: 5,
+        paddingHorizontal: 10,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+        alignItems: 'center'
     },
     bottomBorder: {
         borderBottomWidth: 1,
         borderColor: AppColors.GREY_COLOR,
         paddingHorizontal: 15
+    },
+    text: {
+        textAlign: 'center',
+        color: AppColors.GREEN_COLOR,
+        fontSize: 36
     }
+
 })

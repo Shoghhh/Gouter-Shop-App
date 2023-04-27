@@ -16,7 +16,7 @@ export default function ProductSearchScreen({ navigation }) {
   const [nextUrl, setNextUrl] = useState('https://kantata.justcode.am/api/search_product')
   const [isLoading, setIsLoading] = useState()
   const token = useSelector(state => state.auth.token)
-
+  
   function onSearch(value) {
     value != null && setSearchValue(value);
     value != null && setLoading(true);
@@ -33,7 +33,6 @@ export default function ProductSearchScreen({ navigation }) {
           productName: e.title,
           subcategory: e.get_subcategory.title,
           images: e.get_product_image.map(e => e.image),
-          inBasket: token && e.get_basket_data.length > 0 ? true : false
         }))
         value ? setProducts(myProducts) : setProducts([...products, ...myProducts])
         setNextUrl(body.data.next_page_url)
@@ -56,14 +55,15 @@ export default function ProductSearchScreen({ navigation }) {
     </View> : null
   };
 
-
-  function addToBasket(id) {
-    //todo basket + -
-    postRequestAuth('/change_basket_products_count', token, {
+  async function addToBasket(id) {
+    await postRequestAuth('change_basket_products_count', token, {
       product_id: id,
       count: 1
     }).then(res => {
       console.log(res);
+      if (res.status) {
+        setShowPopup(true)
+      }
     })
   }
 
@@ -91,7 +91,7 @@ export default function ProductSearchScreen({ navigation }) {
             showsVerticalScrollIndicator={false}
             style={{ paddingHorizontal: 20 }}
             data={products}
-            renderItem={(item, i) => <HorizontalProductItem productInfo={item.item} key={i} onPressBasket={(id) => token ? addToBasket(id) : navigation.navigate('Profile')} onPress={() => navigation.navigate('ProductScreen', { productId: item.item.id })} />}
+            renderItem={(item, i) => <HorizontalProductItem productInfo={item.item} key={i} onPressBasket={addToBasket} onPress={() => navigation.navigate('ProductScreen', { productId: item.item.id })} />}
             keyExtractor={item => item.id.toString()}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={1}

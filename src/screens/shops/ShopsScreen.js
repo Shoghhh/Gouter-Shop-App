@@ -43,6 +43,7 @@ export default function ShopsScreen({navigation}) {
           description: el.text,
           lat: el.lat,
           lon: el.lon,
+          // color: el.color
           //todo state
         })),
       }));

@@ -8,10 +8,12 @@ import { postRequestAuth, url } from "../../../api/RequestHelpers";
 import Count from "../../../components/Count";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
+import Loading from "../../../components/Loading";
 
 export default function Productitem({ productInfo, setProducts, products, onPressProduct, width, marginRight, hideFavorite, selectMode, onPressSelect, historyMode, onPressCross, basketMode, incrementCount, decrementCount, favoritesMode, onPressBasket, navigation }) {
     const token = useSelector(state => state.auth.token)
     const [loading, setLoading] = useState(false)
+    const [countLoading, setCountLoading] = useState(false)
 
     function onPressHeart() {
         if (token) {
@@ -80,7 +82,13 @@ export default function Productitem({ productInfo, setProducts, products, onPres
                     </TouchableOpacity>
                 </View>
                     : basketMode ? <View style={Styles.flexRowJustifyBetween}>
-                        <Count count={productInfo.count} incrementCount={incrementCount} decrementCount={decrementCount} horizontal />
+                        <Count count={productInfo.count} incrementCount={() => {
+                            setCountLoading(true)
+                            incrementCount(productInfo.id).then(res => setCountLoading(false))
+                        }} decrementCount={() => {
+                            setCountLoading(true)
+                            decrementCount(productInfo.id).then(res => setCountLoading(false))
+                        }} basket loading={countLoading} />
                         <TouchableOpacity style={styles.deleteButton} onPress={onPressCross}>
                             <CrossIcon />
                         </TouchableOpacity>

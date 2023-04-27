@@ -45,12 +45,14 @@ export function FavoritesScreen({ navigation }) {
     postRequestAuth('remove_favorite', token, {
       product_id: item.id,
     }).then(res => {
-      let index = favorites.indexOf(item);
-      if (index !== -1)
-        setFavorites([
-          ...favorites.slice(0, index),
-          ...favorites.slice(index + 1, favorites.length),
-        ]);
+      if (res.status) {
+        let index = favorites.indexOf(item);
+        if (index !== -1)
+          setFavorites([
+            ...favorites.slice(0, index),
+            ...favorites.slice(index + 1, favorites.length),
+          ]);
+      }
     })
   }
 

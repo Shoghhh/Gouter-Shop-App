@@ -12,6 +12,7 @@ import Context from "../../Context";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 import Loading from "../../components/Loading";
+import Popup from "../../components/Popup";
 
 export default function ProductScreen({ navigation, route }) {
     const { productId } = route.params;
@@ -20,6 +21,8 @@ export default function ProductScreen({ navigation, route }) {
     const token = useSelector(state => state.auth.token)
     const [loading, setLoading] = useState(true)
     const [likeLoading, setLikeLoading] = useState(false)
+    const [showPopup, setShowPopup] = useState(false)
+    const [basketLoading, setBasketLoading] = useState(false)
 
     useEffect(() => {
         getProductInfo()
@@ -88,6 +91,20 @@ export default function ProductScreen({ navigation, route }) {
         })
     }
 
+    function addToBasket() {
+        setBasketLoading(true)
+        console.log(count, productId)
+        postRequestAuth('change_basket_products_count', token, {
+            product_id: productId,
+            count: count
+        }).then(res => {
+            if (res.status) {
+                setShowPopup(true)
+                setBasketLoading(false)
+            }
+        })
+    }
+
     return <View style={Styles.container}>
         <ScrollView style={{ paddingHorizontal: 20 }}>
             {loading ? <Loading /> : <>
@@ -107,7 +124,7 @@ export default function ProductScreen({ navigation, route }) {
                 </View>
                 <View style={Styles.flexRowJustifyBetween}>
                     <Count count={count} incrementCount={incrementCount} decrementCount={decrementCount} />
-                    <Button text={'В корзину'} width={'48%'} />
+                    <Button text={'В корзину'} width={'48%'} onPress={addToBasket} loading={basketLoading} />
                 </View>
                 {+productInfo.reviewCount > 0 && <TouchableOpacity style={[Styles.flexRowJustifyBetween, styles.reviewsContainer]} onPress={() => navigation.navigate('ProductReviewsScreen', { id: productInfo.id })}>
                     <Text style={Styles.greySemiBold14}> Отзывы: {productInfo.reviewCount} </Text>
@@ -130,6 +147,13 @@ export default function ProductScreen({ navigation, route }) {
                 <ComplementProductItem />
             </View> */}
         </ScrollView>
+        <Popup
+            showPopup={showPopup}
+            title={'Добавлено в корзину'}
+            text={''}
+            btnText={'Ок'}
+            onPressBtn={() => setShowPopup(false)}
+        />
     </View>
 }
 
