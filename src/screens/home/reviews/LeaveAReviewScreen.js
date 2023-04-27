@@ -5,11 +5,31 @@ import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
+import { postRequestAuth } from "../../../api/RequestHelpers";
+import { useSelector } from "react-redux";
 
-
-export default function LeaveAReviewScreen() {
+export default function LeaveAReviewScreen({ navigation, route }) {
+    const { selectedIds, reviewType } = route.params
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('')
+    const token = useSelector(state => state.auth.token)
+    const [loading, setLoading] = useState(false)
+
+    function addReview() {
+        setLoading(true)
+        postRequestAuth('add_review', token, {
+            object_id: selectedIds,
+            review_type: reviewType,
+            comment: comment,
+            starsCount: rating
+        }).then(res => {
+            if (res.status) {
+                navigation.replace('ReviewsScreen')
+                setLoading(false)
+            }
+        })
+    }
+
     return <View style={Styles.container}>
         <ScrollView style={{ paddingHorizontal: 20 }}>
             <Text style={[Styles.blackSemiBold20, { marginVertical: 20 }]}>Комментарий</Text>
@@ -36,10 +56,9 @@ export default function LeaveAReviewScreen() {
                     </TouchableOpacity>
                 ))}
             </View>
-            
         </ScrollView>
         {rating > 0 && <View style={Styles.absoluteButton}>
-            <Button text={'Отправить'} backgroundColor={AppColors.GREEN_COLOR} />
+            <Button text={'Отправить'} backgroundColor={AppColors.GREEN_COLOR} onPress={addReview} loading={loading} />
         </View>}
     </View>
 }

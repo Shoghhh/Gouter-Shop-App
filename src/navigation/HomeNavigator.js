@@ -17,6 +17,7 @@ import ReviewAboutGalleryScreen from '../screens/home/reviews/ReviewAboutGallery
 import LeaveAReviewScreen from '../screens/home/reviews/LeaveAReviewScreen';
 import DeliveryAddressScreen from '../screens/home/DeliveryAddressScreen';
 import ProductsScreen from '../screens/catalog/ProductsScreen';
+import ProductReviewsScreen from '../screens/catalog/ProductReviewsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,7 +35,7 @@ export const HomeNavigator = () => {
                 options={({ navigation }) => ({
                     title: '',
                     headerTransparent: true,
-                    header: () => <Header navigation={navigation} title={''} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')}  address />,
+                    header: () => <Header navigation={navigation} title={''} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')} address />,
                 })}
             />
             <Stack.Screen
@@ -61,7 +62,8 @@ export const HomeNavigator = () => {
                 options={({ navigation }) => ({
                     title: '',
                     headerTransparent: true,
-                    headerShown: false
+                    headerShown: false,
+                    
                 })}
             />
             <Stack.Screen
@@ -73,6 +75,7 @@ export const HomeNavigator = () => {
                     header: () => (
                         <Header navigation={navigation} title={route.params.title} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')} backIcon />
                     ),
+                    
                 })}
             />
             <Stack.Screen
@@ -108,13 +111,24 @@ export const HomeNavigator = () => {
                     ),
                 })}
             />
-              <Stack.Screen
+            <Stack.Screen
                 name="DeliveryAddressScreen"
                 component={DeliveryAddressScreen}
                 options={({ navigation, route }) => ({
                     title: '',
                     headerTransparent: true,
                     headerShown: false
+                })}
+            />
+            <Stack.Screen
+                name="ProductReviewsScreen"
+                component={ProductReviewsScreen}
+                options={({ navigation, route }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => (
+                        <Header navigation={navigation} title={''} backIcon />
+                    ),
                 })}
             />
         </Stack.Navigator>
@@ -198,6 +212,7 @@ const ReviewsNavigator = () => {
             initialRouteName={'ReviewsScreen'}
             screenOptions={({ route }) => ({
                 tabBarShowLabel: false,
+                unmountOnBlur:true
             })}
         >
             <Stack.Screen

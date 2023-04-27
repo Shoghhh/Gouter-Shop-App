@@ -7,8 +7,8 @@ import HorizontalProductItem from "../../catalog/components/HorizontalProductIte
 import TitleAll from "./TitleAll";
 
 export default function ReviewsBlock({ navigation, data }) {
-    return <>
-        <TitleAll title={'Отзывы гостей'} onPressAll={() => navigation.navigate('ReviewsNavigator', {screen: 'ReviewsScreen', params: {data}}, )} />
+    return <View>
+        <TitleAll title={'Отзывы гостей'} onPressAll={() => navigation.navigate('ReviewsNavigator', { screen: 'ReviewsScreen' })} />
         <ScrollView horizontal style={{ marginLeft: 20 }} showsHorizontalScrollIndicator={false}>
             {data.map((item, i) => <View style={styles.reviewContainer} key={i}>
                 <View>
@@ -16,14 +16,14 @@ export default function ReviewsBlock({ navigation, data }) {
                     <Text style={Styles.blackRegular13}>{item.comment}</Text>
                 </View>
                 <View style={{ borderTopWidth: 1, borderColor: AppColors.GREY_COLOR, marginTop: 20 }}>
-                    <HorizontalProductItem productInfo={item.productInfo} hideBasket hideLine onPress={() => navigation.navigate('ProductScreen', {productInfo: item.productInfo})} />
+                    <HorizontalProductItem productInfo={item.productInfo} hideBasket hideLine onPress={() => navigation.navigate('ProductScreen', { productId: item.productInfo.id })} />
                 </View>
             </View>)}
         </ScrollView>
         <View style={{ marginHorizontal: 20 }}>
             <Button text={'Оставить отзыв'} marginBottom={80} backgroundColor={AppColors.PURPLE_COLOR} onPress={() => navigation.navigate('ReviewsNavigator', { screen: 'LeaveAReviewAboutScreen' })} />
         </View>
-    </>
+    </View>
 }
 
 const styles = StyleSheet.create({

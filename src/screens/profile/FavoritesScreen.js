@@ -1,56 +1,57 @@
-import React, {useEffect, useState} from 'react';
-import {ScrollView, Text, View} from 'react-native';
-import {useSelector} from 'react-redux';
-import {WhiteArrowRight} from '../../../assets/svgs/HomeSvgs';
-import {getRequestAuth} from '../../api/RequestHelpers';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import { WhiteArrowRight } from '../../../assets/svgs/HomeSvgs';
+import { getRequestAuth, postRequestAuth } from '../../api/RequestHelpers';
 import Button from '../../components/Button';
 import Loading from '../../components/Loading';
-import {Styles} from '../../styles/Styles';
+import { Styles } from '../../styles/Styles';
 import Productitem from '../catalog/components/ProductItem';
 
-export function FavoritesScreen({navigation}) {
+export function FavoritesScreen({ navigation }) {
   const token = useSelector(state => state.auth.token);
   const [favorites, setFavorites] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getFavorites();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', async () => {
+      setLoading(true)
+      getFavorites();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   function getFavorites() {
-    console.log(token);
     getRequestAuth('get_favorites', token).then(res => {
-      console.log(res);
-      res.data.forEach(element => {
-        console.log(element.product_id);
-      });
       let products = res.data.map(el => ({
-          id: el.get_product.id,
-          productName: el.get_product.title,
-          subcategory: 'asdasda',
-          price: el.get_product.price,
-          description: el.get_product.description,
-          degreeOfRoast: el.get_product.degreeOfRoast,
-          compound: el.get_product.compound,
-          //todo subcategory
-          images: el.get_product.get_product_image.map(e => e.image),
-          isFavorite: el.get_favorites_authuser.length > 0 ? true : false,
-          reviewCount: el.review_count,
-          rating: el.review_avg_stars,
-        }));
-      console.log(products);
+        id: el.get_product.id,
+        productName: el.get_product.title,
+        subcategory: el.get_product.get_subcategory.title,
+        price: el.get_product.price,
+        description: el.get_product.description,
+        degreeOfRoast: el.get_product.degreeOfRoast,
+        compound: el.get_product.compound,
+        images: el.get_product.get_product_image.map(e => e.image),
+        isFavorite: true,
+        reviewCount: el.review_count,
+        rating: el.review_avg_stars,
+      }));
       setFavorites(products);
       setLoading(false);
     });
   }
 
   function onPressDelete(item) {
-    // let index = favoriteProducts.indexOf(item);
-    // if (index !== -1)
-    //   setFavoriteProducts([
-    //     ...favoriteProducts.slice(0, index),
-    //     ...favoriteProducts.slice(index + 1, favoriteProducts.length),
-    //   ]);
+    postRequestAuth('remove_favorite', token, {
+      product_id: item.id,
+    }).then(res => {
+      let index = favorites.indexOf(item);
+      if (index !== -1)
+        setFavorites([
+          ...favorites.slice(0, index),
+          ...favorites.slice(index + 1, favorites.length),
+        ]);
+    })
   }
 
   return (
@@ -62,14 +63,14 @@ export function FavoritesScreen({navigation}) {
           <View
             style={[
               Styles.flexRowJustifyBetween,
-              {flexWrap: 'wrap', paddingHorizontal: 20, marginBottom: 80},
+              { flexWrap: 'wrap', paddingHorizontal: 20, marginBottom: 80 },
             ]}>
             {favorites.map((item, i) => (
               <Productitem
                 productInfo={item}
                 favoritesMode
                 onPressProduct={() =>
-                  navigation.navigate('ProductScreen', {productInfo: item})
+                  navigation.navigate('ProductScreen', { productId: item.id })
                 }
                 onPressBasket={() => null}
                 onPressCross={() => onPressDelete(item)}
@@ -80,7 +81,7 @@ export function FavoritesScreen({navigation}) {
         </ScrollView>
       ) : (
         <Text
-          style={[Styles.blackRegular14, {textAlign: 'center', marginTop: 20}]}>
+          style={[Styles.blackRegular14, { textAlign: 'center', marginTop: 20 }]}>
           Ничего не найдено
         </Text>
       )}

@@ -28,13 +28,11 @@ export default function LoginScreen({ navigation }) {
     setPassError(false)
     setEmailError(false)
     let isValidInfo = validateData();
-
     isValidInfo ?
     postRequest('user_login', {
       email: email,
       password: pass,
     }).then(([status, data]) => {
-      console.log('response =====>>>>', status, data);
       if (status === 200) {
         dispatch(saveToken(data.token));
           navigation.popToTop();

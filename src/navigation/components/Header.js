@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LogoutIcon } from "../../../assets/svgs/ProfileSvgs";
+import { getRequestAuth } from "../../api/RequestHelpers";
 import Popup from "../../components/Popup";
 import { deleteToken } from "../../store/actions/saveToken";
 import { AppColors } from "../../styles/AppColors";
@@ -12,11 +13,14 @@ import { BackIcon, SearchIcon, ShareIcon } from "./NavigationMenuSvgs";
 export default function Header({ title, navigation, backIcon, searchIcon, onPressSearch, shareIcon, hideBorder, address, logoutIcon }) {
     const dispatch = useDispatch()
     const [showPopup, setShowPopup] = useState(false)
+    const token = useSelector(state => state.auth.token)
 
     function onPressLogout() {
-        setShowPopup(false);
-        navigation.navigate('Home')
-        dispatch(deleteToken())
+        getRequestAuth('logout_user', token).then(res => {
+            setShowPopup(false);
+            dispatch(deleteToken())
+            navigation.navigate('Home')
+        })
     }
 
     return <View style={[styles.container, hideBorder && { borderBottomWidth: 0 }]}>

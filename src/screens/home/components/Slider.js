@@ -12,7 +12,6 @@ export default function Slider({ images }) {
             event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width,
         );
         setIndex(slider)
-        console.log(slider);
     }
 
     return <>

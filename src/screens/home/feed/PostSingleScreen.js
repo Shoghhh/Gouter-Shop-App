@@ -30,7 +30,7 @@ export default function PostSingleScreen({route}) {
   return (
     <View style={Styles.container}>
       <ScrollView contentContainerStyle={{flexGrow: 1}}>
-        {item.map(el => <NewsItem item={el} key={i}/>)}
+        {item.map((el, i) => <NewsItem item={el} key={i}/>)}
       </ScrollView>
     </View>
   );

@@ -1,15 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
+import { ActivityIndicator } from "react-native";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useSelector } from "react-redux";
 import { BasketIcon, CrossIcon, FilledHeartIcon, HeartIcon, YellowStarIcon } from "../../../../assets/svgs/CatalogSvgs";
 import { CheckMark, WhiteCheckMark } from "../../../../assets/svgs/HomeSvgs";
-import { url } from "../../../api/RequestHelpers";
+import { postRequestAuth, url } from "../../../api/RequestHelpers";
 import Count from "../../../components/Count";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
 
-export default function Productitem({ productInfo, onPressProduct, width, marginRight, hideFavorite, selectMode, onPressSelect, historyMode, onPressCross, basketMode, incrementCount, decrementCount, favoritesMode, onPressBasket, onPressHeart }) {
+export default function Productitem({ productInfo, setProducts, products, onPressProduct, width, marginRight, hideFavorite, selectMode, onPressSelect, historyMode, onPressCross, basketMode, incrementCount, decrementCount, favoritesMode, onPressBasket, navigation }) {
+    const token = useSelector(state => state.auth.token)
+    const [loading, setLoading] = useState(false)
+
+    function onPressHeart() {
+        if (token) {
+            setLoading(true)
+            return productInfo.isFavorite
+                ? RemoveFromFavorites(productInfo.id, token)
+                : AddToFavorites(productInfo.id, token);
+        } else navigation.navigate('Profile');
+    }
+
+    function AddToFavorites() {
+        postRequestAuth('add_favorites', token, {
+            product_id: productInfo.id,
+        }).then(res => {
+            const updatedProducts = products.map(item => {
+                if (item.id === productInfo.id) {
+                    return { ...item, isFavorite: true };
+                }
+                return item;
+            });
+            setProducts(updatedProducts);
+            setLoading(false)
+        });
+    }
+
+    function RemoveFromFavorites() {
+        postRequestAuth('remove_favorite', token, {
+            product_id: productInfo.id,
+        }).then(res => {
+            const updatedProducts = products.map(item => {
+                if (item.id === productInfo.id) {
+                    return { ...item, isFavorite: false };
+                }
+                return item;
+            })
+            setProducts(updatedProducts);
+            setLoading(false)
+        })
+    }
+
     return <TouchableOpacity style={[styles.productContainer, width && { width: width }, marginRight && { marginRight: marginRight }]} onPress={onPressProduct}>
-        <Image source={{uri: `${url}uploads/${productInfo.images[0]}`}} style={styles.image} resizeMode={'cover'} />
+        <Image source={{ uri: `${url}uploads/${productInfo.images[0]}` }} style={styles.image} resizeMode={'cover'} />
         <Text style={Styles.blackSemiBold12}>{productInfo.productName}</Text>
         <Text style={[Styles.greySemiBold12, { marginVertical: 3 }]}>{productInfo.subcategory}</Text>
         <View style={Styles.flexRow}>
@@ -56,8 +100,8 @@ export default function Productitem({ productInfo, onPressProduct, width, margin
                                     <TouchableOpacity style={styles.button} onPress={onPressBasket}>
                                         <BasketIcon />
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.button} onPress={() => onPressHeart(productInfo)}>
-                                        {productInfo.isFavorite ? <FilledHeartIcon /> : <HeartIcon />}
+                                    <TouchableOpacity style={styles.button} onPress={loading ? null : onPressHeart}>
+                                        {loading ? <ActivityIndicator color={AppColors.GREEN_COLOR} /> : productInfo.isFavorite ? <FilledHeartIcon /> : <HeartIcon />}
                                     </TouchableOpacity>
                                 </View>
         }

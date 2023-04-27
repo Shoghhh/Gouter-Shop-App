@@ -15,6 +15,7 @@ import { FavoritesScreen } from '../screens/profile/FavoritesScreen';
 import ChangePasswordScreen from '../screens/profile/ChangePasswordScreen';
 import ChangeEmailScreen from '../screens/profile/ChangeEmailScreen';
 import EmailVerificationScreen from '../screens/profile/EmailVerificationScreen';
+import ProductScreen from '../screens/catalog/ProductScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,7 +48,6 @@ export const ProfileNavigator = () => {
                     headerTransparent: true,
                     header: () => (
                         <Header navigation={navigation} title={'Авторизация'} backIcon hideBorder />
-                        //todo back behavior
                     ),
                 })}
             />
@@ -62,7 +62,6 @@ export const ProfileNavigator = () => {
                     ),
                 })}
             />
-
             <Stack.Screen
                 name="ForgotPasswordScreen"
                 component={ForgotPasswordScreen}
@@ -170,6 +169,17 @@ export const ProfileNavigator = () => {
                     headerTransparent: true,
                     header: () => (
                         <Header navigation={navigation} title={'Изменить эл. почту'} backIcon />
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="ProductScreen"
+                component={ProductScreen}
+                options={({ navigation, route }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => (
+                        <Header navigation={navigation} title={''} shareIcon backIcon />
                     ),
                 })}
             />

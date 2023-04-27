@@ -31,11 +31,12 @@ export default function NavigationMenu() {
       />
       <Tab.Navigator
         initialRouteName="Home"
+        // detachInactiveScreens={true}
         screenOptions={({ route }) => ({
+          // unmountOnBlur:true,
           tabBarShowLabel: false,
           tabBarStyle: (() => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-            console.log(routeName);
             if (routeName === 'DeliveryAddressScreen') {
               return {
                 display: 'none',
@@ -44,7 +45,7 @@ export default function NavigationMenu() {
             return { height: 90, borderTopWidth: 2, borderColor: '#868686' };
           })(route),
         })}
-        backBehavior={'history'}
+        backBehavior={'initialRoute'}
       >
         <Tab.Screen
           name="Home"

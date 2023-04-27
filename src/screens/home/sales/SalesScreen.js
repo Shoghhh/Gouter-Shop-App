@@ -5,7 +5,6 @@ import SaleItem from "./SaleItem";
 
 export default function SalesScreen({ navigation, route }) {
     const {salesInfo} = route.params
-    console.log(salesInfo);
 
     return <View style={Styles.container}>
         <ScrollView style={{ paddingHorizontal: 20 }}>

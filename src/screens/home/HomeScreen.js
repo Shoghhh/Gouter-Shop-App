@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {ActivityIndicator} from 'react-native';
-import {ScrollView, View, Dimensions} from 'react-native';
-import {WhiteArrowRight} from '../../../assets/svgs/HomeSvgs';
-import {getRequest} from '../../api/RequestHelpers';
+import React, { useContext, useEffect, useState } from 'react';
+import { ScrollView, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import { WhiteArrowRight } from '../../../assets/svgs/HomeSvgs';
+import { getRequest, getRequestAuth, postRequestAuth } from '../../api/RequestHelpers';
 import Button from '../../components/Button';
 import Loading from '../../components/Loading';
-import {AppColors} from '../../styles/AppColors';
-import {Styles} from '../../styles/Styles';
+import Context from '../../Context';
+import { Styles } from '../../styles/Styles';
 import Productitem from '../catalog/components/ProductItem';
 import FeedBlock from './components/FeedBlock';
 import ProServicesContainer from './components/ProServicesContainer';
@@ -15,135 +15,52 @@ import SalesBlock from './components/SalesBlock';
 import Slider from './components/Slider';
 import StoriesBlock from './components/StoriesBlock';
 import TitleAll from './components/TitleAll';
+import SectionsBlock from './components/SectionsBlock';
 
-const {width} = Dimensions.get('window');
-
-export default function HomeScreen({navigation}) {
+export default function HomeScreen({ navigation }) {
+  const token = useSelector((state) => state.auth.token)
+  const context = useContext(Context)
   const [sliderImages, setSliderImages] = useState([]);
   const [salesInfo, setSalesInfo] = useState([]);
   const [stories, setStories] = useState([]);
   const [news, setNews] = useState([]);
-  const [sections, setSections] = useState([]);
+  const [sections, setSections] = useState({})
   const [reviews, setReviews] = useState([]);
-  const [sliderLoading, setSliderLoading] = useState(true);
-  const [storiesLoading, setStoriesLoading] = useState(true);
-  const [sectionsLoading, setSectionsLoading] = useState(true);
-  const [newsLoading, setNewsLoading] = useState(true);
-  const [stocksLoading, setStocksLoading] = useState(true);
-  const [reviewsLoading, setReviewsLoading] = useState(true);
-
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
-    getSliderImages();
-    getStories();
-    getSectionsInfo();
-    getNews();
-    getStocks();
-    getReviews();
+    getHomeData()
   }, []);
 
-  function getSliderImages() {
-    getRequest('header_slider').then(res => {
-      let imgs = res.headerSlides.map(el => {
-        return {imgPath: el.image, id: el.id, number: el.number};
-      });
-      setSliderImages(imgs);
-      setSliderLoading(false);
-    });
-  }
 
-  function getStories() {
-    getRequest(`getAllHistory`).then(res => {
-      let stories = res.data.map(el => {
-        return {
-          id: el.id,
-          title: el.title,
-          images: el.history_image.map(el => el.image),
-        };
-      });
-      setStories(stories);
-      setStoriesLoading(false);
-    });
-  }
-
-  function getSectionsInfo() {
-    getRequest('getSections').then(res => {
-      let sections = res.data.map(el => ({
+  function getHomeData() {
+    getRequest('get_home_page_data').then(res => {
+      setStories(res.histores.map(el => ({
         id: el.id,
         title: el.title,
-        products: el.get_product.map(e => ({
+        images: el.history_image.map(el => el.image),
+      })))
+      setNews(res.news_list.map(el => ({
+        id: el.id,
+        image: el.image,
+        title: el.title,
+        news: el.get_news.map(e => ({
           id: e.id,
-          productName: e.title,
-          subcategory: res.data.title,
-          price: e.price,
-          description: e.description,
-          degreeOfRoast: e.degreeOfRoast,
-          compound: e.compound,
-          images: e.get_product_image.map(e => e.image),
-          isFavorite: el.get_favorites_authuser.length > 0 ? true : false,
-          reviewCount: el.review_count,
-          rating: el.review_avg_stars,
-        })),
-      }));
-      setSections(sections);
-      setSectionsLoading(false);
-    });
-  }
-
-  function getNews() {
-    getRequest('get_news_lists').then(res => {
-      let news = res.data.map(el => {
-        return {
-          id: el.id,
-          image: el.image,
-          title: el.title,
-          news: el.get_news.map(e => {
-            return {
-              id: e.id,
-              image: e.image,
-              longText: e.longText,
-              shortText: e.short_text,
-              shortTextTitle: e.short_text_title,
-            };
-          }),
-        };
-      });
-      setNews(news);
-      setNewsLoading(false);
-    });
-  }
-
-  function getStocks() {
-    getRequest('getStocks').then(res => {
-      let sales = res.data.map(el => {
-        return {
-          id: el.id,
-          img: el.image,
-          long_description: el.long_description,
-          short_description: el.short_description,
-          title: el.title,
-        };
-      });
-      setSalesInfo(sales);
-      setStocksLoading(false);
-    });
-  }
-
-  function getReviews() {
-    getRequest('get_all_reviews/Product').then(res => {
-      const reviews = res.data.map(el => ({
-        productInfo: {
-          productName: el.get_product.title,
-          id: el.get_product.id,
-          subcategory: el.get_product.get_subcategory.title,
-          price: el.get_product.price,
-          description: el.get_product.description,
-          degreeOfRoast: el.get_product.degreeOfRoast,
-          compound: el.get_product.compound,
-          images: el.get_product.get_product_image.map(e => e.image),
-          isFavorite: el.get_favorites_authuser.length > 0 ? true : false,
-          reviewCount: el.review_count,
-          rating: el.review_avg_stars,
-        },
+          image: e.image,
+          longText: e.longText,
+          shortText: e.short_text,
+          shortTextTitle: e.short_text_title,
+        }
+        )),
+      })))
+      setSliderImages(res.slider.map(el => ({ imgPath: el.image, id: el.id, number: el.number })))
+      setSalesInfo(res.stocks.map(el => ({
+        id: el.id,
+        img: el.image,
+        long_description: el.long_description,
+        short_description: el.short_description,
+        title: el.title,
+      })))
+      setReviews(res.reviews.map(el => ({
         username: el.user_name,
         comment: el.text,
         rating: el.stars,
@@ -152,73 +69,45 @@ export default function HomeScreen({navigation}) {
           month: 'long',
           year: 'numeric',
         }),
-      }));
-      setReviews(reviews);
-      setReviewsLoading(false);
-      console.log('reviews', reviews);
-    });
+        productInfo: {
+          productName: el.get_product.title,
+          id: el.get_product.id,
+          subcategory: el.get_product.get_subcategory.title,
+          price: el.get_product.price,
+          images: el.get_product.get_product_image.map(e => e.image),
+        },
+      })))
+      setSections(res.sections.map(el => ({
+        id: el.id,
+        title: el.title,
+        products: el.get_product.map(e => ({
+          id: e.id,
+          productName: e.title,
+          subcategory: e.get_subcategory.title,
+          price: e.price,
+          images: e.get_product_image.map(e => e.image),
+        })),
+      })))
+      setLoading(false)
+    })
   }
 
   return (
     <View style={Styles.container}>
       <ScrollView
-        style={{paddingBottom: 100}}
+        style={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}>
-        {sliderLoading ? <Loading /> : <Slider images={sliderImages} />}
-        {storiesLoading ? (
-          <Loading />
-        ) : (
-          <StoriesBlock navigation={navigation} stories={stories} />
-        )}
-        {sectionsLoading ? (
-          <Loading />
-        ) : (
-          sections.map((el, i) => {
-            return (
-              <View key={i}>
-                <TitleAll
-                  title={el.title}
-                  onPressAll={() =>
-                    navigation.navigate('ProductsScreen', {
-                      title: el.title,
-                      products: el.products,
-                    })
-                  }
-                />
-                <ScrollView
-                  horizontal
-                  style={{marginLeft: 20}}
-                  showsHorizontalScrollIndicator={false}>
-                  {el.products.map((item, i) => (
-                    <Productitem
-                      key={i}
-                      productInfo={item}
-                      width={150}
-                      marginRight={10}
-                      hideFavorite
-                    />
-                  ))}
-                </ScrollView>
-              </View>
-            );
-          })
-        )}
-        {stocksLoading ? (
-          <Loading />
-        ) : (
-          <SalesBlock navigation={navigation} data={salesInfo} />
-        )}
-        <ProServicesContainer />
-        {newsLoading ? (
-          <Loading />
-        ) : (
-          <FeedBlock navigation={navigation} data={news} />
-        )}
-        {reviewsLoading ? (
-          <Loading />
-        ) : (
-          <ReviewsBlock navigation={navigation} data={reviews} />
-        )}
+        {loading ? <Loading /> :
+          <>
+            <Slider images={sliderImages} />
+            <StoriesBlock navigation={navigation} stories={stories} />
+            <SectionsBlock navigation={navigation} sections={sections} />
+            <SalesBlock navigation={navigation} data={salesInfo} />
+            <ProServicesContainer />
+            <FeedBlock navigation={navigation} data={news} />
+            <ReviewsBlock data={reviews} navigation={navigation} />
+          </>
+        }
       </ScrollView>
       <View style={Styles.absoluteButton}>
         <Button

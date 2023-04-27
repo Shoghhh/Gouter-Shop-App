@@ -10,8 +10,8 @@ export default function Popup({ showPopup, title, text, firstBtnText, secondBtnT
         {showPopup && <View style={styles.container}>
             <BlurView style={styles.blurView} blurType="dark" blurAmount={1} />
             <View style={styles.popupContainer}>
-                <Text style={[styles.title, !text && { marginBottom: 20 }, Styles.blackSemiBold18]}>{title}</Text>
-                {text && <Text style={[styles.text, Styles.blackRegular14]}>{text}</Text>}
+                <Text style={[styles.title, !text && { margin: 20 }, Styles.blackSemiBold18]}>{title}</Text>
+                {text && <Text style={[styles.text, Styles.blackRegular13]}>{text}</Text>}
 
                 {btnText ?
                     <TouchableOpacity style={styles.btn} onPress={onPressBtn}>
@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
-        // zIndex: 99999999,
     },
     container: {
         position: 'absolute',

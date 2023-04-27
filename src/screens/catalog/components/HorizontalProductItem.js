@@ -1,23 +1,24 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BasketIcon } from "../../../../assets/svgs/CatalogSvgs";
+import { BasketIcon, GreyBasketicon } from "../../../../assets/svgs/CatalogSvgs";
 import { CheckMark } from "../../../../assets/svgs/HomeSvgs";
-import { url } from "../../../api/RequestHelpers";
+import { postRequestAuth, url } from "../../../api/RequestHelpers";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
+import { useSelector } from "react-redux";
 
 export default function HorizontalProductItem({ productInfo, hideBasket, hideLine, selectMode, onPress, onPressBasket }) {
-    return <TouchableOpacity style={[styles.container, hideLine && { borderBottomWidth: 0 }]} onPress={onPress}>
+    return <TouchableOpacity style={[styles.container, hideLine && { borderBottomWidth: 0 }]} onPress={(selectMode && productInfo.reviewAlreadyLeft) ? null : () => onPress(productInfo)}>
         <View style={Styles.flexRow}>
-            <Image style={styles.image} source={{uri: `${url}uploads/${productInfo.images[0]}`}} resizeMode={'cover'} />
+            <Image style={styles.image} source={{ uri: `${url}uploads/${productInfo.images[0]}` }} resizeMode={'cover'} />
             <View style={{ marginLeft: 15 }}>
                 <Text style={Styles.blackSemiBold16}>{productInfo.productName}</Text>
                 <Text style={[Styles.greyRegular14, { marginTop: 5 }]}>{productInfo.subcategory}</Text>
             </View>
         </View>
-        {(selectMode && productInfo.isSelected) && <CheckMark />}
-        {!hideBasket && <TouchableOpacity onPress={onPressBasket}>
-            <BasketIcon />
+        {selectMode && (productInfo.reviewAlreadyLeft ? <Text style={Styles.greyRegular12}>отзыв уже оставлен</Text> : productInfo.isSelected && <CheckMark />)}
+        {!hideBasket && <TouchableOpacity onPress={productInfo.inBasket ? null : () => onPressBasket(productInfo.id)}>
+            {productInfo.inBasket ? <GreyBasketicon /> : <BasketIcon />}
         </TouchableOpacity>}
     </TouchableOpacity>
 }
@@ -34,5 +35,6 @@ const styles = StyleSheet.create({
     image: {
         width: 70,
         height: 70,
+        borderRadius: 50
     }
 })

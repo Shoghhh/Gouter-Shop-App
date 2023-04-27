@@ -1,16 +1,48 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
+import { useContext } from "react";
+import { ActivityIndicator } from "react-native";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useSelector } from "react-redux";
 import { FilledHeartIcon, GreyArrowRightIcon, HeartIcon, YellowStarIcon } from "../../../assets/svgs/CatalogSvgs";
-import { url } from "../../api/RequestHelpers";
+import { getRequestAuth, postRequestAuth, url } from "../../api/RequestHelpers";
 import Button from "../../components/Button";
 import Count from "../../components/Count";
+import Context from "../../Context";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
+import Loading from "../../components/Loading";
 
 export default function ProductScreen({ navigation, route }) {
-    const { onPressHeart } = route.params;
-    const [productInfo, setProductInfo] = useState(route.params.productInfo)
+    const { productId } = route.params;
+    const [productInfo, setProductInfo] = useState({})
     const [count, setCount] = useState('1');
+    const token = useSelector(state => state.auth.token)
+    const [loading, setLoading] = useState(true)
+    const [likeLoading, setLikeLoading] = useState(false)
+
+    useEffect(() => {
+        getProductInfo()
+    }, [])
+
+    function getProductInfo() {
+        getRequestAuth(`getProducts/${productId}`, token).then(res => {
+            setProductInfo({
+                id: res.data.id,
+                productName: res.data.title,
+                subcategory: res.data.get_subcategory.title, //
+                price: res.data.price,
+                description: res.data.description,
+                degreeOfRoast: res.data.degreeOfRoast,
+                compound: res.data.compound,
+                images: res.data.get_product_image.map(e => e.image),
+                reviewCount: res.data.review_count,
+                isFavorite: token && res.data.get_favorites_authuser.length > 0 ? true : false,
+                rating: res.data.review_avg_stars,
+            })
+            setLoading(false)
+        })
+    }
 
     function ComplementProductItem() {
         return <TouchableOpacity style={styles.productContainer}>
@@ -29,39 +61,69 @@ export default function ProductScreen({ navigation, route }) {
         count != '1' && setCount(myCount)
     }
 
+    function onPressHeart() {
+        if (token) {
+            setLikeLoading(true)
+            return productInfo.isFavorite
+                ? RemoveFromFavorites(productInfo.id, token)
+                : AddToFavorites(productInfo.id, token);
+        } else navigation.navigate('Profile');
+    }
+
+    function AddToFavorites() {
+        postRequestAuth('add_favorites', token, {
+            product_id: productInfo.id,
+        }).then(res => {
+            setProductInfo({ ...productInfo, isFavorite: true })
+            setLikeLoading(false)
+        });
+    }
+
+    function RemoveFromFavorites() {
+        postRequestAuth('remove_favorite', token, {
+            product_id: productInfo.id,
+        }).then(res => {
+            setProductInfo({ ...productInfo, isFavorite: false })
+            setLikeLoading(false)
+        })
+    }
+
     return <View style={Styles.container}>
         <ScrollView style={{ paddingHorizontal: 20 }}>
-            <Image source={{uri: `${url}uploads/${productInfo.images[0]}`}} style={{ width: '100%', height: 230, marginVertical: 15 }} />
-            <View style={Styles.flexRowJustifyBetween}>
-                <View>
-                    <Text style={[Styles.greyRegular14, { marginBottom: 5 }]} >{productInfo.subcategory}</Text>
-                    <Text style={Styles.blackSemiBold18}>{productInfo.productName}</Text>
+            {loading ? <Loading /> : <>
+                <Image source={{ uri: `${url}uploads/${productInfo.images[0]}` }} style={{ width: '100%', height: 230, marginVertical: 15 }} />
+                <View style={Styles.flexRowJustifyBetween}>
+                    <View>
+                        <Text style={[Styles.greyRegular14, { marginBottom: 5 }]} >{productInfo.subcategory}</Text>
+                        <Text style={Styles.blackSemiBold18}>{productInfo.productName}</Text>
+                    </View>
+                    <TouchableOpacity style={styles.favoriteIconContainer} onPress={() => { onPressHeart(productInfo); setProductInfo({ ...productInfo, isFavorite: !productInfo.isFavorite }) }}>
+                        {likeLoading ? <ActivityIndicator color={AppColors.GREEN_COLOR} /> : productInfo.isFavorite ? <FilledHeartIcon /> : <HeartIcon />}
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.favoriteIconContainer} onPress={() =>  {onPressHeart(productInfo); setProductInfo({...productInfo, isFavorite: !productInfo.isFavorite})}}>
-                    {productInfo.isFavorite ? <FilledHeartIcon /> : <HeartIcon />}
-                </TouchableOpacity>
-            </View>
-            <View style={[Styles.flexRow, { marginVertical: 15 }]}>
-                <Text style={Styles.blackSemiBold13}>{productInfo.price} </Text>
-                <Text style={Styles.greySemiBold13}>100г</Text>
-            </View>
-            <View style={Styles.flexRowJustifyBetween}>
-                <Count count={count} incrementCount={incrementCount} decrementCount={decrementCount} />
-                <Button text={'В корзину'} width={'48%'} />
-            </View>
-            {+productInfo.reviewCount > 0 &&  <TouchableOpacity style={[Styles.flexRowJustifyBetween, styles.reviewsContainer]} onPress={() => navigation.navigate('ProductReviewsScreen', {id: productInfo.id})}>
-                <Text style={Styles.greySemiBold14}> Отзывы: {productInfo.reviewCount} </Text>
-                <View style={Styles.flexRow}>
-                    <YellowStarIcon />
-                    <Text style={styles.rating} >{productInfo.rating}   </Text>
-                    <GreyArrowRightIcon />
+                <View style={[Styles.flexRow, { marginVertical: 15 }]}>
+                    <Text style={Styles.blackSemiBold13}>{productInfo.price} </Text>
+                    <Text style={Styles.greySemiBold13}>100г</Text>
                 </View>
-            </TouchableOpacity>}
-            <Text style={Styles.greyRegular14}>{productInfo.description}</Text>
-            <Text style={[Styles.blackSemiBold14, { marginTop: 10, marginBottom: 5 }]}>Состав:</Text>
-            <Text style={Styles.greyRegular14}>{productInfo.compound}</Text>
-            <Text style={[Styles.blackSemiBold14, { marginTop: 10, marginBottom: 5 }]}>Степень обжарки:</Text>
-            <Text style={Styles.greyRegular14}>{productInfo.degreeOfRoast}</Text>
+                <View style={Styles.flexRowJustifyBetween}>
+                    <Count count={count} incrementCount={incrementCount} decrementCount={decrementCount} />
+                    <Button text={'В корзину'} width={'48%'} />
+                </View>
+                {+productInfo.reviewCount > 0 && <TouchableOpacity style={[Styles.flexRowJustifyBetween, styles.reviewsContainer]} onPress={() => navigation.navigate('ProductReviewsScreen', { id: productInfo.id })}>
+                    <Text style={Styles.greySemiBold14}> Отзывы: {productInfo.reviewCount} </Text>
+                    <View style={Styles.flexRow}>
+                        <YellowStarIcon />
+                        <Text style={styles.rating} >{productInfo.rating}   </Text>
+                        <GreyArrowRightIcon />
+                    </View>
+                </TouchableOpacity>}
+                <Text style={Styles.greyRegular14}>{productInfo.description}</Text>
+                <Text style={[Styles.blackSemiBold14, { marginTop: 10, marginBottom: 5 }]}>Состав:</Text>
+                <Text style={Styles.greyRegular14}>{productInfo.compound}</Text>
+                <Text style={[Styles.blackSemiBold14, { marginTop: 10, marginBottom: 5 }]}>Степень обжарки:</Text>
+                <Text style={[Styles.greyRegular14, { marginBottom: 20 }]}>{productInfo.degreeOfRoast}</Text>
+            </>
+            }
             {/* <Text style={[Styles.blackSemiBold18, { marginVertical: 30 }]}>Этот товар отлично дополняют</Text>
             <View style={Styles.flexRowJustifyBetween}>
                 <ComplementProductItem />

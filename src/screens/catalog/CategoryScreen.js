@@ -1,23 +1,35 @@
-import React, {useEffect, useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import {DefaultIcon} from '../../../assets/svgs/CatalogSvgs';
-import {getRequest, postRequestAuth} from '../../api/RequestHelpers';
+import { DefaultIcon } from '../../../assets/svgs/CatalogSvgs';
+import { getRequestPagination } from '../../api/RequestHelpers';
 import Loading from '../../components/Loading';
-import {Styles} from '../../styles/Styles';
+import { Styles } from '../../styles/Styles';
 import Productitem from './components/ProductItem';
 
-export default function CategoryScreen({navigation, route}) {
-  const {id, title} = route.params;
+export default function CategoryScreen({ navigation, route }) {
+  const { id, title } = route.params;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    getProducts();
-  }, []);
+  const token = useSelector((state) => state.auth.token)
+  const [nextUrl, setNextUrl] = useState(`https://kantata.justcode.am/api/get_product_by_subcategory_id/${id}`)
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const firstPageUrl = `https://kantata.justcode.am/api/get_product_by_subcategory_id/${id}`
+  const [isLoading, setIsLoading] = useState()
+  const [productsCount, setProductsCount] = useState()
 
-  function getProducts() {
-    getRequest(`get_product_by_subcategory_id/${id}`).then(res => {
-      let products = res.data.map(el => {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      setLoading(true)
+      getProducts()
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  function getProducts(refresh) {
+    getRequestPagination(refresh ? firstPageUrl : nextUrl, token).then(res => {
+      setProductsCount(res.data_count)
+      const myProducts = res.data.data.map(el => {
         return {
           id: el.id,
           productName: el.title,
@@ -27,54 +39,39 @@ export default function CategoryScreen({navigation, route}) {
           degreeOfRoast: el.degreeOfRoast,
           compound: el.compound,
           images: el.get_product_image.map(e => e.image),
-          isFavorite: el.get_favorites_authuser.length > 0 ? true : false,
+          isFavorite: token && el.get_favorites_authuser?.length > 0 ? true : false,
           reviewCount: el.review_count,
           rating: el.review_avg_stars,
         };
-      });
-      setProducts(products);
+      })
+      refresh ? setProducts(myProducts) : setProducts([...products, ...myProducts]);
+      setNextUrl(res.data.next_page_url)
+      setIsRefreshing(false);
       setLoading(false);
+      setIsLoading(false);
     });
   }
 
-  const token = useSelector(state => state.auth.token);
-  function onPressHeart(productInfo) {
-    console.log(productInfo);
-    if (token) {
-      productInfo.isFavorite
-        ? RemoveFromFavorites(productInfo.id, token)
-        : AddToFavorites(productInfo.id, token);
-    } else navigation.navigate('Profile');
-  }
+  const handleLoadMore = () => {
+    if (nextUrl) {
+      setIsLoading(true)
+      getProducts()
+    }
+  };
 
-  function AddToFavorites(id, token) {
-    console.log(id);
-    console.log('added to favorites');
-    //   setProducts([...products, { ...productInfo, isFavorite: true }]);
-    postRequestAuth('add_favorites', token, {
-      product_id: id,
-    }).then(res => {
-      console.log(res);
-      const updatedProducts = products.map(item => {
-        if (item.id === id) {
-          return {...item, isFavorite: true};
-        }
-        return item;
-      });
-      setProducts(updatedProducts);
-    });
-  }
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    setProducts([])
+    setProductsCount(null)
+    getProducts('refresh')
+  };
 
-  function RemoveFromFavorites(id) {
-    //todo remove favorites
-    const updatedProducts = products.map(item => {
-      if (item.id === id) {
-        return {...item, isFavorite: false};
-      }
-      return item;
-    });
-    setProducts(updatedProducts);
-  }
+  const renderFooter = () => {
+    return isLoading ? <View style={{ marginBottom: 30 }}>
+      <Loading />
+    </View> : null
+  };
+
 
   return (
     <View style={Styles.container}>
@@ -82,31 +79,39 @@ export default function CategoryScreen({navigation, route}) {
         <Loading />
       ) : (
         <>
-          <View style={[Styles.flexRowJustifyBetween, {padding: 20}]}>
-            <Text style={Styles.greyRegular14}>Товаров: {products.length}</Text>
+          <View style={[Styles.flexRowJustifyBetween, { padding: 20 }]}>
+            <Text style={Styles.greyRegular14}>Товаров: {productsCount}</Text>
             <TouchableOpacity style={Styles.flexRow}>
               <DefaultIcon />
-              <Text style={[Styles.greyRegular14, {marginLeft: 5}]}>
+              <Text style={[Styles.greyRegular14, { marginLeft: 5 }]}>
                 По умолчанию
               </Text>
             </TouchableOpacity>
           </View>
-          <ScrollView style={{paddingHorizontal: 20}}>
-            <View style={[Styles.flexRowJustifyBetween, {flexWrap: 'wrap'}]}>
-              {products.map((item, i) => (
-                <Productitem
-                  key={i}
-                  productInfo={item}
-                  products={products}
-                  setProducts={setProducts}
-                  onPressProduct={() =>
-                    navigation.navigate('ProductScreen', {productInfo: item, onPressHeart: onPressHeart})
-                  }
-                  onPressHeart={onPressHeart}
-                />
-              ))}
-            </View>
-          </ScrollView>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            style={{ paddingHorizontal: 20 }}
+            columnWrapperStyle={{ justifyContent: 'space-between' }}
+            data={products}
+            numColumns={2}
+            renderItem={(item, i) => (
+              <Productitem
+                productInfo={item.item}
+                products={products}
+                setProducts={setProducts}
+                onPressProduct={() =>
+                  navigation.navigate('ProductScreen', { productId: item.item.id })
+                }
+                navigation={navigation}
+              />
+            )}
+            keyExtractor={item => item.id.toString()}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={1}
+            ListFooterComponent={renderFooter}
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+          />
         </>
       )}
     </View>

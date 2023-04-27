@@ -9,7 +9,7 @@ import HorizontalProductItem from "../../catalog/components/HorizontalProductIte
 export default function ReviewItem({ reviewInfo, navigation }) {
     return <View style={styles.container}>
         <Text style={Styles.blackSemiBold18}>{reviewInfo.username}</Text>
-        <HorizontalProductItem productInfo={reviewInfo.productInfo} hideBasket hideLine onPress={() => navigation.navigate('ProductScreen', {productInfo: reviewInfo.productInfo})}/>
+        <HorizontalProductItem productInfo={reviewInfo.productInfo} hideBasket hideLine onPress={() => navigation.navigate('ProductScreen', {productId: reviewInfo.productInfo.id})}/>
         <Text style={Styles.blackRegular14}>{reviewInfo.comment}</Text>
         <Text style={[Styles.greyRegular14, { marginVertical: 8 }]}>{reviewInfo.date}</Text>
         <View style={Styles.flexRow}>
