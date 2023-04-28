@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { DefaultIcon } from '../../../assets/svgs/CatalogSvgs';
-import { getRequestPagination } from '../../api/RequestHelpers';
+import { getRequestPagination, postRequestAuth } from '../../api/RequestHelpers';
 import Loading from '../../components/Loading';
 import { Styles } from '../../styles/Styles';
 import Productitem from './components/ProductItem';
+import Popup from '../../components/Popup';
 
 export default function CategoryScreen({ navigation, route }) {
   const { id, title } = route.params;
@@ -17,6 +18,7 @@ export default function CategoryScreen({ navigation, route }) {
   const firstPageUrl = `https://kantata.justcode.am/api/get_product_by_subcategory_id/${id}`
   const [isLoading, setIsLoading] = useState()
   const [productsCount, setProductsCount] = useState()
+  const [showPopup, setShowPopup] = useState(false)
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
@@ -72,6 +74,18 @@ export default function CategoryScreen({ navigation, route }) {
     </View> : null
   };
 
+  async function addToBasket(id) {
+    await postRequestAuth('change_basket_products_count', token, {
+      product_id: id,
+      count: 1
+    }).then(res => {
+      console.log(res);
+      if (res.status) {
+        setShowPopup(true)
+      }
+    })
+  }
+
 
   return (
     <View style={Styles.container}>
@@ -102,6 +116,7 @@ export default function CategoryScreen({ navigation, route }) {
                 onPressProduct={() =>
                   navigation.navigate('ProductScreen', { productId: item.item.id })
                 }
+                onPressBasket={addToBasket}
                 navigation={navigation}
               />
             )}
@@ -114,6 +129,13 @@ export default function CategoryScreen({ navigation, route }) {
           />
         </>
       )}
+      <Popup
+        showPopup={showPopup}
+        title={'Добавлено в корзину'}
+        text={''}
+        btnText={'Ок'}
+        onPressBtn={() => setShowPopup(false)}
+      />
     </View>
   );
 }

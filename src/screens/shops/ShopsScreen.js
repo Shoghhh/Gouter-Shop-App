@@ -27,11 +27,11 @@ export default function ShopsScreen({navigation}) {
 
   function getGalleries() {
     getRequest(`get_gallery_by_city/2`).then(res => {
-      let galleries = res.data.map(el => ({
-        id: el.id,
-        title: el.title,
-        state: 'yellow',
-        shops: el.get_shops.map(el => ({
+      let galleries = res.data.map(e => ({
+        id: e.id,
+        title: e.title,
+        state: e.color,
+        shops: e.get_shops.map(el => ({
           id: el.id,
           galleryId: el.gallery_id,
           cityId: el.city_id,
@@ -43,8 +43,6 @@ export default function ShopsScreen({navigation}) {
           description: el.text,
           lat: el.lat,
           lon: el.lon,
-          // color: el.color
-          //todo state
         })),
       }));
       setGalleries(galleries)

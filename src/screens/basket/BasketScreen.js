@@ -22,7 +22,7 @@ export default function BasketScreen({ navigation }) {
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
             setLoading(true)
-            getBasketProducts()
+            getBasketProducts('refresh')
         });
         return unsubscribe;
     }, [navigation]);
@@ -102,6 +102,8 @@ export default function BasketScreen({ navigation }) {
                     return item;
                 });
                 setProducts(updatedProducts);
+                //todo Karen
+                console.log(res.price_sum);
                 setTotalPrice(res.price_sum)
             }
         });
@@ -120,18 +122,19 @@ export default function BasketScreen({ navigation }) {
                     return item;
                 });
                 setProducts(updatedProducts);
+                console.log(res.price_sum);
                 setTotalPrice(res.price_sum)
             }
         });
     }
 
     return <View style={Styles.container}>
-        {token ? loading ? <Loading /> : (products ?
+        {token ? loading ? <Loading /> : (products.length > 0 ?
             <>
                 <Text style={[Styles.blackSemiBold20, { padding: 20, borderBottomWidth: 2, borderColor: AppColors.WHITE_SMOKE_COLOR }]}>Товаров на: {totalPrice} Р</Text>
                 <FlatList
                     showsVerticalScrollIndicator={false}
-                    style={{ paddingHorizontal: 20, marginBottom: 80 }}
+                    style={{ paddingHorizontal: 20, marginBottom: 80, paddingTop: 20 }}
                     columnWrapperStyle={{ justifyContent: 'space-between' }}
                     data={products}
                     numColumns={2}

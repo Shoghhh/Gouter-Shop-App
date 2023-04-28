@@ -8,12 +8,12 @@ import { postRequestAuth, url } from "../../../api/RequestHelpers";
 import Count from "../../../components/Count";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
-import Loading from "../../../components/Loading";
 
 export default function Productitem({ productInfo, setProducts, products, onPressProduct, width, marginRight, hideFavorite, selectMode, onPressSelect, historyMode, onPressCross, basketMode, incrementCount, decrementCount, favoritesMode, onPressBasket, navigation }) {
     const token = useSelector(state => state.auth.token)
     const [loading, setLoading] = useState(false)
     const [countLoading, setCountLoading] = useState(false)
+    const [basketLoading, setBasketLoading] = useState(false)
 
     function onPressHeart() {
         if (token) {
@@ -52,6 +52,13 @@ export default function Productitem({ productInfo, setProducts, products, onPres
             setProducts(updatedProducts);
             setLoading(false)
         })
+    }
+
+    function addToBasket(){
+        if(token) {
+            setBasketLoading(true)
+            onPressBasket(productInfo.id).then(res => setBasketLoading(false))
+        } else navigation.navigate('Profile')
     }
 
     return <TouchableOpacity style={[styles.productContainer, width && { width: width }, marginRight && { marginRight: marginRight }]} onPress={onPressProduct}>
@@ -93,20 +100,20 @@ export default function Productitem({ productInfo, setProducts, products, onPres
                             <CrossIcon />
                         </TouchableOpacity>
                     </View> :
-                        hideFavorite ? <TouchableOpacity style={[styles.button, { width: '100%' }]} onPress={onPressBasket}>
-                            <BasketIcon />
+                        hideFavorite ? <TouchableOpacity style={[styles.button, { width: '100%' }]} onPress={addToBasket}>
+                            {basketLoading ? <ActivityIndicator color={AppColors.GREEN_COLOR} size={'small'} /> : <BasketIcon />}
                         </TouchableOpacity> :
                             favoritesMode ?
                                 <View style={Styles.flexRowJustifyBetween}>
-                                    <TouchableOpacity style={styles.button} onPress={onPressBasket}>
-                                        <BasketIcon />
+                                    <TouchableOpacity style={styles.button} onPress={addToBasket}>
+                                        {basketLoading ? <ActivityIndicator color={AppColors.GREEN_COLOR} size={'small'} /> : <BasketIcon />}
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.button} onPress={onPressCross}>
                                         <CrossIcon />
                                     </TouchableOpacity>
                                 </View> : <View style={Styles.flexRowJustifyBetween}>
-                                    <TouchableOpacity style={styles.button} onPress={onPressBasket}>
-                                        <BasketIcon />
+                                    <TouchableOpacity style={styles.button} onPress={addToBasket}>
+                                        {basketLoading ? <ActivityIndicator color={AppColors.GREEN_COLOR} size={'small'} /> : <BasketIcon />}
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.button} onPress={loading ? null : onPressHeart}>
                                         {loading ? <ActivityIndicator color={AppColors.GREEN_COLOR} /> : productInfo.isFavorite ? <FilledHeartIcon /> : <HeartIcon />}

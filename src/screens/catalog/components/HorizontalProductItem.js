@@ -28,7 +28,7 @@ export default function HorizontalProductItem({ productInfo, hideBasket, hideLin
         </TouchableOpacity>}
     </TouchableOpacity>
 }
-//todo favorites pagination , get all galleries, color-nery gallery-i 
+//todo get all galleries
 
 const styles = StyleSheet.create({
     container: {

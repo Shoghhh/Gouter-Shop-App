@@ -40,7 +40,7 @@ export default function ShopsDropDown({ data, defaultOpenedId, setCurrentShop })
                     style={styles.blockContainer}
                     onPress={onPress}>
                     <View style={Styles.flexRow}>
-                        {data.state === 'yellow' ? <YellowCircleIcon /> : data.state === 'green' ? <GreenCircleIcon /> : data.state === 'red' ? <RedCircleIcon /> : null}
+                        <View style={{width: 8, height: 8, borderRadius: 50, backgroundColor: data.state}}/>
                         <Text style={[Styles.greyRegular15, { marginLeft: 5 }]}>{data.title}</Text>
                     </View>
                     {isOpened ? <GreyArrowUp /> : <GreyArrowDown />}
