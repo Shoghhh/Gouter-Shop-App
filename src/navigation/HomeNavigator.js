@@ -2,8 +2,8 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Header from './components/Header';
 import HomeScreen from '../screens/home/HomeScreen';
-import SalesScreen from '../screens/home/sales/SalesScreen';
-import SaleSingleScreen from '../screens/home/sales/SaleSingleScreen';
+import DiscountScreen from '../screens/home/discounts/DiscountScreen';
+import DiscountSingleScreen from '../screens/home/discounts/DiscountSingleScreen';
 import FeedScreen from '../screens/home/feed/FeedScreen';
 import PostSingleScreen from '../screens/home/feed/PostSingleScreen';
 import CategoryScreen from '../screens/catalog/CategoryScreen';
@@ -18,6 +18,7 @@ import LeaveAReviewScreen from '../screens/home/reviews/LeaveAReviewScreen';
 import DeliveryAddressScreen from '../screens/home/DeliveryAddressScreen';
 import ProductsScreen from '../screens/catalog/ProductsScreen';
 import ProductReviewsScreen from '../screens/catalog/ProductReviewsScreen';
+import MonthProductsScreen from '../screens/catalog/MonthProductsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,8 +40,8 @@ export const HomeNavigator = () => {
                 })}
             />
             <Stack.Screen
-                name="SalesNavigator"
-                component={SalesNavigator}
+                name="DiscountNavigator"
+                component={DiscountNavigator}
                 options={({ navigation }) => ({
                     title: '',
                     headerTransparent: true,
@@ -63,7 +64,6 @@ export const HomeNavigator = () => {
                     title: '',
                     headerTransparent: true,
                     headerShown: false,
-                    
                 })}
             />
             <Stack.Screen
@@ -75,7 +75,6 @@ export const HomeNavigator = () => {
                     header: () => (
                         <Header navigation={navigation} title={route.params.title} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')} backIcon />
                     ),
-                    
                 })}
             />
             <Stack.Screen
@@ -131,23 +130,33 @@ export const HomeNavigator = () => {
                     ),
                 })}
             />
+            <Stack.Screen
+                name="MonthProductsScreen"
+                component={MonthProductsScreen}
+                options={({ navigation }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => ( 
+                        <Header navigation={navigation} title={'Продукция месяца'} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')} backIcon />
+                    ),
+                })}
+            />
         </Stack.Navigator>
     );
 };
 
 
-
-const SalesNavigator = () => {
+const DiscountNavigator = () => {
     return (
         <Stack.Navigator
-            initialRouteName={'SalesScreen'}
+            initialRouteName={'DiscountScreen'}
             screenOptions={({ route }) => ({
                 tabBarShowLabel: false,
             })}
         >
             <Stack.Screen
-                name="SalesScreen"
-                component={SalesScreen}
+                name="DiscountScreen"
+                component={DiscountScreen}
                 options={({ navigation }) => ({
                     title: '',
                     headerTransparent: true,
@@ -157,8 +166,8 @@ const SalesNavigator = () => {
                 })}
             />
             <Stack.Screen
-                name="SaleSingleScreen"
-                component={SaleSingleScreen}
+                name="DiscountSingleScreen"
+                component={DiscountSingleScreen}
                 options={({ navigation, route }) => ({
                     title: '',
                     headerTransparent: true,
@@ -212,7 +221,7 @@ const ReviewsNavigator = () => {
             initialRouteName={'ReviewsScreen'}
             screenOptions={({ route }) => ({
                 tabBarShowLabel: false,
-                unmountOnBlur:true
+                unmountOnBlur: true
             })}
         >
             <Stack.Screen

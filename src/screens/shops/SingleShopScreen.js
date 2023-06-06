@@ -9,7 +9,7 @@ import { Styles } from "../../styles/Styles";
 export default function SingleShopScreen({ shopInfo, setCurrentShop }) {
     return <View style={{ flex: 1 }}>
         <View style={styles.headerContainer}>
-            <TouchableOpacity style={{ position: 'absolute', bottom: 17, left: 20, zIndex: 9999999 }} onPress={() => setCurrentShop(null)}>
+            <TouchableOpacity style={{ position: 'absolute', bottom: 17, left: 20, zIndex: 9999999, }} onPress={() => setCurrentShop(null)}>
                 <BackIcon />
             </TouchableOpacity>
             <Text style={[Styles.blackSemiBold18, { textAlign: 'center' }]}>Галерея</Text>

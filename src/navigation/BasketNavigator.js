@@ -8,9 +8,8 @@ import VerificationScreen from '../screens/profile/auth/VerificationScreen';
 import ForgotPasswordScreen from '../screens/profile/auth/ForgotPasswordScreen';
 import ForgotPasswordVerificationScreen from '../screens/profile/auth/ForgotPasswordVerificationScreen';
 import NewPasswordScreen from '../screens/profile/auth/NewPasswordScreen';
-
+import { FavoritesScreen } from '../screens/profile/FavoritesScreen';
 const Stack = createNativeStackNavigator();
-
 export const BasketNavigator = () => {
     return (
         <Stack.Navigator
@@ -25,9 +24,7 @@ export const BasketNavigator = () => {
                 options={({ navigation }) => ({
                     title: '',
                     headerTransparent: true,
-                    header: () => (
-                        <Header navigation={navigation} title={'Корзина'} />
-                    ),
+                    header: () => <Header navigation={navigation} title={'Корзина'} />,
                 })}
             />
             <Stack.Screen
@@ -63,7 +60,6 @@ export const BasketNavigator = () => {
                     ),
                 })}
             />
-
             <Stack.Screen
                 name="ForgotPasswordScreen"
                 component={ForgotPasswordScreen}
@@ -94,6 +90,18 @@ export const BasketNavigator = () => {
                     headerTransparent: true,
                     header: () => (
                         <Header navigation={navigation} title={'Забыли пароль?'} backIcon hideBorder />
+                    ),
+                })}
+            />
+
+            <Stack.Screen
+                name="FavoritesScreen"
+                component={FavoritesScreen}
+                options={({ navigation }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => (
+                        <Header navigation={navigation} title={'Избранное'} backIcon />
                     ),
                 })}
             />

@@ -9,7 +9,6 @@ import Productitem from "../../catalog/components/ProductItem";
 
 export default function ReviewAboutPurchaseScreen({ navigation }) {
     const [searchValue, setSearchValue] = useState('')
-
     //todo
 
     const [purchasesInfo, setPurchasesInfo] = useState([

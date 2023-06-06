@@ -4,13 +4,10 @@ import { StyleSheet, TextInput, View } from "react-native";
 import { CrossedEye, EditIcon, OpenedEye } from "../../assets/svgs/ProfileSvgs";
 import { AppColors } from "../styles/AppColors";
 import { Styles } from "../styles/Styles";
-
-
-export default function Input({ placeholder, inputType, value, setValue, notEditable, onPressEdit, isCurrentEditingField, error }) {
+export default function Input({ placeholder, inputType, value, setValue, notEditable, onPressEdit, isCurrentEditingField, error, multiline }) {
     const [isOpenEye, setIsOpenEye] = useState(false)
     const [isFocused, setIsFocused] = useState(false)
-
-    return <View style={[styles.inputContainer, Styles.flexRowJustifyBetween, isFocused && { borderColor: AppColors.GREEN_COLOR }, error && {borderColor: AppColors.RED_COLOR}]}>
+    return <View style={[styles.inputContainer, Styles.flexRowJustifyBetween, isFocused && { borderColor: AppColors.GREEN_COLOR }, multiline && {height: 120, alignItems: 'flex-start'}, error && {borderColor: AppColors.RED_COLOR}]}>
         <TextInput
             style={[styles.input, Styles.blackSemiBold14]}
             value={value}
@@ -23,6 +20,7 @@ export default function Input({ placeholder, inputType, value, setValue, notEdit
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             editable={(notEditable && !isCurrentEditingField) ? false : true}
+            multiline={multiline ? true : false}
         />
         {notEditable && !isCurrentEditingField ?
             <TouchableOpacity onPress={onPressEdit}>
@@ -39,7 +37,6 @@ export default function Input({ placeholder, inputType, value, setValue, notEdit
         }
     </View>
 }
-
 const styles = StyleSheet.create({
     inputContainer: {
         height: 50,

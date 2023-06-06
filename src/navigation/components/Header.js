@@ -8,13 +8,10 @@ import { deleteToken } from "../../store/actions/saveToken";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 import { BackIcon, SearchIcon, ShareIcon } from "./NavigationMenuSvgs";
-
-
 export default function Header({ title, navigation, backIcon, searchIcon, onPressSearch, shareIcon, hideBorder, address, logoutIcon }) {
     const dispatch = useDispatch()
     const [showPopup, setShowPopup] = useState(false)
     const token = useSelector(state => state.auth.token)
-
     function onPressLogout() {
         getRequestAuth('logout_user', token).then(res => {
             setShowPopup(false);
@@ -22,7 +19,6 @@ export default function Header({ title, navigation, backIcon, searchIcon, onPres
             navigation.navigate('Home')
         })
     }
-
     return <View style={[styles.container, hideBorder && { borderBottomWidth: 0 }]}>
         {address ? <TouchableOpacity style={styles.addressContainer} onPress={() => navigation.navigate('DeliveryAddressScreen')}>
             <Text style={styles.addressText}>Укажите адрес доставки</Text>
@@ -43,7 +39,6 @@ export default function Header({ title, navigation, backIcon, searchIcon, onPres
         {logoutIcon && <Popup showPopup={showPopup} title={'Выход'} text={'Вы уверены, что хотите выйти?'} firstBtnText={'Да'} secondBtnText={'Нет'} firstOnPress={onPressLogout} secondOnPress={() => setShowPopup(false)} />}
     </View>
 }
-
 const styles = StyleSheet.create({
     container: {
         borderBottomWidth: 2,
@@ -56,7 +51,10 @@ const styles = StyleSheet.create({
     backIcon: {
         position: 'absolute',
         left: 20,
-        bottom: 14
+        bottom: 14,
+        paddingTop: 20,
+        paddingRight: 20,
+        paddingBottom: 5
     },
     searchIcon: {
         position: 'absolute',

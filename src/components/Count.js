@@ -7,7 +7,7 @@ import { ActivityIndicator } from "react-native";
 export default function Count({ count, incrementCount, decrementCount, basket, loading }) {
     return <View style={[styles.selectAmountContainer, basket && { width: '70%', height: 30, marginBottom: 0 }, loading && { justifyContent: 'center' }]}>
         {loading ? <ActivityIndicator color={AppColors.GREEN_COLOR} /> : <>
-            <TouchableOpacity onPress={decrementCount}>
+            <TouchableOpacity onPress={(count > 1) ? decrementCount : null}>
                 <Text style={[styles.text, basket && { fontSize: 24 }]}>–</Text>
             </TouchableOpacity>
             <Text style={Styles.blackSemiBold14}>{count} шт.</Text>
@@ -17,7 +17,6 @@ export default function Count({ count, incrementCount, decrementCount, basket, l
         </>}
     </View>
 }
-
 const styles = StyleSheet.create({
     selectAmountContainer: {
         backgroundColor: AppColors.WHITE_SMOKE_COLOR,
@@ -41,5 +40,4 @@ const styles = StyleSheet.create({
         color: AppColors.GREEN_COLOR,
         fontSize: 36
     }
-
 })

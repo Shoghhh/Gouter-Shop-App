@@ -17,7 +17,7 @@ const Tab = createBottomTabNavigator();
 export default function NavigationMenu() {
   const dispatch = useDispatch()
 
-  React.useEffect(()=> {
+  React.useEffect(() => {
     dispatch(checkToken())
   }, [])
 
@@ -48,16 +48,16 @@ export default function NavigationMenu() {
         backBehavior={'initialRoute'}
       >
         <Tab.Screen
-          name="Home"
-          component={HomeNavigator}
-          options={{
+          name="Catalog"
+          component={CatalogNavigator}
+          options={({ navigation }) => ({
             title: '',
             headerTransparent: true,
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabBarIcon focused={focused} text={'Главная'} Icon={HomeIcon} />
+              <TabBarIcon focused={focused} text={'Каталог'} Icon={CatalogIcon} />
             ),
-          }}
+          })}
         />
         <Tab.Screen
           name="Shops"
@@ -72,16 +72,16 @@ export default function NavigationMenu() {
           })}
         />
         <Tab.Screen
-          name="Catalog"
-          component={CatalogNavigator}
-          options={({ navigation }) => ({
+          name="Home"
+          component={HomeNavigator}
+          options={{
             title: '',
             headerTransparent: true,
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabBarIcon focused={focused} text={'Каталог'} Icon={CatalogIcon} />
+              <TabBarIcon focused={focused} text={'Главная'} Icon={HomeIcon} />
             ),
-          })}
+          }}
         />
         <Tab.Screen
           name="Basket"

@@ -1,7 +1,7 @@
 import React from "react"
 import { View } from 'react-native';
 import { useSelector } from "react-redux";
-import { FilledHeartIcon } from "../../../assets/svgs/CatalogSvgs";
+import { FilledHeartIconGreen } from "../../../assets/svgs/CatalogSvgs";
 import { CardsIcon, HistoryIcon } from "../../../assets/svgs/ProfileSvgs";
 import Button from "../../components/Button";
 import { Styles } from "../../styles/Styles";
@@ -13,7 +13,7 @@ export default function ProfileScreen({ navigation }) {
     return <View style={[Styles.containerPadding, { paddingTop: 20 }]}>
         {token ? <>
             <ProfileField Icon={CardsIcon} text={'Личные данные'} onPress={() => navigation.navigate('PersonalInfoScreen')}/>
-            <ProfileField Icon={FilledHeartIcon} text={'Избранное'} onPress={() => navigation.navigate('FavoritesScreen')} />
+            <ProfileField Icon={FilledHeartIconGreen} text={'Избранное'} onPress={() => navigation.navigate('FavoritesScreen')} />
             <ProfileField Icon={HistoryIcon} text={'История покупок'} onPress={() => navigation.navigate('PurchaseHistoryScreen')}/>
         </> : <>
             <Button text={'Зарегистрироваться'} onPress={() => navigation.navigate('AuthScreen', { page: 'register' })} />

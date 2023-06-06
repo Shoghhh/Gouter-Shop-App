@@ -13,7 +13,6 @@ import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 import Loading from "../../components/Loading";
 import Popup from "../../components/Popup";
-
 export default function ProductScreen({ navigation, route }) {
     const { productId } = route.params;
     const [productInfo, setProductInfo] = useState({})
@@ -23,11 +22,9 @@ export default function ProductScreen({ navigation, route }) {
     const [likeLoading, setLikeLoading] = useState(false)
     const [showPopup, setShowPopup] = useState(false)
     const [basketLoading, setBasketLoading] = useState(false)
-
     useEffect(() => {
         getProductInfo()
     }, [])
-
     function getProductInfo() {
         getRequestAuth(`getProducts/${productId}`, token).then(res => {
             setProductInfo({
@@ -46,7 +43,6 @@ export default function ProductScreen({ navigation, route }) {
             setLoading(false)
         })
     }
-
     function ComplementProductItem() {
         return <TouchableOpacity style={styles.productContainer}>
             <Image source={productInfo.imgPath} style={styles.image} resizeMode={'cover'} />
@@ -54,7 +50,6 @@ export default function ProductScreen({ navigation, route }) {
             <Text style={[Styles.greySemiBold12, { marginVertical: 3 }]}>{productInfo.category}</Text>
         </TouchableOpacity>
     }
-
     function incrementCount() {
         let myCount = +count + 1
         setCount(myCount)
@@ -63,7 +58,6 @@ export default function ProductScreen({ navigation, route }) {
         let myCount = +count - 1
         count != '1' && setCount(myCount)
     }
-
     function onPressHeart() {
         if (token) {
             setLikeLoading(true)
@@ -72,7 +66,6 @@ export default function ProductScreen({ navigation, route }) {
                 : AddToFavorites(productInfo.id, token);
         } else navigation.navigate('Profile');
     }
-
     function AddToFavorites() {
         postRequestAuth('add_favorites', token, {
             product_id: productInfo.id,
@@ -81,7 +74,6 @@ export default function ProductScreen({ navigation, route }) {
             setLikeLoading(false)
         });
     }
-
     function RemoveFromFavorites() {
         postRequestAuth('remove_favorite', token, {
             product_id: productInfo.id,
@@ -90,13 +82,13 @@ export default function ProductScreen({ navigation, route }) {
             setLikeLoading(false)
         })
     }
-
     function addToBasket() {
         setBasketLoading(true)
         console.log(count, productId)
         postRequestAuth('change_basket_products_count', token, {
             product_id: productId,
-            count: count
+            count: count,
+            type: 'add'
         }).then(res => {
             if (res.status) {
                 setShowPopup(true)
@@ -104,7 +96,6 @@ export default function ProductScreen({ navigation, route }) {
             }
         })
     }
-
     return <View style={Styles.container}>
         <ScrollView style={{ paddingHorizontal: 20 }}>
             {loading ? <Loading /> : <>
@@ -124,7 +115,7 @@ export default function ProductScreen({ navigation, route }) {
                 </View>
                 <View style={Styles.flexRowJustifyBetween}>
                     <Count count={count} incrementCount={incrementCount} decrementCount={decrementCount} />
-                    <Button text={'В корзину'} width={'48%'} onPress={addToBasket} loading={basketLoading} />
+                    <Button text={'В корзину'} width={'48%'} onPress={token ? addToBasket : () => navigation.navigate('Profile')} loading={basketLoading} />
                 </View>
                 {+productInfo.reviewCount > 0 && <TouchableOpacity style={[Styles.flexRowJustifyBetween, styles.reviewsContainer]} onPress={() => navigation.navigate('ProductReviewsScreen', { id: productInfo.id })}>
                     <Text style={Styles.greySemiBold14}> Отзывы: {productInfo.reviewCount} </Text>
@@ -156,14 +147,12 @@ export default function ProductScreen({ navigation, route }) {
         />
     </View>
 }
-
-
 const styles = StyleSheet.create({
     favoriteIconContainer: {
         height: 45,
         width: 45,
         backgroundColor: AppColors.WHITE_SMOKE_COLOR,
-        borderRadius: 10,
+        borderRadius: 50,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -188,5 +177,4 @@ const styles = StyleSheet.create({
         height: 100,
         marginBottom: 5
     },
-
 })

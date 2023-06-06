@@ -32,6 +32,7 @@ export default function ProductsScreen({ navigation, route }) {
         isFavorite: token && el.get_favorites_authuser.length > 0 ? true : false,
         reviewCount: el.review_count,
         rating: el.review_avg_stars,
+        oldPrice: el.discount
       }))
       setProducts(products)
       setLoading(false)
@@ -58,16 +59,12 @@ export default function ProductsScreen({ navigation, route }) {
                 productInfo={item}
                 products={products}
                 setProducts={setProducts}
-                onPressProduct={() =>
-                  navigation.navigate('ProductScreen', { productId: item.id })
-                }
                 navigation={navigation}
               />
             ))}
           </View>
         </ScrollView>
-      </>
-      }
+      </>}
     </View>
   );
 }

@@ -5,10 +5,8 @@ import { GreyArrowRightIcon } from "../../../../assets/svgs/CatalogSvgs";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
 
-
-
-export default function TitleAll({title, hideAll, onPressAll}){
-    return <View style={styles.container}>
+export default function TitleAll({title, hideAll, onPressAll, hideBottomMargin}){
+    return <View style={[styles.container, hideBottomMargin && {marginBottom: 0}]}>
         <Text style={Styles.blackSemiBold20}>{title}</Text>
         {!hideAll && <TouchableOpacity style={Styles.flexRow} onPress={onPressAll}>
             <Text style={styles.allText}>Все</Text>
@@ -17,14 +15,14 @@ export default function TitleAll({title, hideAll, onPressAll}){
     </View>
 }
 
-
 const styles = StyleSheet.create({
     container:{
         marginHorizontal: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginVertical: 20
+        marginBottom: 20,
+        marginTop: 35,
     },
     allText: {
         color: AppColors.GREEN_COLOR,

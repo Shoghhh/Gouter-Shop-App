@@ -8,7 +8,6 @@ import Productitem from "../catalog/components/ProductItem";
 import Loading from "../../components/Loading";
 import { getRequestPagination, postRequestAuth } from "../../api/RequestHelpers";
 
-
 export default function BasketScreen({ navigation }) {
     const token = useSelector(state => state.auth.token)
     const [products, setProducts] = useState([]);
@@ -21,8 +20,10 @@ export default function BasketScreen({ navigation }) {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
-            setLoading(true)
-            getBasketProducts('refresh')
+            if (token) {
+                setLoading(true)
+                getBasketProducts('refresh')
+            }
         });
         return unsubscribe;
     }, [navigation]);
@@ -30,7 +31,6 @@ export default function BasketScreen({ navigation }) {
     function getBasketProducts(refresh) {
         console.log(refresh ? firstPageUrl : nextUrl);
         getRequestPagination(refresh ? firstPageUrl : nextUrl, token).then(res => {
-            console.log(res);
             setTotalPrice(res.price_sum)
             const myProducts = res.data.data.map(el => {
                 return {
@@ -42,6 +42,7 @@ export default function BasketScreen({ navigation }) {
                     images: el.get_products.get_product_image.map(e => e.image),
                     isFavorite: el.get_products.get_favorites_authuser?.length > 0 ? true : false,
                     rating: el.get_products.review_avg_stars,
+                    oldPrice: el.get_products.discount
                 };
             })
             refresh ? setProducts(myProducts) : setProducts([...products, ...myProducts]);
@@ -92,8 +93,10 @@ export default function BasketScreen({ navigation }) {
     async function incrementCount(id) {
         await postRequestAuth('change_basket_products_count', token, {
             product_id: id,
-            count: '1'
+            count: '1',
+            type: 'add'
         }).then(res => {
+            console.log('incrementCount', res);
             if (res.status) {
                 const updatedProducts = products.map((item, i) => {
                     if (item.id === id) {
@@ -102,8 +105,6 @@ export default function BasketScreen({ navigation }) {
                     return item;
                 });
                 setProducts(updatedProducts);
-                //todo Karen
-                console.log(res.price_sum);
                 setTotalPrice(res.price_sum)
             }
         });
@@ -112,8 +113,10 @@ export default function BasketScreen({ navigation }) {
     async function decrementCount(id) {
         await postRequestAuth('change_basket_products_count', token, {
             product_id: id,
-            count: '-1'
+            count: '-1',
+            type: 'add'
         }).then(res => {
+            console.log('decrementCount', res);
             if (res.status) {
                 const updatedProducts = products.map((item, i) => {
                     if (item.id === id) {
@@ -122,14 +125,13 @@ export default function BasketScreen({ navigation }) {
                     return item;
                 });
                 setProducts(updatedProducts);
-                console.log(res.price_sum);
                 setTotalPrice(res.price_sum)
             }
         });
     }
 
     return <View style={Styles.container}>
-        {token ? loading ? <Loading /> : (products.length > 0 ?
+        {token ? ((loading || isRefreshing) ? <Loading /> : (products.length > 0 ?
             <>
                 <Text style={[Styles.blackSemiBold20, { padding: 20, borderBottomWidth: 2, borderColor: AppColors.WHITE_SMOKE_COLOR }]}>Товаров на: {totalPrice} Р</Text>
                 <FlatList
@@ -139,7 +141,14 @@ export default function BasketScreen({ navigation }) {
                     data={products}
                     numColumns={2}
                     renderItem={(item, i) => (
-                        <Productitem productInfo={item.item} basketMode incrementCount={incrementCount} decrementCount={decrementCount} onPressCross={() => onPressDelete(item.item)} key={i} />
+                        <Productitem
+                            productInfo={item.item}
+                            basketMode
+                            incrementCount={incrementCount}
+                            decrementCount={decrementCount}
+                            onPressCross={() => onPressDelete(item.item)}
+                            key={i}
+                        />
                     )}
                     keyExtractor={item => item.id.toString()}
                     onEndReached={handleLoadMore}
@@ -155,9 +164,9 @@ export default function BasketScreen({ navigation }) {
             : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
                 <Text style={[Styles.greySemiBold24, { textAlign: 'center' }]}>Корзина пуста!</Text>
                 <Text style={[Styles.greySemiBold12, { textAlign: 'center', marginVertical: 15 }]}>Выбирайте товары из католога или из списка избранных</Text>
-                <Button text={'Перейти в избранное'} width={'100%'} marginBottom={10} />
+                <Button text={'Перейти в избранное'} width={'100%'} marginBottom={10} onPress={() => navigation.navigate('FavoritesScreen')} />
                 <Button text={'Выбрать из каталога'} width={'100%'} noFill onPress={() => navigation.navigate('Catalog')} />
-            </View>) :
+            </View>)) :
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
                 <Text style={[Styles.greySemiBold24, { textAlign: 'center', color: AppColors.GREEN_COLOR }]}>Внимание</Text>
                 <Text style={[Styles.greySemiBold12, { textAlign: 'center', marginVertical: 15, color: AppColors.GREEN_COLOR }]}>Выбирайте товары из католога или из списка избранных</Text>
@@ -165,7 +174,5 @@ export default function BasketScreen({ navigation }) {
                 <Button text={'Зарегистрироваться'} width={'100%'} noFill onPress={() => navigation.navigate('Profile')} />
             </View>
         }
-        {/* navigation.navigate('AuthScreen', { page: 'login' }) */}
-        {/* {screen: 'FavoritesScreen'}     onPress={() => navigation.navigate('Profile')}*/}
     </View>
 }

@@ -5,18 +5,17 @@ import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
 import HorizontalProductItem from "../../catalog/components/HorizontalProductItem";
 import TitleAll from "./TitleAll";
-
 export default function ReviewsBlock({ navigation, data }) {
     return <View>
-        <TitleAll title={'Отзывы гостей'} onPressAll={() => navigation.navigate('ReviewsNavigator', { screen: 'ReviewsScreen' })} />
-        <ScrollView horizontal style={{ marginLeft: 20 }} showsHorizontalScrollIndicator={false}>
+        <TitleAll title={'Отзывы гостей'} onPressAll={() => navigation.navigate('ReviewsNavigator', { screen: 'ReviewsScreen' })} hideBottomMargin/>
+        <ScrollView horizontal style={{paddingLeft: 20, paddingVertical: 20, backgroundColor: AppColors.WHITE_SMOKE_COLOR  }} showsHorizontalScrollIndicator={false}>
             {data.map((item, i) => <View style={styles.reviewContainer} key={i}>
                 <View>
                     <Text style={Styles.blackSemiBold18}>{item.username}</Text>
                     <Text style={Styles.blackRegular13}>{item.comment}</Text>
                 </View>
-                <View style={{ borderTopWidth: 1, borderColor: AppColors.GREY_COLOR, marginTop: 20 }}>
-                    <HorizontalProductItem productInfo={item.productInfo} hideBasket hideLine onPress={() => navigation.navigate('ProductScreen', { productId: item.productInfo.id })} />
+                <View style={{ borderTopWidth: 1, borderColor: AppColors.LIGHT_GREY, marginTop: 20 }}>
+                    <HorizontalProductItem productInfo={item.productInfo} hideBasket navigation={navigation} hideLine onPress={() => navigation.navigate('ProductScreen', { productId: item.productInfo.id })} />
                 </View>
             </View>)}
         </ScrollView>
@@ -25,16 +24,14 @@ export default function ReviewsBlock({ navigation, data }) {
         </View>
     </View>
 }
-
 const styles = StyleSheet.create({
     reviewContainer: {
         width: 280,
-        backgroundColor: AppColors.WHITE_SMOKE_COLOR,
+        backgroundColor: AppColors.WHITE_COLOR,
         paddingHorizontal: 15,
         paddingVertical: 20,
         marginRight: 10,
         borderRadius: 10,
-        marginBottom: 20,
         justifyContent: 'space-between',
     }
 })

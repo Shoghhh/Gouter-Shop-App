@@ -8,12 +8,14 @@ import { postRequestAuth, url } from "../../../api/RequestHelpers";
 import Count from "../../../components/Count";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
+import Popup from "../../../components/Popup";
 
-export default function Productitem({ productInfo, setProducts, products, onPressProduct, width, marginRight, hideFavorite, selectMode, onPressSelect, historyMode, onPressCross, basketMode, incrementCount, decrementCount, favoritesMode, onPressBasket, navigation }) {
+export default function Productitem({ productInfo, setProducts, products, width, marginRight, hideFavorite, selectMode, onPressSelect, historyMode, onPressCross, basketMode, incrementCount, decrementCount, favoritesMode, navigation }) {
     const token = useSelector(state => state.auth.token)
     const [loading, setLoading] = useState(false)
     const [countLoading, setCountLoading] = useState(false)
     const [basketLoading, setBasketLoading] = useState(false)
+    const [showPopup, setShowPopup] = useState(false)
 
     function onPressHeart() {
         if (token) {
@@ -54,14 +56,27 @@ export default function Productitem({ productInfo, setProducts, products, onPres
         })
     }
 
-    function addToBasket(){
-        if(token) {
+    function onPressBasket() {
+        if (token) {
             setBasketLoading(true)
-            onPressBasket(productInfo.id).then(res => setBasketLoading(false))
+            addToBasket().then(res => setBasketLoading(false))
         } else navigation.navigate('Profile')
     }
 
-    return <TouchableOpacity style={[styles.productContainer, width && { width: width }, marginRight && { marginRight: marginRight }]} onPress={onPressProduct}>
+    async function addToBasket() {
+        await postRequestAuth('change_basket_products_count', token, {
+            product_id: productInfo.id,
+            count: 1,
+            type: 'add'
+        }).then(res => {
+            console.log(res);
+            if (res.status) {
+                setShowPopup(true)
+            }
+        })
+    }
+
+    return <TouchableOpacity style={[styles.productContainer, width && { width: width }, marginRight && { marginRight: marginRight }]} onPress={() => navigation.navigate('ProductScreen', { productId: productInfo.id })}>
         <Image source={{ uri: `${url}uploads/${productInfo.images[0]}` }} style={styles.image} resizeMode={'cover'} />
         <Text style={Styles.blackSemiBold12}>{productInfo.productName}</Text>
         <Text style={[Styles.greySemiBold12, { marginVertical: 3 }]}>{productInfo.subcategory}</Text>
@@ -70,9 +85,9 @@ export default function Productitem({ productInfo, setProducts, products, onPres
             <Text style={styles.rating}>{productInfo.rating}</Text>
         </View>
         <View style={[Styles.flexRow, { marginVertical: 5 }]}>
-            {productInfo.oldPrice && <Text style={styles.redRegular13}><Text style={{ textDecorationLine: 'line-through', textDecorationColor: 'red' }}>397 Р</Text>  </Text>}
-            <Text style={Styles.blackSemiBold13}>{productInfo.price}  </Text>
-            <Text style={Styles.greySemiBold13}>100г</Text>
+            {productInfo.oldPrice && <Text style={styles.redRegular13}><Text style={{ textDecorationLine: 'line-through', textDecorationColor: 'red' }}>{productInfo.oldPrice} Р</Text> </Text>}
+            <Text style={Styles.blackSemiBold13}>{productInfo.price} Р </Text>
+            <Text style={Styles.greySemiBold13}>· 1 шт</Text>
         </View>
         {
             selectMode ?
@@ -100,19 +115,19 @@ export default function Productitem({ productInfo, setProducts, products, onPres
                             <CrossIcon />
                         </TouchableOpacity>
                     </View> :
-                        hideFavorite ? <TouchableOpacity style={[styles.button, { width: '100%' }]} onPress={addToBasket}>
+                        hideFavorite ? <TouchableOpacity style={[styles.button, { width: '100%' }]} onPress={onPressBasket}>
                             {basketLoading ? <ActivityIndicator color={AppColors.GREEN_COLOR} size={'small'} /> : <BasketIcon />}
                         </TouchableOpacity> :
                             favoritesMode ?
                                 <View style={Styles.flexRowJustifyBetween}>
-                                    <TouchableOpacity style={styles.button} onPress={addToBasket}>
+                                    <TouchableOpacity style={styles.button} onPress={onPressBasket}>
                                         {basketLoading ? <ActivityIndicator color={AppColors.GREEN_COLOR} size={'small'} /> : <BasketIcon />}
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.button} onPress={onPressCross}>
                                         <CrossIcon />
                                     </TouchableOpacity>
                                 </View> : <View style={Styles.flexRowJustifyBetween}>
-                                    <TouchableOpacity style={styles.button} onPress={addToBasket}>
+                                    <TouchableOpacity style={styles.button} onPress={onPressBasket}>
                                         {basketLoading ? <ActivityIndicator color={AppColors.GREEN_COLOR} size={'small'} /> : <BasketIcon />}
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.button} onPress={loading ? null : onPressHeart}>
@@ -120,9 +135,15 @@ export default function Productitem({ productInfo, setProducts, products, onPres
                                     </TouchableOpacity>
                                 </View>
         }
+        <Popup
+            showPopup={showPopup}
+            title={'Добавлено в корзину'}
+            text={''}
+            btnText={'Ок'}
+            onPressBtn={() => setShowPopup(false)}
+        />
     </TouchableOpacity>
 }
-
 const styles = StyleSheet.create({
     productContainer: {
         width: '48%',
@@ -168,5 +189,4 @@ const styles = StyleSheet.create({
         color: AppColors.RED_COLOR,
         fontFamily: 'OpenSans-Regular',
     }
-
 })

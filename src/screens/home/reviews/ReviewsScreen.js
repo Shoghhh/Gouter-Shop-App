@@ -8,8 +8,6 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Loading from "../../../components/Loading";
 import { getRequest, getRequestPagination } from "../../../api/RequestHelpers";
-
-
 export default function ReviewsScreen({ navigation, route }) {
     const [reviews, setReviews] = useState([])
     const [loading, setLoading] = useState(true)
@@ -17,18 +15,20 @@ export default function ReviewsScreen({ navigation, route }) {
     const [nextUrl, setNextUrl] = useState('https://kantata.justcode.am/api/get_all_reviews/Product')
     const [isRefreshing, setIsRefreshing] = useState(false);
     const firstPageUrl = 'https://kantata.justcode.am/api/get_all_reviews/Product'
-
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
             getReviews()
         });
         return unsubscribe;
     }, [navigation]);
-
     function getReviews(refresh) {
         getRequestPagination(refresh ? firstPageUrl : nextUrl).then(res => {
             console.log(res);
-            const myReviews = res.data.data.map(el => ({
+            const myReviews = res.data.data.filter((el)=> {
+                if(!el.get_product){
+                  return false
+                } else return true
+              }).map(el => ({
                 id: el.id,
                 username: el.user_name,
                 comment: el.text,
@@ -54,21 +54,17 @@ export default function ReviewsScreen({ navigation, route }) {
             setIsLoading(false);
         });
     }
-
-
     const handleLoadMore = () => {
         if (nextUrl) {
             setIsLoading(true)
             getReviews()
         }
     };
-
     const handleRefresh = () => {
         setIsRefreshing(true);
         setReviews([])
         getReviews('refresh')
     };
-
     const renderFooter = () => {
         return <View style={{ marginBottom: 70 }}>
             {isLoading ? <View style={{ marginBottom: 30 }}>
@@ -76,8 +72,6 @@ export default function ReviewsScreen({ navigation, route }) {
             </View> : null}
         </View>
     };
-
-
     return <View style={Styles.container}>
         {loading ? <Loading /> :
             <FlatList
@@ -92,7 +86,6 @@ export default function ReviewsScreen({ navigation, route }) {
                 onRefresh={handleRefresh}
             />
         }
-
         <View style={Styles.absoluteButton}>
             <Button text={'Оставить отзыв'} backgroundColor={AppColors.PURPLE_COLOR} onPress={() => navigation.navigate('LeaveAReviewAboutScreen')} />
         </View>

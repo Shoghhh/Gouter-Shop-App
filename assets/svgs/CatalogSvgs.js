@@ -1,5 +1,4 @@
 import { Svg, Path } from "react-native-svg"
-
 export const ArrowDownIcon = () => {
     return <Svg
         width={24}
@@ -14,7 +13,6 @@ export const ArrowDownIcon = () => {
         />
     </Svg>
 }
-
 export const ArrowUpIcon = () => {
     return <Svg
         width={24}
@@ -29,8 +27,6 @@ export const ArrowUpIcon = () => {
         />
     </Svg>
 }
-
-
 export const DefaultIcon = () => {
     return <Svg
         width={13}
@@ -48,8 +44,6 @@ export const DefaultIcon = () => {
         />
     </Svg>
 }
-
-
 export const YellowStarIcon = () => {
     return <Svg
         width={12}
@@ -64,7 +58,6 @@ export const YellowStarIcon = () => {
         />
     </Svg>
 }
-
 export const BasketIcon = () => {
     return <Svg
         width={20}
@@ -79,8 +72,6 @@ export const BasketIcon = () => {
         />
     </Svg>
 }
-
-
 export const HeartIcon = () => {
     return <Svg
         width={20}
@@ -95,8 +86,21 @@ export const HeartIcon = () => {
         />
     </Svg>
 }
-
 export const FilledHeartIcon = () => {
+    return <Svg
+        width={20}
+        height={20}
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <Path
+            d="M10 18.5l-1.318-1.2C4 13.055.909 10.245.909 6.818c0-2.809 2.2-5 5-5 1.582 0 3.1.737 4.091 1.891.991-1.154 2.51-1.89 4.091-1.89 2.8 0 5 2.19 5 5 0 3.426-3.09 6.236-7.773 10.481L10 18.5z"
+            fill="red"
+        />
+    </Svg>
+}
+export const FilledHeartIconGreen = () => {
     return <Svg
         width={20}
         height={20}
@@ -110,7 +114,6 @@ export const FilledHeartIcon = () => {
         />
     </Svg>
 }
-
 export const ArrowRightIcon = () => {
     return <Svg
         width={7}
@@ -125,7 +128,6 @@ export const ArrowRightIcon = () => {
         />
     </Svg>
 }
-
 export const GreyArrowRightIcon = () => {
     return <Svg
         width={7}
@@ -136,11 +138,10 @@ export const GreyArrowRightIcon = () => {
     >
         <Path
             d="M1.387.237l5.436 5.32c.064.063.11.132.137.206.027.073.04.153.04.237a.694.694 0 01-.04.237.548.548 0 01-.137.206l-5.436 5.335A.774.774 0 01.823 12a.8.8 0 01-.581-.238.753.753 0 010-1.108L4.984 6 .242 1.346A.736.736 0 01.016.799.76.76 0 01.258.237.78.78 0 01.823 0a.78.78 0 01.564.237z"
-            fill="#868686"
+            fill="#E1E1E1"
         />
     </Svg>
 }
-
 export const GreyBasketicon = () => {
     return <Svg
         width={20}
@@ -155,8 +156,6 @@ export const GreyBasketicon = () => {
         />
     </Svg>
 }
-
-
 export const CrossIcon = () => {
     return <Svg
         width={20}

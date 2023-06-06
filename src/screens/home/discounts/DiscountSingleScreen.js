@@ -5,7 +5,7 @@ import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
 
 
-export default function SaleSingleScreen({ navigation, route }) {
+export default function DiscountSingleScreen({ navigation, route }) {
     const { itemInfo } = route.params;
 
     return <View style={Styles.container}>

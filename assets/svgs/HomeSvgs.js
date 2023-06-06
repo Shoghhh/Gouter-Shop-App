@@ -1,5 +1,4 @@
 import { Svg, Path } from "react-native-svg"
-
 export const GreyArrowRight = () => {
     return <Svg
         width={24}
@@ -14,8 +13,6 @@ export const GreyArrowRight = () => {
         />
     </Svg>
 }
-
-
 export const WhiteArrowRight = () => {
     return <Svg
         width={7}
@@ -30,7 +27,6 @@ export const WhiteArrowRight = () => {
         />
     </Svg>
 }
-
 export const YellowStarIcon = () => {
     return <Svg
         width={16}
@@ -45,8 +41,6 @@ export const YellowStarIcon = () => {
         />
     </Svg>
 }
-
-
 export const BigYellowStarIcon = () => {
     return <Svg
         width={40}
@@ -61,7 +55,6 @@ export const BigYellowStarIcon = () => {
         />
     </Svg>
 }
-
 export const BigGreyStarIcon = () => {
     return <Svg
         width={40}
@@ -76,7 +69,6 @@ export const BigGreyStarIcon = () => {
         />
     </Svg>
 }
-
 export const CheckMark = () => {
     return <Svg
         width={20}
@@ -91,7 +83,6 @@ export const CheckMark = () => {
         />
     </Svg>
 }
-
 export const WhiteCheckMark = () => {
     return <Svg
         width={20}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { DefaultIcon } from '../../../assets/svgs/CatalogSvgs';
-import { getRequestPagination, postRequestAuth } from '../../api/RequestHelpers';
+import { getRequestPagination } from '../../api/RequestHelpers';
 import Loading from '../../components/Loading';
 import { Styles } from '../../styles/Styles';
 import Productitem from './components/ProductItem';
@@ -44,6 +44,7 @@ export default function CategoryScreen({ navigation, route }) {
           isFavorite: token && el.get_favorites_authuser?.length > 0 ? true : false,
           reviewCount: el.review_count,
           rating: el.review_avg_stars,
+          oldPrice: el.discount
         };
       })
       refresh ? setProducts(myProducts) : setProducts([...products, ...myProducts]);
@@ -74,19 +75,6 @@ export default function CategoryScreen({ navigation, route }) {
     </View> : null
   };
 
-  async function addToBasket(id) {
-    await postRequestAuth('change_basket_products_count', token, {
-      product_id: id,
-      count: 1
-    }).then(res => {
-      console.log(res);
-      if (res.status) {
-        setShowPopup(true)
-      }
-    })
-  }
-
-
   return (
     <View style={Styles.container}>
       {loading ? (
@@ -113,10 +101,6 @@ export default function CategoryScreen({ navigation, route }) {
                 productInfo={item.item}
                 products={products}
                 setProducts={setProducts}
-                onPressProduct={() =>
-                  navigation.navigate('ProductScreen', { productId: item.item.id })
-                }
-                onPressBasket={addToBasket}
                 navigation={navigation}
               />
             )}

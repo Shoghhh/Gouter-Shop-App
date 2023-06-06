@@ -7,5 +7,6 @@ export const AppColors = {
   RED_COLOR: '#E1041F',
   PURPLE_COLOR: '#8E95C1',
   YELLOW_COLOR: '#F2AB41',
-  DIM_GREY_COLOR: '#6D6D6D'
+  DIM_GREY_COLOR: '#6D6D6D',
+  LIGHT_GREY: '#E1E1E1'
 };
