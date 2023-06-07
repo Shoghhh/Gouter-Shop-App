@@ -6,7 +6,6 @@ import CategoryScreen from '../screens/catalog/CategoryScreen';
 import ProductScreen from '../screens/catalog/ProductScreen';
 import ProductSearchScreen from '../screens/catalog/ProductSearchScreen';
 import ProductReviewsScreen from '../screens/catalog/ProductReviewsScreen';
-import LeaveAReviewAboutScreen from '../screens/home/reviews/LeaveAReviewAboutScreen';
 import LeaveAReviewScreen from '../screens/home/reviews/LeaveAReviewScreen';
 
 const Stack = createNativeStackNavigator();

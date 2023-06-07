@@ -12,6 +12,7 @@ export default function Header({ title, navigation, backIcon, searchIcon, onPres
     const dispatch = useDispatch()
     const [showPopup, setShowPopup] = useState(false)
     const token = useSelector(state => state.auth.token)
+
     function onPressLogout() {
         getRequestAuth('logout_user', token).then(res => {
             setShowPopup(false);
@@ -19,6 +20,7 @@ export default function Header({ title, navigation, backIcon, searchIcon, onPres
             navigation.navigate('Home')
         })
     }
+    
     return <View style={[styles.container, hideBorder && { borderBottomWidth: 0 }]}>
         {address ? <TouchableOpacity style={styles.addressContainer} onPress={() => navigation.navigate('DeliveryAddressScreen')}>
             <Text style={styles.addressText}>Укажите адрес доставки</Text>

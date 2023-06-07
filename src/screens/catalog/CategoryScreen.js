@@ -44,7 +44,7 @@ export default function CategoryScreen({ navigation, route }) {
           isFavorite: token && el.get_favorites_authuser?.length > 0 ? true : false,
           reviewCount: el.review_count,
           rating: el.review_avg_stars,
-          oldPrice: el.discount
+          newPrice: el.discount
         };
       })
       refresh ? setProducts(myProducts) : setProducts([...products, ...myProducts]);

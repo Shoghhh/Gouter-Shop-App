@@ -15,12 +15,14 @@ export default function ReviewsScreen({ navigation, route }) {
     const [nextUrl, setNextUrl] = useState('https://kantata.justcode.am/api/get_all_reviews/Product')
     const [isRefreshing, setIsRefreshing] = useState(false);
     const firstPageUrl = 'https://kantata.justcode.am/api/get_all_reviews/Product'
+
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
             getReviews()
         });
         return unsubscribe;
     }, [navigation]);
+
     function getReviews(refresh) {
         getRequestPagination(refresh ? firstPageUrl : nextUrl).then(res => {
             console.log(res);
@@ -54,17 +56,20 @@ export default function ReviewsScreen({ navigation, route }) {
             setIsLoading(false);
         });
     }
+
     const handleLoadMore = () => {
         if (nextUrl) {
             setIsLoading(true)
             getReviews()
         }
     };
+
     const handleRefresh = () => {
         setIsRefreshing(true);
         setReviews([])
         getReviews('refresh')
     };
+
     const renderFooter = () => {
         return <View style={{ marginBottom: 70 }}>
             {isLoading ? <View style={{ marginBottom: 30 }}>
@@ -72,6 +77,7 @@ export default function ReviewsScreen({ navigation, route }) {
             </View> : null}
         </View>
     };
+    
     return <View style={Styles.container}>
         {loading ? <Loading /> :
             <FlatList

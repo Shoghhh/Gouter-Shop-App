@@ -7,9 +7,9 @@ import { Styles } from "../../styles/Styles";
 import Productitem from "../catalog/components/ProductItem";
 import Loading from "../../components/Loading";
 import { getRequestPagination, postRequestAuth } from "../../api/RequestHelpers";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function BasketScreen({ navigation }) {
-    const token = useSelector(state => state.auth.token)
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [nextUrl, setNextUrl] = useState(`https://kantata.justcode.am/api/get_basket_products`)
@@ -17,20 +17,28 @@ export default function BasketScreen({ navigation }) {
     const firstPageUrl = `https://kantata.justcode.am/api/get_basket_products`
     const [isLoading, setIsLoading] = useState()
     const [totalPrice, setTotalPrice] = useState('')
+    const [token, setToken] = useState(null)
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
-            if (token) {
-                setLoading(true)
+            setLoading(true)
+            const t = await AsyncStorage.getItem('token')
+            setToken(t)
+            if (t) {
                 getBasketProducts('refresh')
+            } else {
+                setLoading(false)
             }
         });
         return unsubscribe;
     }, [navigation]);
 
-    function getBasketProducts(refresh) {
-        console.log(refresh ? firstPageUrl : nextUrl);
-        getRequestPagination(refresh ? firstPageUrl : nextUrl, token).then(res => {
+
+
+    async function getBasketProducts(refresh) {
+        const myToken = await AsyncStorage.getItem('token')
+
+        getRequestPagination(refresh ? firstPageUrl : nextUrl, myToken).then(res => {
             setTotalPrice(res.price_sum)
             const myProducts = res.data.data.map(el => {
                 return {
@@ -41,8 +49,8 @@ export default function BasketScreen({ navigation }) {
                     price: el.get_products.price,
                     images: el.get_products.get_product_image.map(e => e.image),
                     isFavorite: el.get_products.get_favorites_authuser?.length > 0 ? true : false,
-                    rating: el.get_products.review_avg_stars,
-                    oldPrice: el.get_products.discount
+                    newPrice: el.get_products.discount,
+                    rating: el.get_products.review_avg_stars ?? 5,
                 };
             })
             refresh ? setProducts(myProducts) : setProducts([...products, ...myProducts]);
@@ -165,7 +173,7 @@ export default function BasketScreen({ navigation }) {
                 <Text style={[Styles.greySemiBold24, { textAlign: 'center' }]}>Корзина пуста!</Text>
                 <Text style={[Styles.greySemiBold12, { textAlign: 'center', marginVertical: 15 }]}>Выбирайте товары из католога или из списка избранных</Text>
                 <Button text={'Перейти в избранное'} width={'100%'} marginBottom={10} onPress={() => navigation.navigate('FavoritesScreen')} />
-                <Button text={'Выбрать из каталога'} width={'100%'} noFill onPress={() => navigation.navigate('Catalog')} />
+                <Button text={'Выбрать из каталога'} width={'100%'} noFill onPress={() => navigation.navigate('CatalogNavigator')} />
             </View>)) :
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
                 <Text style={[Styles.greySemiBold24, { textAlign: 'center', color: AppColors.GREEN_COLOR }]}>Внимание</Text>

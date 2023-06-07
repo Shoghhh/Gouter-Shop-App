@@ -34,11 +34,12 @@ export default function HorizontalProductItem({ productInfo, hideBasket, hideLin
     }
 
     const token = useSelector(state => state.auth.token)
+
     return <TouchableOpacity style={[styles.container, hideLine && { borderBottomWidth: 0 }]} onPress={(selectMode && productInfo.reviewAlreadyLeft) ? null : () => onPress(productInfo)}>
         <View style={Styles.flexRow}>
             <Image style={styles.image} source={{ uri: `${url}uploads/${productInfo.images[0]}` }} resizeMode={'cover'} />
             <View style={{ marginLeft: 15 }}>
-                <Text style={Styles.blackSemiBold16}>{productInfo.productName}</Text>
+                <Text style={[Styles.blackSemiBold16, { width: 170 }]}>{productInfo.productName}</Text>
                 <Text style={[Styles.greyRegular14, { marginTop: 5 }]}>{productInfo.subcategory}</Text>
             </View>
         </View>
@@ -55,6 +56,7 @@ export default function HorizontalProductItem({ productInfo, hideBasket, hideLin
         />
     </TouchableOpacity>
 }
+
 //todo get all galleries
 
 const styles = StyleSheet.create({

@@ -19,6 +19,7 @@ import DeliveryAddressScreen from '../screens/home/DeliveryAddressScreen';
 import ProductsScreen from '../screens/catalog/ProductsScreen';
 import ProductReviewsScreen from '../screens/catalog/ProductReviewsScreen';
 import MonthProductsScreen from '../screens/catalog/MonthProductsScreen';
+import { CatalogNavigator } from './CatalogNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -136,8 +137,20 @@ export const HomeNavigator = () => {
                 options={({ navigation }) => ({
                     title: '',
                     headerTransparent: true,
-                    header: () => ( 
+                    header: () => (
                         <Header navigation={navigation} title={'Продукция месяца'} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')} backIcon />
+                    ),
+                })}
+            />
+
+            <Stack.Screen
+                name="CatalogNavigator"
+                component={CatalogNavigator}
+                options={({ navigation }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => (
+                        <Header navigation={navigation} title={'Каталог'} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')} backIcon />
                     ),
                 })}
             />
@@ -179,7 +192,6 @@ const DiscountNavigator = () => {
         </Stack.Navigator>
     );
 }
-
 
 const FeedNavigator = () => {
     return (

@@ -4,7 +4,7 @@ import { url } from "../../../api/RequestHelpers";
 import { AppColors } from "../../../styles/AppColors";
 const { width } = Dimensions.get('window')
 
-export default function Slider({ images }) {
+export default function Slider({ images, productSlider }) {
     const [index, setIndex] = useState(0);
 
     function handleScroll(event) {
@@ -15,10 +15,10 @@ export default function Slider({ images }) {
     }
 
     return <>
-        <ScrollView horizontal style={styles.container} pagingEnabled onScroll={handleScroll}>
-            {images.map((image, i) => <Image source={{uri: `${url}uploads/${image.imgPath}`}} style={styles.image} resizeMode={'cover'} key={i} />)}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={productSlider ? styles.productSliderContainer : styles.container} pagingEnabled onScroll={handleScroll}>
+            {images.map((image, i) => <Image source={{ uri: `${url}uploads/${image.image}` }} style={productSlider ? styles.productImage : styles.image} resizeMode={'cover'} key={i} />)}
         </ScrollView>
-        <View style={styles.circlesContainer}>
+        <View style={[styles.circlesContainer, productSlider && {top: 240}]}>
             {images.map((item, i) => <View style={[styles.circle, index === i && { opacity: 1 }]} key={i} />)}
         </View>
     </>
@@ -43,10 +43,21 @@ const styles = StyleSheet.create({
         opacity: 0.6
     },
     image: {
-        width: width - 40, height: 140, borderRadius: 10
+        width: width - 40,
+        height: 140,
+        borderRadius: 10
+    },
+
+    productImage: {
+        height: 230,
+        width: width - 40,
     },
     container: {
         marginHorizontal: 20,
         marginTop: 30,
+    },
+    productSliderContainer: {
+        marginBottom: 15,
+        marginTop: 30
     }
 })

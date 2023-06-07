@@ -13,6 +13,8 @@ import Slider from './components/Slider';
 import StoriesBlock from './components/StoriesBlock';
 import SectionsBlock from './components/SectionsBlock';
 import MonthProducts from './components/MonthProducts';
+import { RefreshControl } from 'react-native';
+import { AppColors } from '../../styles/AppColors';
 
 export default function HomeScreen({ navigation }) {
   const [sliderImages, setSliderImages] = useState([]);
@@ -23,6 +25,7 @@ export default function HomeScreen({ navigation }) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true)
   const [monthProducts, setMonthProducts] = useState([])
+  const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     getHomeData()
@@ -30,11 +33,7 @@ export default function HomeScreen({ navigation }) {
 
   function getHomeData() {
     getRequest('get_home_page_data').then(res => {
-      setSliderImages(res.slider.map(el => ({
-        imgPath: el.image,
-        id: el.id,
-        number: el.number
-      })))
+      setSliderImages(res.slider)
 
       setStories(res.histores.map(el => ({
         id: el.id,
@@ -51,7 +50,8 @@ export default function HomeScreen({ navigation }) {
           subcategory: e.get_subcategory.title,
           price: e.price,
           images: e.get_product_image.map(e => e.image),
-          oldPrice: e.discount
+          newPrice: e.discount,
+          rating: e.averageReview
         })),
       })))
 
@@ -84,7 +84,6 @@ export default function HomeScreen({ navigation }) {
       }).map(el => ({
         username: el.user_name,
         comment: el.text,
-        rating: el.stars,
         date: new Date(el.created_at).toLocaleDateString('ru', {
           day: 'numeric',
           month: 'long',
@@ -104,19 +103,32 @@ export default function HomeScreen({ navigation }) {
         subcategory: el.get_subcategory.title,
         price: el.price,
         images: el.get_product_image.map(el => el.image),
-        oldPrice: el.discount
+        newPrice: el.discount,
+        rating: el.review_avg_stars ?? 5
       })))
-
       setLoading(false)
+      setRefreshing(false);
     })
   }
+
+
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getHomeData()
+  }, []);
+
 
   return (
     <View style={Styles.container}>
       <ScrollView
         style={{ paddingBottom: 100 }}
-        showsVerticalScrollIndicator={false}>
-        {loading ? <Loading /> :
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{}}  colors={[AppColors.GREEN_COLOR]}/>
+        }
+      >
+        {loading ? <Loading /> : (refreshing ? null :
           <>
             <Slider images={sliderImages} />
             <StoriesBlock navigation={navigation} stories={stories} />
@@ -126,14 +138,14 @@ export default function HomeScreen({ navigation }) {
             <ProServicesContainer />
             <FeedBlock navigation={navigation} data={news} />
             <ReviewsBlock data={reviews} navigation={navigation} />
-          </>
+          </>)
         }
       </ScrollView>
       <View style={Styles.absoluteButton}>
         <Button
           text={'Весь каталог'}
           Icon={WhiteArrowRight}
-          onPress={() => navigation.navigate('Catalog')}
+          onPress={() => navigation.navigate('CatalogNavigator')}
         />
       </View>
     </View>

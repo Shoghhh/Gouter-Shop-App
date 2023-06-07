@@ -2,16 +2,18 @@ import * as React from 'react';
 import { StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { BasketIcon, CatalogIcon, HomeIcon, ProfileIcon, ShopsIcon } from './components/NavigationMenuSvgs';
+import { BasketIcon, BellIcon, HomeIcon, ProfileIcon, ShopsIcon } from './components/NavigationMenuSvgs';
 import TabBarIcon from './components/TabBarIcon';
 import { ProfileNavigator } from './ProfileNavigator';
-import { CatalogNavigator } from './CatalogNavigator';
 import { HomeNavigator } from './HomeNavigator';
 import { BasketNavigator } from './BasketNavigator';
 import ShopsScreen from '../screens/shops/ShopsScreen';
 import { checkToken } from '../store/actions/saveToken';
 import { useDispatch } from 'react-redux';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import NotificationScreen from '../screens/notifications/NotificationScreen';
+import Header from './components/Header';
+
 const Tab = createBottomTabNavigator();
 
 export default function NavigationMenu() {
@@ -48,14 +50,16 @@ export default function NavigationMenu() {
         backBehavior={'initialRoute'}
       >
         <Tab.Screen
-          name="Catalog"
-          component={CatalogNavigator}
+          name="Notifications"
+          component={NotificationScreen}
           options={({ navigation }) => ({
             title: '',
             headerTransparent: true,
-            headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabBarIcon focused={focused} text={'Каталог'} Icon={CatalogIcon} />
+              <TabBarIcon focused={focused} text={'Сообщения'} Icon={BellIcon} />
+            ),
+            header: () => (
+              <Header navigation={navigation} title={'Сообщения'} />
             ),
           })}
         />

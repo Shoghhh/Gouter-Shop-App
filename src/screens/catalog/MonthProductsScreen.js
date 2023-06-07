@@ -30,8 +30,8 @@ export default function MonthProductsScreen({ navigation, route }) {
                 images: el.get_product_image.map(e => e.image),
                 isFavorite: token && el.get_favorites_authuser.length > 0 ? true : false,
                 reviewCount: el.review_count,
-                rating: el.review_avg_stars,
-                oldPrice: el.discount
+                rating: el.review_avg_stars ?? 5,
+                newPrice: el.discount
             }))
             setProducts(products)
             setLoading(false)

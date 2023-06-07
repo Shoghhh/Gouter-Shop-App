@@ -16,7 +16,7 @@ export function deleteToken() {
     await AsyncStorage.removeItem('token');
     dispatch({
       type: TOKEN,
-      payload: false,
+      payload: null,
     });
   };
 }
@@ -32,7 +32,7 @@ export function checkToken() {
     } else {
       await dispatch({
         type: TOKEN,
-        payload: false
+        payload: null
       })
     }
   };

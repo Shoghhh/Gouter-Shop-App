@@ -38,7 +38,7 @@ export function FavoritesScreen({ navigation }) {
         price: el.get_product.price,
         images: el.get_product.get_product_image.map(e => e.image),
         rating: el.review_avg_stars,
-        oldPrice: el.get_product.discount
+        newPrice: el.get_product.discount
       }));
       
       refresh ? setFavorites(myProducts) : setFavorites([...favorites, ...myProducts]);
@@ -116,7 +116,7 @@ export function FavoritesScreen({ navigation }) {
         <Button
           text={'Весь каталог'}
           Icon={WhiteArrowRight}
-          onPress={() => navigation.navigate('Catalog')}
+          onPress={() => navigation.navigate('CatalogNavigator')}
         />
       </View>
     </View>

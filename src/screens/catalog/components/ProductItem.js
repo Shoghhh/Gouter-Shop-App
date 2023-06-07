@@ -78,15 +78,15 @@ export default function Productitem({ productInfo, setProducts, products, width,
 
     return <TouchableOpacity style={[styles.productContainer, width && { width: width }, marginRight && { marginRight: marginRight }]} onPress={() => navigation.navigate('ProductScreen', { productId: productInfo.id })}>
         <Image source={{ uri: `${url}uploads/${productInfo.images[0]}` }} style={styles.image} resizeMode={'cover'} />
-        <Text style={Styles.blackSemiBold12}>{productInfo.productName}</Text>
+        <Text style={Styles.blackSemiBold12} numberOfLines={1}>{productInfo.productName}</Text>
         <Text style={[Styles.greySemiBold12, { marginVertical: 3 }]}>{productInfo.subcategory}</Text>
         <View style={Styles.flexRow}>
             <YellowStarIcon />
             <Text style={styles.rating}>{productInfo.rating}</Text>
         </View>
         <View style={[Styles.flexRow, { marginVertical: 5 }]}>
-            {productInfo.oldPrice && <Text style={styles.redRegular13}><Text style={{ textDecorationLine: 'line-through', textDecorationColor: 'red' }}>{productInfo.oldPrice} Р</Text> </Text>}
-            <Text style={Styles.blackSemiBold13}>{productInfo.price} Р </Text>
+            {productInfo.newPrice && <Text style={[styles.redRegular13]}>{productInfo.newPrice} Р </Text>}
+            <Text style={[Styles.blackSemiBold13, productInfo.newPrice && { textDecorationLine: 'line-through' }]}>{productInfo.price} Р </Text>
             <Text style={Styles.greySemiBold13}>· 1 шт</Text>
         </View>
         {

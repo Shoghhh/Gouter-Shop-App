@@ -12,6 +12,7 @@ export default function LeaveAReviewScreen({ navigation, route }) {
     const [comment, setComment] = useState('')
     const token = useSelector(state => state.auth.token)
     const [loading, setLoading] = useState(false)
+
     function addReview() {
         setLoading(true)
         postRequestAuth('add_review', token, {
@@ -56,7 +57,7 @@ export default function LeaveAReviewScreen({ navigation, route }) {
             </View>
         </ScrollView>
         {rating > 0 && <View style={Styles.absoluteButton}>
-            <Button text={'Отправить'} backgroundColor={AppColors.GREEN_COLOR} onPress={addReview} loading={loading} />
+            <Button text={'Отправить'} backgroundColor={AppColors.GREEN_COLOR} onPress={token ? addReview : () => navigation.navigate('Profile')} loading={loading} />
         </View>}
     </View>
 }

@@ -1,18 +1,16 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useContext } from "react";
-import { ActivityIndicator } from "react-native";
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from "react-native";
 import { useSelector } from "react-redux";
 import { FilledHeartIcon, GreyArrowRightIcon, HeartIcon, YellowStarIcon } from "../../../assets/svgs/CatalogSvgs";
 import { getRequestAuth, postRequestAuth, url } from "../../api/RequestHelpers";
 import Button from "../../components/Button";
 import Count from "../../components/Count";
-import Context from "../../Context";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 import Loading from "../../components/Loading";
 import Popup from "../../components/Popup";
+import Slider from "../home/components/Slider";
+
 export default function ProductScreen({ navigation, route }) {
     const { productId } = route.params;
     const [productInfo, setProductInfo] = useState({})
@@ -22,11 +20,14 @@ export default function ProductScreen({ navigation, route }) {
     const [likeLoading, setLikeLoading] = useState(false)
     const [showPopup, setShowPopup] = useState(false)
     const [basketLoading, setBasketLoading] = useState(false)
+
     useEffect(() => {
         getProductInfo()
     }, [])
+
     function getProductInfo() {
         getRequestAuth(`getProducts/${productId}`, token).then(res => {
+            console.log(res);
             setProductInfo({
                 id: res.data.id,
                 productName: res.data.title,
@@ -35,7 +36,7 @@ export default function ProductScreen({ navigation, route }) {
                 description: res.data.description,
                 degreeOfRoast: res.data.degreeOfRoast,
                 compound: res.data.compound,
-                images: res.data.get_product_image.map(e => e.image),
+                images: res.data.get_product_image.map(e => e),
                 reviewCount: res.data.review_count,
                 isFavorite: token && res.data.get_favorites_authuser.length > 0 ? true : false,
                 rating: res.data.review_avg_stars,
@@ -43,6 +44,7 @@ export default function ProductScreen({ navigation, route }) {
             setLoading(false)
         })
     }
+
     function ComplementProductItem() {
         return <TouchableOpacity style={styles.productContainer}>
             <Image source={productInfo.imgPath} style={styles.image} resizeMode={'cover'} />
@@ -50,14 +52,17 @@ export default function ProductScreen({ navigation, route }) {
             <Text style={[Styles.greySemiBold12, { marginVertical: 3 }]}>{productInfo.category}</Text>
         </TouchableOpacity>
     }
+
     function incrementCount() {
         let myCount = +count + 1
         setCount(myCount)
     }
+
     function decrementCount() {
         let myCount = +count - 1
         count != '1' && setCount(myCount)
     }
+
     function onPressHeart() {
         if (token) {
             setLikeLoading(true)
@@ -66,6 +71,7 @@ export default function ProductScreen({ navigation, route }) {
                 : AddToFavorites(productInfo.id, token);
         } else navigation.navigate('Profile');
     }
+
     function AddToFavorites() {
         postRequestAuth('add_favorites', token, {
             product_id: productInfo.id,
@@ -74,6 +80,7 @@ export default function ProductScreen({ navigation, route }) {
             setLikeLoading(false)
         });
     }
+
     function RemoveFromFavorites() {
         postRequestAuth('remove_favorite', token, {
             product_id: productInfo.id,
@@ -82,6 +89,7 @@ export default function ProductScreen({ navigation, route }) {
             setLikeLoading(false)
         })
     }
+
     function addToBasket() {
         setBasketLoading(true)
         console.log(count, productId)
@@ -96,14 +104,15 @@ export default function ProductScreen({ navigation, route }) {
             }
         })
     }
+
     return <View style={Styles.container}>
         <ScrollView style={{ paddingHorizontal: 20 }}>
             {loading ? <Loading /> : <>
-                <Image source={{ uri: `${url}uploads/${productInfo.images[0]}` }} style={{ width: '100%', height: 230, marginVertical: 15 }} />
+                <Slider images={productInfo.images} productSlider  />
                 <View style={Styles.flexRowJustifyBetween}>
                     <View>
                         <Text style={[Styles.greyRegular14, { marginBottom: 5 }]} >{productInfo.subcategory}</Text>
-                        <Text style={Styles.blackSemiBold18}>{productInfo.productName}</Text>
+                        <Text style={[Styles.blackSemiBold18, { width: 250 }]}>{productInfo.productName}</Text>
                     </View>
                     <TouchableOpacity style={styles.favoriteIconContainer} onPress={() => { onPressHeart(productInfo); setProductInfo({ ...productInfo, isFavorite: !productInfo.isFavorite }) }}>
                         {likeLoading ? <ActivityIndicator color={AppColors.GREEN_COLOR} /> : productInfo.isFavorite ? <FilledHeartIcon /> : <HeartIcon />}
