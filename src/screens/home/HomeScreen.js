@@ -25,7 +25,7 @@ export default function HomeScreen({ navigation }) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true)
   const [monthProducts, setMonthProducts] = useState([])
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     getHomeData()
@@ -125,9 +125,8 @@ export default function HomeScreen({ navigation }) {
         style={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{}}  colors={[AppColors.GREEN_COLOR]}/>
-        }
-      >
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[AppColors.GREEN_COLOR]}/>
+        }>
         {loading ? <Loading /> : (refreshing ? null :
           <>
             <Slider images={sliderImages} />

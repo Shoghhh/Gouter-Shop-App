@@ -18,10 +18,10 @@ export default function ForgotPasswordVerificationScreen({navigation, route}) {
       setCodeError(true);
       setShowErrorMsg(false);
       setLoading(false)
-    } else if (code.length < 6) {
+    } else if (code.length < 4) {
       setCodeError(true);
       setShowErrorMsg(
-        'Код безопасности должен содержать не менее 6-ти символов.',
+        'Код безопасности должен содержать не менее 4-ти символов.',
       );
       setLoading(false)
     } else {

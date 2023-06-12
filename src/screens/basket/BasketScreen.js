@@ -81,8 +81,8 @@ export default function BasketScreen({ navigation }) {
         </View> : null
     };
 
-    function onPressDelete(item) {
-        postRequestAuth('delete_basket_product', token, {
+    async function onPressDelete(item) {
+        await postRequestAuth('delete_basket_product', token, {
             product_id: item.id,
         }).then(res => {
             console.log(res);
@@ -154,7 +154,7 @@ export default function BasketScreen({ navigation }) {
                             basketMode
                             incrementCount={incrementCount}
                             decrementCount={decrementCount}
-                            onPressCross={() => onPressDelete(item.item)}
+                            onPressCross={onPressDelete}
                             key={i}
                         />
                     )}

@@ -26,7 +26,7 @@ export function FavoritesScreen({ navigation }) {
   }, [navigation]);
   function getFavorites(refresh) {
     getRequestPagination(refresh ? firstPageUrl : nextUrl, token).then(res => {
-      let myProducts = res.data.data.filter((el)=> {
+      let myProducts = res.data.data.filter((el) => {
         if (!el.get_product) {
           return false;
         }
@@ -40,7 +40,7 @@ export function FavoritesScreen({ navigation }) {
         rating: el.review_avg_stars,
         newPrice: el.get_product.discount
       }));
-      
+
       refresh ? setFavorites(myProducts) : setFavorites([...favorites, ...myProducts]);
       setNextUrl(res.data.next_page_url)
       setLoading(false);
@@ -48,8 +48,9 @@ export function FavoritesScreen({ navigation }) {
       setIsRefreshing(false);
     });
   }
-  function onPressDelete(item) {
-    postRequestAuth('remove_favorite', token, {
+
+  async function onPressDelete(item) {
+    await postRequestAuth('remove_favorite', token, {
       product_id: item.id,
     }).then(res => {
       if (res.status) {
@@ -74,6 +75,7 @@ export function FavoritesScreen({ navigation }) {
     setIsRefreshing(true);
     getFavorites('refresh')
   };
+
   const renderFooter = () => {
     return isLoading ? <View style={{ marginBottom: 30 }}>
       <Loading />
@@ -95,7 +97,7 @@ export function FavoritesScreen({ navigation }) {
               productInfo={item.item}
               favoritesMode
               navigation={navigation}
-              onPressCross={() => onPressDelete(item.item)}
+              onPressCross={onPressDelete}
               key={i}
             />
           )}
@@ -108,7 +110,7 @@ export function FavoritesScreen({ navigation }) {
         />
       ) : (
         <Text
-          style={[Styles.blackRegular14, { textAlign: 'center', marginTop: 20 }]}>
+          style={[Styles.greyRegular16, { textAlign: 'center', marginTop: 20 }]}>
           Ничего не найдено
         </Text>
       )}

@@ -15,6 +15,7 @@ export default function Productitem({ productInfo, setProducts, products, width,
     const [loading, setLoading] = useState(false)
     const [countLoading, setCountLoading] = useState(false)
     const [basketLoading, setBasketLoading] = useState(false)
+    const [crossLoading, setCrossLoading] = useState(false)
     const [showPopup, setShowPopup] = useState(false)
 
     function onPressHeart() {
@@ -99,8 +100,11 @@ export default function Productitem({ productInfo, setProducts, products, width,
                 </View>
                 : historyMode ? <View style={Styles.flexRowJustifyBetween}>
                     <Text style={Styles.greyRegular12}>{productInfo.date}</Text>
-                    <TouchableOpacity style={styles.deleteButton} onPress={onPressCross}>
-                        <CrossIcon />
+                    <TouchableOpacity style={styles.deleteButton} onPress={async () => {
+                        setCrossLoading(true)
+                        onPressCross(productInfo).then(res => setCrossLoading(false))
+                    }}>
+                        {crossLoading ? <ActivityIndicator color={AppColors.GREEN_COLOR} size={'small'} /> : <CrossIcon />}
                     </TouchableOpacity>
                 </View>
                     : basketMode ? <View style={Styles.flexRowJustifyBetween}>
@@ -111,8 +115,11 @@ export default function Productitem({ productInfo, setProducts, products, width,
                             setCountLoading(true)
                             decrementCount(productInfo.id).then(res => setCountLoading(false))
                         }} basket loading={countLoading} />
-                        <TouchableOpacity style={styles.deleteButton} onPress={onPressCross}>
-                            <CrossIcon />
+                        <TouchableOpacity style={styles.deleteButton} onPress={async () => {
+                            setCrossLoading(true)
+                            onPressCross(productInfo).then(res => setCrossLoading(false))
+                        }}>
+                            {crossLoading ? <ActivityIndicator color={AppColors.GREEN_COLOR} size={'small'} /> : <CrossIcon />}
                         </TouchableOpacity>
                     </View> :
                         hideFavorite ? <TouchableOpacity style={[styles.button, { width: '100%' }]} onPress={onPressBasket}>
@@ -123,8 +130,11 @@ export default function Productitem({ productInfo, setProducts, products, width,
                                     <TouchableOpacity style={styles.button} onPress={onPressBasket}>
                                         {basketLoading ? <ActivityIndicator color={AppColors.GREEN_COLOR} size={'small'} /> : <BasketIcon />}
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.button} onPress={onPressCross}>
-                                        <CrossIcon />
+                                    <TouchableOpacity style={styles.button} onPress={async () => {
+                                        setCrossLoading(true)
+                                        onPressCross(productInfo).then(res => setCrossLoading(false))
+                                    }}>
+                                        {crossLoading ? <ActivityIndicator color={AppColors.GREEN_COLOR} size={'small'} /> : <CrossIcon />}
                                     </TouchableOpacity>
                                 </View> : <View style={Styles.flexRowJustifyBetween}>
                                     <TouchableOpacity style={styles.button} onPress={onPressBasket}>

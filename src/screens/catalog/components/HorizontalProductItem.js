@@ -39,7 +39,7 @@ export default function HorizontalProductItem({ productInfo, hideBasket, hideLin
         <View style={Styles.flexRow}>
             <Image style={styles.image} source={{ uri: `${url}uploads/${productInfo.images[0]}` }} resizeMode={'cover'} />
             <View style={{ marginLeft: 15 }}>
-                <Text style={[Styles.blackSemiBold16, { width: 170 }]}>{productInfo.productName}</Text>
+                <Text style={[Styles.blackSemiBold16, {maxWidth: 125} ]} numberOfLines={1}>{productInfo.productName}</Text>
                 <Text style={[Styles.greyRegular14, { marginTop: 5 }]}>{productInfo.subcategory}</Text>
             </View>
         </View>

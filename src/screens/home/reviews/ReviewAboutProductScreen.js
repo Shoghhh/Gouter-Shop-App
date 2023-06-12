@@ -88,7 +88,7 @@ export default function ReviewAboutProductScreen({ navigation }) {
             ) : products.length === 0 ? (
                 <Text
                     style={[
-                        Styles.blackRegular14,
+                        Styles.greyRegular16,
                         { textAlign: 'center', marginTop: 20 },
                     ]}>
                     Ничего не найдено
