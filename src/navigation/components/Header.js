@@ -8,10 +8,14 @@ import { deleteToken } from "../../store/actions/saveToken";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 import { BackIcon, SearchIcon, ShareIcon } from "./NavigationMenuSvgs";
-export default function Header({ title, navigation, backIcon, searchIcon, onPressSearch, shareIcon, hideBorder, address, logoutIcon }) {
+import { useEffect } from "react";
+
+export default function Header({ title, navigation, backIcon, searchIcon, onPressSearch, shareIcon, hideBorder, showAddress, logoutIcon }) {
+
     const dispatch = useDispatch()
     const [showPopup, setShowPopup] = useState(false)
     const token = useSelector(state => state.auth.token)
+    const [address, setAddress] = useState(null)
 
     function onPressLogout() {
         getRequestAuth('logout_user', token).then(res => {
@@ -20,10 +24,26 @@ export default function Header({ title, navigation, backIcon, searchIcon, onPres
             navigation.navigate('Home')
         })
     }
-    
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async () => {
+            if (token) {
+                getAddress()
+            }
+        });
+        return unsubscribe;
+    }, [navigation]);
+
+    function getAddress() {
+        getRequestAuth('get_delivery_address', token).then(res => {
+            console.log(res);
+            setAddress(res.delivery_address)
+        })
+    }
+
     return <View style={[styles.container, hideBorder && { borderBottomWidth: 0 }]}>
-        {address ? <TouchableOpacity style={styles.addressContainer} onPress={() => navigation.navigate('DeliveryAddressScreen')}>
-            <Text style={styles.addressText}>Укажите адрес доставки</Text>
+        {showAddress ? <TouchableOpacity style={styles.addressContainer} onPress={() => navigation.navigate('DeliveryAddressScreen')}>
+            <Text style={styles.addressText}>{address ? address : `Укажите адрес доставки`}</Text>
         </TouchableOpacity> :
             <Text style={[Styles.blackSemiBold18, { marginBottom: 12, width: '58%', alignSelf: 'center', textAlign: 'center' }]} numberOfLines={1}>{title}</Text>}
         {backIcon && <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backIcon}>

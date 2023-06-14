@@ -3,24 +3,28 @@ import { ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View }
 import { url } from "../../../api/RequestHelpers";
 import { AppColors } from "../../../styles/AppColors";
 import TitleAll from "./TitleAll";
+import InstaStory from "react-native-insta-story";
+import { Image } from "react-native";
 
 export default function StoriesBlock({ navigation, stories }) {
 
-    function StoryItem({ storyInfo }) {
-        return <TouchableOpacity style={styles.categoryContainer} >
-            <ImageBackground source={{ uri: `${url}uploads/${storyInfo.images[0]}` }} resizeMode="contain" style={styles.image} borderRadius={10} >
-                <View style={styles.blackBack}>
-                    <Text style={styles.categoryName}>{storyInfo.title}</Text>
-                </View>
-            </ImageBackground>
-        </TouchableOpacity>
-    }
-    return <>
+    return <View>
         <TitleAll title={'Истории'} hideAll />
-        <ScrollView horizontal style={{ height: 90, marginLeft: 20 }} showsHorizontalScrollIndicator={false}>
-            {stories.map((item, i) => <StoryItem storyInfo={item} key={i} />)}
-        </ScrollView>
-    </>
+        <InstaStory
+            pressedAvatarTextColor={'black'}
+            avatarSize={90}
+            avatarImageStyle={{ borderRadius: 15 }}
+            avatarWrapperStyle={{ borderRadius: 15, borderWidth: 0 }}
+            avatarTextStyle={{ fontSize: 14 }}
+            renderCloseComponent={({ item, onPress }) => (
+                <TouchableOpacity onPress={onPress}>
+                    <Image source={require('../../../../assets/pngs/home/close.png')} style={{ width: 30, height: 30 }} />
+                </TouchableOpacity>
+            )}
+            data={stories}
+            duration={5}
+        />
+    </View>
 }
 
 

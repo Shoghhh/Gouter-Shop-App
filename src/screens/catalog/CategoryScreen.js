@@ -5,7 +5,7 @@ import { DefaultIcon } from '../../../assets/svgs/CatalogSvgs';
 import { getRequestPagination } from '../../api/RequestHelpers';
 import Loading from '../../components/Loading';
 import { Styles } from '../../styles/Styles';
-import Productitem from './components/ProductItem';
+import ProductItem from './components/ProductItem';
 import Popup from '../../components/Popup';
 
 export default function CategoryScreen({ navigation, route }) {
@@ -97,7 +97,7 @@ export default function CategoryScreen({ navigation, route }) {
             data={products}
             numColumns={2}
             renderItem={(item, i) => (
-              <Productitem
+              <ProductItem
                 productInfo={item.item}
                 products={products}
                 setProducts={setProducts}

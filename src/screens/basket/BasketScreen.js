@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import Button from "../../components/Button";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
-import Productitem from "../catalog/components/ProductItem";
+import ProductItem from "../catalog/components/ProductItem";
 import Loading from "../../components/Loading";
 import { getRequestPagination, postRequestAuth } from "../../api/RequestHelpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -32,7 +32,6 @@ export default function BasketScreen({ navigation }) {
         });
         return unsubscribe;
     }, [navigation]);
-
 
 
     async function getBasketProducts(refresh) {
@@ -149,12 +148,13 @@ export default function BasketScreen({ navigation }) {
                     data={products}
                     numColumns={2}
                     renderItem={(item, i) => (
-                        <Productitem
+                        <ProductItem
                             productInfo={item.item}
                             basketMode
                             incrementCount={incrementCount}
                             decrementCount={decrementCount}
                             onPressCross={onPressDelete}
+                            navigation={navigation}
                             key={i}
                         />
                     )}

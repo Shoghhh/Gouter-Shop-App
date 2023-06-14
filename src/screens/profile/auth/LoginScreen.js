@@ -41,8 +41,7 @@ export default function LoginScreen({ navigation }) {
           setError('Неверный ввод данных. Повторите попытку.');
         } else if(status === 403){
           setError('Данная эл. почта не зарегистрирована')
-        }
-        else if (status === 401) {
+        } else if (status === 401) {
           setShowPopup(true)
         }
         setLoading(false)
@@ -65,7 +64,6 @@ export default function LoginScreen({ navigation }) {
       myErrors.pass = false;
       error = true;
       setError('Неверный ввод данных. Повторите попытку.')
-      // setPassError(true);
     } else {
       myErrors.pass = false;
     }
@@ -77,7 +75,6 @@ export default function LoginScreen({ navigation }) {
       myErrors.email = false;
       error = true;
       setError('Неверный ввод данных. Повторите попытку.')
-      // setEmailError(true);
     } else {
       myErrors.email = false;
     }

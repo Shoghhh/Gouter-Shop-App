@@ -184,7 +184,7 @@ export default function RegisterScreen({ navigation }) {
         <Text style={Styles.redRegular12}>Пароли не совпадают.</Text>
       )}
       <Input
-        placeholder={'Номер телефона'}
+        placeholder={'+34 00 00 00 00'}
         value={phone}
         setValue={setPhone}
         inputType={'phone'}

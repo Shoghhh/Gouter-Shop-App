@@ -4,7 +4,7 @@ import Button from "../../../components/Button";
 import SearchInput from "../../../components/SearchInput";
 import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
-import Productitem from "../../catalog/components/ProductItem";
+import ProductItem from "../../catalog/components/ProductItem";
 
 
 export default function ReviewAboutPurchaseScreen({ navigation }) {
@@ -36,7 +36,7 @@ export default function ReviewAboutPurchaseScreen({ navigation }) {
         <SearchInput value={searchValue} onChangeValue={setSearchValue} placeholder={'Поиск...'}/>
         <ScrollView style={{ paddingHorizontal: 20 }}>
             {searchValue && <View style={[Styles.flexRowJustifyBetween, { flexWrap: 'wrap' }]}>
-                {purchasesInfo.map((item, i) => <Productitem productInfo={item} key={i} selectMode onPressSelect={() => onSelectItem(i)} />)}
+                {purchasesInfo.map((item, i) => <ProductItem productInfo={item} key={i} selectMode onPressSelect={() => onSelectItem(i)} />)}
             </View>}
             {purchasesInfo.some((el) => el.isSelected === true) && <View style={{ height: 70 }} />}
         </ScrollView>

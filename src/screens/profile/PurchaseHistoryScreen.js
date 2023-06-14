@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Button from "../../components/Button";
 import { Styles } from "../../styles/Styles";
-import Productitem from "../catalog/components/ProductItem";
+import ProductItem from "../catalog/components/ProductItem";
 
 export default function PurchaseHistoryScreen({navigation}) {
 
@@ -23,7 +23,7 @@ export default function PurchaseHistoryScreen({navigation}) {
     return <View style={Styles.container}>
         {purchasesInfo.length > 0 ? <ScrollView style={{ paddingHorizontal: 20 }}>
             <View style={[Styles.flexRowJustifyBetween, { flexWrap: 'wrap' }]}>
-                {/* {purchasesInfo.map((item, i) => <Productitem productInfo={item} historyMode onPressCross={() => onPressDelete(item)} key={i} />)} */}
+                {/* {purchasesInfo.map((item, i) => <ProductItem productInfo={item} historyMode onPressCross={() => onPressDelete(item)} key={i} />)} */}
             </View>
         </ScrollView> : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
             <Text style={[Styles.greySemiBold24, { textAlign: 'center' }]}>История покупок пуста</Text>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { WhiteArrowRight } from '../../../assets/svgs/HomeSvgs';
-import { getRequest } from '../../api/RequestHelpers';
+import { getRequest, url } from '../../api/RequestHelpers';
 import Button from '../../components/Button';
 import Loading from '../../components/Loading';
 import { Styles } from '../../styles/Styles';
@@ -15,6 +15,7 @@ import SectionsBlock from './components/SectionsBlock';
 import MonthProducts from './components/MonthProducts';
 import { RefreshControl } from 'react-native';
 import { AppColors } from '../../styles/AppColors';
+import SplashScreen from 'react-native-splash-screen';
 
 export default function HomeScreen({ navigation }) {
   const [sliderImages, setSliderImages] = useState([]);
@@ -35,10 +36,19 @@ export default function HomeScreen({ navigation }) {
     getRequest('get_home_page_data').then(res => {
       setSliderImages(res.slider)
 
-      setStories(res.histores.map(el => ({
+      setStories(res.histores.filter((el) => {
+        if (!el.history_image.length) {
+          return false
+        } else return true
+      }).map((el, i) => ({
         id: el.id,
-        title: el.title,
-        images: el.history_image.map(el => el.image),
+        user_id: i,
+        user_name: el.title,
+        user_image: `${url}uploads/${el.history_image[0].image}`,
+        stories: el.history_image.map((el, i) => ({
+          story_id: i,
+          story_image: `${url}uploads/${el.image}`
+        })),
       })))
 
       setSections(res.sections.map(el => ({
@@ -106,6 +116,7 @@ export default function HomeScreen({ navigation }) {
         newPrice: el.discount,
         rating: el.review_avg_stars ?? 5
       })))
+      SplashScreen.hide()
       setLoading(false)
       setRefreshing(false);
     })
@@ -125,7 +136,7 @@ export default function HomeScreen({ navigation }) {
         style={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[AppColors.GREEN_COLOR]}/>
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[AppColors.GREEN_COLOR]} />
         }>
         {loading ? <Loading /> : (refreshing ? null :
           <>

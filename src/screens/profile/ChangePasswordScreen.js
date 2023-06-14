@@ -21,6 +21,7 @@ export default function ChangePasswordScreen({ navigation }) {
     const [confirmPassErr, setConfrmPassErr] = useState(false)
 
     const [passErrorMsg, setPassErrorMsg] = useState(false)
+    const [oldPassMsg, setOldPassMsg] = useState(false)
 
     const [loading, setLoading] = useState(false)
     const [showPopup, setShowPopup] = useState(false)
@@ -46,29 +47,41 @@ export default function ChangePasswordScreen({ navigation }) {
             }
             setLoading(false)
             setPassErrorMsg(false)
+            setOldPassMsg(false)
             return
-        } else if (oldPass.length < 6 || newPass.length < 6 || confirmPass.length < 6) {
-            if (oldPass.length < 6) {
-                setOldPassErr(true)
+        } else if (newPass.length < 6 || confirmPass.length < 6 || oldPass.length < 6) {
+
+            if (newPass.length < 6 || confirmPass.length < 6) {
+                if (newPass.length < 6) {
+                    setNewPassErr(true)
+                } else {
+                    setNewPassErr(false)
+                }
+                if (confirmPass.length < 6) {
+                    setConfrmPassErr(true)
+                } else {
+                    setConfrmPassErr(false)
+                }
+                setPassErrorMsg('Пароль должен содержать не менее 6-ти символов.')
             } else {
-                setOldPassErr(false)
-            }
-            if (newPass.length < 6) {
-                setNewPassErr(true)
-            } else {
+                setPassErrorMsg(false)
                 setNewPassErr(false)
-            }
-            if (confirmPass.length < 6) {
-                setConfrmPassErr(true)
-            } else {
                 setConfrmPassErr(false)
             }
-            setPassErrorMsg('Пароль должен содержать не менее 6-ти символов.')
+
+            if (oldPass.length < 6) {
+                setOldPassErr(true)
+                setOldPassMsg('Неверный старый пароль')
+            } else {
+                setOldPassErr(false)
+                setOldPassMsg(false)
+            }
             setLoading(false)
             return
         } else if (newPass != confirmPass) {
             setPassErrorMsg('Пароли не совпадают.')
             setOldPassErr(false)
+            setOldPassMsg(false)
             setNewPassErr(true)
             setConfrmPassErr(true)
             setLoading(false)
@@ -78,6 +91,7 @@ export default function ChangePasswordScreen({ navigation }) {
             setNewPassErr(false)
             setConfrmPassErr(false)
             setPassErrorMsg(false)
+            setOldPassMsg(false)
         }
 
         postRequestAuth('change_password_data', token, {
@@ -91,7 +105,7 @@ export default function ChangePasswordScreen({ navigation }) {
                 setShowPopup(true)
             } else if (res.message == 'not valid old password') {
                 setOldPassErr(true)
-                setPassErrorMsg('Неверный старый пароль')
+                setOldPassMsg('Неверный старый пароль')
             }
 
         })
@@ -105,6 +119,9 @@ export default function ChangePasswordScreen({ navigation }) {
     return <View style={[Styles.container, { paddingTop: 20 }]}>
         <ScrollView style={{ paddingHorizontal: 20 }}>
             <Input value={oldPass} setValue={setOldPass} placeholder={'Старый пароль'} inputType={'pass'} error={oldPassErr} />
+            {oldPassMsg && (
+                <Text style={Styles.redRegular12}>{oldPassMsg}</Text>
+            )}
             <Input value={newPass} setValue={setNewPass} placeholder={'Новый пароль'} inputType={'pass'} error={newPassErr} />
             <Input value={confirmPass} setValue={setConfirmPass} placeholder={'Повтор пароля'} inputType={'pass'} error={confirmPassErr} />
             {passErrorMsg && (

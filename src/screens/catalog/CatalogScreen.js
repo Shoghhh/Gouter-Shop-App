@@ -40,7 +40,7 @@ export default function CatalogScreen({ navigation }) {
             </View>
             <Text style={styles.blockText}>Продукция месяца</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.blockContainer} onPress={() => navigation.navigate('')}>
+          <TouchableOpacity style={styles.blockContainer} onPress={() => navigation.navigate('PurchaseHistoryScreen')}>
             <View style={[styles.block, { backgroundColor: '#E9E9F2' }]}>
               <MyPurchases />
             </View>

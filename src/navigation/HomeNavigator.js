@@ -37,7 +37,7 @@ export const HomeNavigator = () => {
                 options={({ navigation }) => ({
                     title: '',
                     headerTransparent: true,
-                    header: () => <Header navigation={navigation} title={''} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')} address />,
+                    header: () => <Header navigation={navigation} title={''} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')} showAddress />,
                 })}
             />
             <Stack.Screen
@@ -149,9 +149,7 @@ export const HomeNavigator = () => {
                 options={({ navigation }) => ({
                     title: '',
                     headerTransparent: true,
-                    header: () => (
-                        <Header navigation={navigation} title={'Каталог'} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')} backIcon />
-                    ),
+                    headerShown: false
                 })}
             />
         </Stack.Navigator>

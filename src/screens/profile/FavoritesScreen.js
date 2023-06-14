@@ -6,7 +6,7 @@ import { getRequestPagination, postRequestAuth } from '../../api/RequestHelpers'
 import Button from '../../components/Button';
 import Loading from '../../components/Loading';
 import { Styles } from '../../styles/Styles';
-import Productitem from '../catalog/components/ProductItem';
+import ProductItem from '../catalog/components/ProductItem';
 
 export function FavoritesScreen({ navigation }) {
   const token = useSelector(state => state.auth.token);
@@ -93,7 +93,7 @@ export function FavoritesScreen({ navigation }) {
           data={favorites}
           numColumns={2}
           renderItem={(item, i) => (
-            <Productitem
+            <ProductItem
               productInfo={item.item}
               favoritesMode
               navigation={navigation}

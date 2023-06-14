@@ -7,6 +7,8 @@ import ProductScreen from '../screens/catalog/ProductScreen';
 import ProductSearchScreen from '../screens/catalog/ProductSearchScreen';
 import ProductReviewsScreen from '../screens/catalog/ProductReviewsScreen';
 import LeaveAReviewScreen from '../screens/home/reviews/LeaveAReviewScreen';
+import { FavoritesScreen } from '../screens/profile/FavoritesScreen';
+import PurchaseHistoryScreen from '../screens/profile/PurchaseHistoryScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,7 +28,7 @@ export const CatalogNavigator = () => {
                     title: '',
                     headerTransparent: true,
                     header: () => (
-                        <Header navigation={navigation} title={'Каталог'} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')}/>
+                        <Header navigation={navigation} title={'Каталог'} searchIcon onPressSearch={() => navigation.navigate('ProductSearchScreen')} backIcon />
                     ),
                 })}
             />
@@ -82,6 +84,28 @@ export const CatalogNavigator = () => {
                     headerTransparent: true,
                     header: () => (
                         <Header navigation={navigation} title={'Оставьте отзыв'} backIcon />
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="FavoritesScreen"
+                component={FavoritesScreen}
+                options={({ navigation }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => (
+                        <Header navigation={navigation} title={'Избранное'} backIcon />
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="PurchaseHistoryScreen"
+                component={PurchaseHistoryScreen}
+                options={({ navigation }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => (
+                        <Header navigation={navigation} title={'История покупок'} backIcon />
                     ),
                 })}
             />

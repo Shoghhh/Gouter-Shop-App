@@ -6,7 +6,7 @@ import { DefaultIcon } from '../../../assets/svgs/CatalogSvgs';
 import { getRequestAuth } from '../../api/RequestHelpers';
 import Loading from '../../components/Loading';
 import { Styles } from '../../styles/Styles';
-import Productitem from './components/ProductItem';
+import ProductItem from './components/ProductItem';
 
 export default function ProductsScreen({ navigation, route }) {
   const { id } = route.params
@@ -54,7 +54,7 @@ export default function ProductsScreen({ navigation, route }) {
         <ScrollView style={{ paddingHorizontal: 20 }}>
           <View style={[Styles.flexRowJustifyBetween, { flexWrap: 'wrap' }]}>
             {products.map((item, i) => (
-              <Productitem
+              <ProductItem
                 key={i}
                 productInfo={item}
                 products={products}

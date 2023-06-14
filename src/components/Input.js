@@ -16,9 +16,9 @@ export default function Input({ placeholder, inputType, value, setValue, notEdit
         let myPhone = !x[2]
             ? '+34 ' + x[1]
             : '+34 ' + x[2] +
-                (x[3] ? ' - ' + x[3] : '') +
-                (x[4] ? ' - ' + x[4] : '') +
-                (x[5] ? ' - ' + x[5] : '');
+            (x[3] ? ' - ' + x[3] : '') +
+            (x[4] ? ' - ' + x[4] : '') +
+            (x[5] ? ' - ' + x[5] : '');
         setValue(myPhone);
     }
 

@@ -10,7 +10,7 @@ import { AppColors } from "../../../styles/AppColors";
 import { Styles } from "../../../styles/Styles";
 import Popup from "../../../components/Popup";
 
-export default function Productitem({ productInfo, setProducts, products, width, marginRight, hideFavorite, selectMode, onPressSelect, historyMode, onPressCross, basketMode, incrementCount, decrementCount, favoritesMode, navigation }) {
+export default function ProductItem({ productInfo, setProducts, products, width, marginRight, hideFavorite, selectMode, onPressSelect, historyMode, onPressCross, basketMode, incrementCount, decrementCount, favoritesMode, navigation }) {
     const token = useSelector(state => state.auth.token)
     const [loading, setLoading] = useState(false)
     const [countLoading, setCountLoading] = useState(false)
