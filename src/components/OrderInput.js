@@ -1,37 +1,51 @@
 import React, { useState } from "react";
-import { Platform } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import DatePicker from "react-native-date-picker";
 import { AppColors } from "../styles/AppColors";
 import { Styles } from "../styles/Styles";
 import moment from 'moment';
+import SelectDropdown from 'react-native-select-dropdown'
 
-export default function OrderInput({ label, placeholder, value, setValue, addressButton, date, dropdown, phone }) {
+export default function OrderInput({ label, placeholder, value, setValue, addressButton, date, dropdown, phone, options, error }) {
     const [openDatePicker, setOpenDatePicker] = useState(false)
     const [myDate, setMyDate] = useState(new Date())
 
-    // const options = [
-    //     { label: 'Доставка курьером', value: 0 },
-    //     { label: 'Cамовывоз', value: 1 }
-    // ];
+    function formatPhone(value) {
+        let x = value
+            .replace(/\D/g, '')
+            .match(/(\d{0,2})(\d{0,2})(\d{0,2})(\d{0,2})(\d{0,2})/);
+        let myPhone = !x[2]
+            ? '+34 '
+            : '+34 ' + x[2] +
+            (x[3] ? ' - ' + x[3] : '') +
+            (x[4] ? ' - ' + x[4] : '') +
+            (x[5] ? ' - ' + x[5] : '')
+        setValue(myPhone);
+    }
 
-    // const [selectedOption, setSelectedOption] = useState(null);
-
-    // const handleSelect = option => {
-    //     setSelectedOption(option);
-    // };
 
     return <View>
         <Text style={Styles.blackSemiBold14}>{label}</Text>
         {addressButton ?
-            <TouchableOpacity style={styles.input}>
+            <TouchableOpacity style={[styles.input, error && { borderColor: AppColors.RED_COLOR }]}>
                 <Text>{value}</Text>
             </TouchableOpacity>
             : dropdown ?
-            //todo dropdown
-            <></>
-                : date ? <>
+                <SelectDropdown
+                    data={options}
+                    onSelect={(selectedItem, index) => {
+                        console.log(selectedItem, index)
+                        setValue(selectedItem)
+                    }}
+                    defaultValue={value}
+                    buttonStyle={[styles.input, { paddingHorizontal: 5, width: '100%' }, error && { borderColor: AppColors.RED_COLOR }]}
+                    dropdownStyle={{ borderBottomLeftRadius: 10, borderBottomRightRadius: 10, marginTop: -26, }}
+                    buttonTextStyle={[Styles.blackRegular12, { textAlign: 'left' }]}
+                    defaultButtonText={label}
+                    selectedRowStyle={{ backgroundColor: '#D3D3D3' }}
+                    rowTextStyle={[Styles.blackRegular12, { textAlign: 'left' }]}
+                /> : date ? <>
                     <TouchableOpacity style={styles.input} onPress={() => setOpenDatePicker(true)}>
                         <Text>{moment(myDate).format('D.M.YYYY')}</Text>
                     </TouchableOpacity>
@@ -55,9 +69,10 @@ export default function OrderInput({ label, placeholder, value, setValue, addres
                 </> : <TextInput
                     placeholder={placeholder}
                     value={value}
-                    onChangeText={(value) => setValue(value)}
+                    onChangeText={phone ? formatPhone : setValue}
                     keyboardType={phone ? 'numeric' : 'default'}
-                    style={[Styles.blackRegular12, styles.input]}
+                    style={[Styles.blackRegular12, styles.input,  error && { borderColor: AppColors.RED_COLOR }]}
+                    maxLength={phone ? 21 : 255}
                 />}
     </View>
 }
@@ -72,6 +87,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingHorizontal: 15,
         justifyContent: 'center',
+        backgroundColor: 'white',
         // alignItems: 'center'
     }
 })

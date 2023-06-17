@@ -14,7 +14,7 @@ export default function Input({ placeholder, inputType, value, setValue, notEdit
             .replace(/\D/g, '')
             .match(/(\d{0,2})(\d{0,2})(\d{0,2})(\d{0,2})(\d{0,2})/);
         let myPhone = !x[2]
-            ? '+34 ' + x[1]
+            ? '+34 '
             : '+34 ' + x[2] +
             (x[3] ? ' - ' + x[3] : '') +
             (x[4] ? ' - ' + x[4] : '') +

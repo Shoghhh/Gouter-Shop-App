@@ -13,6 +13,7 @@ export default function StoriesBlock({ navigation, stories }) {
         <InstaStory
             pressedAvatarTextColor={'black'}
             avatarSize={90}
+            storyImageStyle={{resizeMode: 'contain'}}  
             avatarImageStyle={{ borderRadius: 15 }}
             avatarWrapperStyle={{ borderRadius: 15, borderWidth: 0 }}
             avatarTextStyle={{ fontSize: 14 }}
@@ -21,6 +22,7 @@ export default function StoriesBlock({ navigation, stories }) {
                     <Image source={require('../../../../assets/pngs/home/close.png')} style={{ width: 30, height: 30 }} />
                 </TouchableOpacity>
             )}
+            swipeText=""
             data={stories}
             duration={5}
         />

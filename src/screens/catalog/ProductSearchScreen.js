@@ -3,9 +3,8 @@ import { FlatList, Text, View } from 'react-native';
 import { Styles } from '../../styles/Styles';
 import SearchInput from '../../components/SearchInput';
 import HorizontalProductItem from './components/HorizontalProductItem';
-import Popup from '../../components/Popup';
 import Loading from '../../components/Loading';
-import { postRequestAuth, postRequestPaginationAuth } from '../../api/RequestHelpers';
+import { postRequestPaginationAuth } from '../../api/RequestHelpers';
 import { useSelector } from 'react-redux';
 
 export default function ProductSearchScreen({ navigation }) {

@@ -1,45 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, View } from "react-native";
-import { useSelector } from "react-redux";
+import { FlatList, RefreshControl, Text, View } from "react-native";
 import Button from "../../components/Button";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 import ProductItem from "../catalog/components/ProductItem";
 import Loading from "../../components/Loading";
-import { getRequestPagination, postRequestAuth } from "../../api/RequestHelpers";
+import { getRequestAuth, postRequestAuth } from "../../api/RequestHelpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function BasketScreen({ navigation }) {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [nextUrl, setNextUrl] = useState(`https://kantata.justcode.am/api/get_basket_products`)
-    const [isRefreshing, setIsRefreshing] = useState(false);
-    const firstPageUrl = `https://kantata.justcode.am/api/get_basket_products`
-    const [isLoading, setIsLoading] = useState()
+    const [isRefreshing, setIsRefreshing] = useState(true);
     const [totalPrice, setTotalPrice] = useState('')
     const [token, setToken] = useState(null)
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', async () => {
-            setLoading(true)
-            const t = await AsyncStorage.getItem('token')
-            setToken(t)
-            if (t) {
-                getBasketProducts('refresh')
-            } else {
-                setLoading(false)
-            }
-        });
-        return unsubscribe;
-    }, [navigation]);
-
-
-    async function getBasketProducts(refresh) {
-        const myToken = await AsyncStorage.getItem('token')
-
-        getRequestPagination(refresh ? firstPageUrl : nextUrl, myToken).then(res => {
-            setTotalPrice(res.price_sum)
-            const myProducts = res.data.data.map(el => {
+    async function getBasketProducts(myToken) {
+        getRequestAuth('get_basket_products', myToken).then(res => {
+            const myProducts = res.data.map(el => {
                 return {
                     id: el.get_products.id,
                     count: el.product_count,
@@ -52,39 +30,24 @@ export default function BasketScreen({ navigation }) {
                     rating: el.get_products.review_avg_stars ?? 5,
                 };
             })
-            refresh ? setProducts(myProducts) : setProducts([...products, ...myProducts]);
-            setNextUrl(res.data.next_page_url)
+            setProducts(myProducts)
+            setTotalPrice(res.price_sum)
             setIsRefreshing(false);
             setLoading(false);
-            setIsLoading(false);
         });
     }
-
-    const handleLoadMore = () => {
-        if (nextUrl) {
-            setIsLoading(true)
-            getBasketProducts()
-        }
-    };
 
     const handleRefresh = () => {
         setIsRefreshing(true);
         setProducts([])
         setTotalPrice(null)
-        getBasketProducts('refresh')
-    };
-
-    const renderFooter = () => {
-        return isLoading ? <View style={{ marginBottom: 30 }}>
-            <Loading />
-        </View> : null
+        getBasketProducts()
     };
 
     async function onPressDelete(item) {
         await postRequestAuth('delete_basket_product', token, {
             product_id: item.id,
         }).then(res => {
-            console.log(res);
             if (res.status) {
                 let index = products.indexOf(item);
                 if (index !== -1)
@@ -103,7 +66,6 @@ export default function BasketScreen({ navigation }) {
             count: '1',
             type: 'add'
         }).then(res => {
-            console.log('incrementCount', res);
             if (res.status) {
                 const updatedProducts = products.map((item, i) => {
                     if (item.id === id) {
@@ -123,7 +85,6 @@ export default function BasketScreen({ navigation }) {
             count: '-1',
             type: 'add'
         }).then(res => {
-            console.log('decrementCount', res);
             if (res.status) {
                 const updatedProducts = products.map((item, i) => {
                     if (item.id === id) {
@@ -137,10 +98,24 @@ export default function BasketScreen({ navigation }) {
         });
     }
 
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async () => {
+            setLoading(true)
+            const myToken = await AsyncStorage.getItem('token')
+            setToken(myToken)
+            if (myToken) {
+                getBasketProducts(myToken)
+            } else setLoading(false)
+        });
+        return unsubscribe;
+    }, [navigation]);
+
+
     return <View style={Styles.container}>
-        {token ? ((loading || isRefreshing) ? <Loading /> : (products.length > 0 ?
+        {token ? (loading ? <Loading /> : (products.length > 0 || isRefreshing ?
             <>
-                <Text style={[Styles.blackSemiBold20, { padding: 20, borderBottomWidth: 2, borderColor: AppColors.WHITE_SMOKE_COLOR }]}>Товаров на: {totalPrice} Р</Text>
+                <Text style={[Styles.blackSemiBold20, { padding: 20, borderBottomWidth: 2, borderColor: AppColors.WHITE_SMOKE_COLOR }]}>Товаров на: {!isRefreshing && totalPrice + ' Р'}</Text>
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     style={{ paddingHorizontal: 20, marginBottom: 80, paddingTop: 20 }}
@@ -148,7 +123,7 @@ export default function BasketScreen({ navigation }) {
                     data={products}
                     numColumns={2}
                     renderItem={(item, i) => (
-                        <ProductItem
+                       isRefreshing ? null : <ProductItem
                             productInfo={item.item}
                             basketMode
                             incrementCount={incrementCount}
@@ -159,11 +134,9 @@ export default function BasketScreen({ navigation }) {
                         />
                     )}
                     keyExtractor={item => item.id.toString()}
-                    onEndReached={handleLoadMore}
-                    onEndReachedThreshold={1}
-                    ListFooterComponent={renderFooter}
-                    refreshing={isRefreshing}
-                    onRefresh={handleRefresh}
+                    refreshControl={
+                        <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} colors={[AppColors.GREEN_COLOR]} />
+                    }
                 />
                 <View style={Styles.absoluteButton}>
                     <Button text={'Оформить заказ'} onPress={() => navigation.navigate('OrderingScreen')} />

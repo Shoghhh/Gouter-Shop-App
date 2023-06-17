@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, ScrollView, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import Button from "../../../components/Button";
 import SearchInput from "../../../components/SearchInput";
 import { AppColors } from "../../../styles/AppColors";
@@ -12,23 +12,37 @@ import { useSelector } from "react-redux";
 
 export default function ReviewAboutProductScreen({ navigation }) {
     const [searchValue, setSearchValue] = useState('');
-    const [nextUrl, setNextUrl] = useState('https://kantata.justcode.am/api/search_product')
-    const [isLoading, setIsLoading] = useState()
     const [loading, setLoading] = useState(false);
     const [products, setProducts] = useState([]);
-    const [selectedProductIds, setSelectedProductIds] = useState([])
-    const token = useSelector(state => state.auth.token)
+    const [nextUrl, setNextUrl] = useState('https://kantata.justcode.am/api/search_product')
+    const firstPageUrl = 'https://kantata.justcode.am/api/search_product'
 
+    const [isLoading, setIsLoading] = useState()
+    const token = useSelector(state => state.auth.token)
+    
+    const [selectedProductIds, setSelectedProductIds] = useState([])
+    
     function onSearch(value) {
-        value != null && setSearchValue(value);
-        value != null && setLoading(true);
-        value != null && setSelectedProductIds([])
-        if (!value && (typeof value == 'string')) {
-            setNextUrl('https://kantata.justcode.am/api/search_product')
-            return
+        let myValue = value
+
+        if (value) {
+          setSearchValue(value)
         }
-        postRequestPaginationAuth(value ? 'https://kantata.justcode.am/api/search_product' : nextUrl, {
-            search_text: value,
+    
+        //load more-y chi
+        if (value != undefined) {
+          //datarka
+          if (!value) {
+            setSearchValue(value)
+            return
+          }
+          setLoading(true);
+        } else {
+          myValue = searchValue
+        }
+
+        postRequestPaginationAuth(value ? firstPageUrl : nextUrl, {
+            search_text: myValue,
         }, token).then(([status, body]) => {
             if (status === 200) {
                 const myProducts = body.data.data.map(e => ({
@@ -41,10 +55,7 @@ export default function ReviewAboutProductScreen({ navigation }) {
                 }))
                 value ? setProducts(myProducts) : setProducts([...products, ...myProducts])
                 setNextUrl(body.data.next_page_url)
-            } else {
-                setProducts([])
-                setNextUrl(null)
-            }
+            } else setProducts([])
             setLoading(false);
             setIsLoading(false)
         });
@@ -52,7 +63,6 @@ export default function ReviewAboutProductScreen({ navigation }) {
 
     const handleLoadMore = () => {
         if (nextUrl) {
-            console.log('handleLoadMore', nextUrl);
             setIsLoading(true)
             onSearch()
         }
