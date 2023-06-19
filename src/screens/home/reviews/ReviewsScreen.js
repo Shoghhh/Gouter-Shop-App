@@ -25,7 +25,7 @@ export default function ReviewsScreen({ navigation, route }) {
 
     function getReviews(refresh) {
         getRequestPagination(refresh ? firstPageUrl : nextUrl).then(res => {
-            console.log(res);
+            console.log(res.data.data[0]);
             const myReviews = res.data.data.filter((el)=> {
                 if(!el.get_product){
                   return false
@@ -34,7 +34,7 @@ export default function ReviewsScreen({ navigation, route }) {
                 id: el.id,
                 username: el.user_name,
                 comment: el.text,
-                rating: el.stars,
+                rating: +el.stars,
                 date: new Date(el.created_at).toLocaleDateString('ru', {
                     day: 'numeric',
                     month: 'long',

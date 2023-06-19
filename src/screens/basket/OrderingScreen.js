@@ -7,9 +7,11 @@ import Select from "../../components/Select";
 import { AppColors } from "../../styles/AppColors";
 import { Styles } from "../../styles/Styles";
 import OrderInfoBlock from "./OrderInfoBlock";
-import { getRequestAuth } from "../../api/RequestHelpers";
+import { getRequestAuth, postRequestAuth } from "../../api/RequestHelpers";
 import Loading from "../../components/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import DeliveryAddressScreen from "../home/DeliveryAddressScreen";
+import { useRef } from "react";
 
 export default function OrderingScreen({ navigation }) {
     const [selectedPaymentType, setSelectedPaymentType] = useState(0)
@@ -40,7 +42,7 @@ export default function OrderingScreen({ navigation }) {
     const [phone, setPhone] = useState()
     const [name, setName] = useState()
     const [email, setEmail] = useState()
-    const [comment, setComment] = useState()
+    const [comment, setComment] = useState('')
 
     const [totalPrice, setTotalPrice] = useState()
     const [products, setProducts] = useState()
@@ -58,6 +60,8 @@ export default function OrderingScreen({ navigation }) {
         emailErr: false,
         emailErrMsg: false
     })
+    const [modalVisible, setModalVisible] = useState(false);
+    const scrollRef = useRef()
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
@@ -81,7 +85,6 @@ export default function OrderingScreen({ navigation }) {
     }, [navigation]);
 
     async function getUserInfo(myToken) {
-
         getRequestAuth('get_user_by_id', myToken).then(res => {
             setName(res.data.name + ' ' + res.data.last_name)
             setEmail(res.data.email)
@@ -89,7 +92,7 @@ export default function OrderingScreen({ navigation }) {
             setReq1(true)
         })
         getRequestAuth('get_delivery_address', myToken).then(res => {
-            setDeliveryAddress(res.delivery_address)
+            setDeliveryAddress(res.delivery_address.address)
             setReq2(true)
         })
         getRequestAuth('get_basket_products', myToken).then(res => {
@@ -112,18 +115,36 @@ export default function OrderingScreen({ navigation }) {
         });
     }
 
-    function placeOrder() {
-        // setShowPopup(true)
-        isValidData()
+    async function placeOrder() {
+        const myToken = await AsyncStorage.getItem('token')
+        const data = {
+            address: deliveryAddress,
+            delivery_type: deliveryMethods[selectedDeliveryMethod],
+            delivery_date: date,
+            phone: phone,
+            name: name,
+            email: email,
+            comment: comment,
+            what_to_do_if_the_product_is_over: toDos[selectedToDo].text,
+            comunication_type: communicationWays[selectedCommunicationWay].text
+        }
+        
+        isValidData() && postRequestAuth('add_order', myToken, data).then(res => {
+            console.log(res)
+            if(res.status){
+                setShowPopup(true)
+            }
+        })
     }
+
+    useEffect(() => {
+        setErrors({...errors, deliveryMethodErr: false})
+    }, [selectedDeliveryMethod])
 
 
     function isValidData() {
-        //todotun
         let myErrors = { ...errors }
-        console.log(phone.length);
         const myPhone = phone.replace(/\D/g, '')
-        console.log(myPhone.length, myPhone);
         let error = false
 
         if (!deliveryAddress) {
@@ -162,7 +183,10 @@ export default function OrderingScreen({ navigation }) {
             myErrors.emailErrMsg = false;
         }
 
-
+        error && scrollRef.current?.scrollTo({
+            y: 0,
+            animated: true,
+        })
         setErrors(myErrors)
         return !error
     }
@@ -170,20 +194,25 @@ export default function OrderingScreen({ navigation }) {
     const validateEmail = () => {
         const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return pattern.test(email);
-    };
-
+    }
 
     function onPressOk() {
-        // navigation.popToTop()
-        // navigation.navigate('BasketScreen')
+        navigation.popToTop()
+        navigation.navigate('BasketScreen')
         setShowPopup(false)
+    }
+
+    function onSuccessAddress(address){
+        setDeliveryAddress(address)
+        setModalVisible(false)
+        setErrors({...errors, addressErr : false})
     }
 
     return <View style={[Styles.container, { paddingTop: 20 }]}>
         {!req1 || !req2 || !req3 ? <Loading /> :
-            <ScrollView style={{ paddingHorizontal: 20 }}>
+            <ScrollView style={{ paddingHorizontal: 20 }} ref={scrollRef}>
                 <Text style={[Styles.blackSemiBold18, { marginBottom: 30 }]}>Укажите информация для доставки</Text>
-                <OrderInput label={'Адрес доставки'} value={deliveryAddress ?? `Укажите адрес доставки`} setValue={setDeliveryAddress} addressButton error={errors.addressErr} />
+                <OrderInput label={'Адрес доставки'} value={deliveryAddress ?? `Укажите адрес доставки`} setValue={setDeliveryAddress} addressButton error={errors.addressErr} onPressAddress={() => setModalVisible(true)} />
                 <OrderInput label={'Способ доставки'} value={selectedDeliveryMethod} setValue={setSelectedDeliveryMethod} dropdown options={deliveryMethods} error={errors.deliveryMethodErr} />
                 <OrderInput label={'Дата доставки'} value={date} setValue={setDate} date />
                 <OrderInput label={'Телефон'} value={phone} setValue={setPhone} phone placeholder={'+34 00 00 00 00'} error={errors.phoneErr} />
@@ -207,5 +236,6 @@ export default function OrderingScreen({ navigation }) {
                 <Text style={[Styles.greyRegular12, { textAlign: 'center', marginBottom: 20 }]}>{`Нажимая на кнопку <<Оформить заказ>> вы соглашаетесь с `} <Text style={{ color: AppColors.GREEN_COLOR }}>пользовательским соглашением</Text></Text>
             </ScrollView>}
         <Popup showPopup={showPopup} title={'Заказ успешно оформлен'} text={''} btnText={'Ок'} onPressBtn={onPressOk} />
+        <DeliveryAddressScreen modalVisible={modalVisible} setModalVisible={setModalVisible}  onSuccess={onSuccessAddress} />
     </View>
 }

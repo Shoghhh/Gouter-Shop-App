@@ -10,31 +10,13 @@ import Loading from "../../../components/Loading";
 import { getRequest, postRequestPaginationAuth } from "../../../api/RequestHelpers";
 
 export default function ReviewAboutGalleryScreen({ navigation }) {
-    const [galleryItemsinfo, setGalleryItemsInfo] = useState([
-        { id: 0, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-        { id: 1, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-        { id: 2, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-        { id: 3, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-        { id: 4, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-        { id: 5, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-        { id: 6, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-        { id: 7, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-        { id: 8, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-        { id: 9, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-        { id: 10, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-        { id: 11, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-        { id: 12, name: 'ТЦ Панорама', address: 'Москва. ул. Гарибальди д.23', isSelected: false },
-    ])
-
     const [searchValue, setSearchValue] = useState()
     const [loading, setLoading] = useState(true);
     const [galleries, setGalleries] = useState([]);
     const [nextUrl, setNextUrl] = useState('https://kantata.justcode.am/api/search_gallery')
     const firstPageUrl = 'https://kantata.justcode.am/api/search_gallery'
-
     const [isLoading, setIsLoading] = useState()
     const token = useSelector(state => state.auth.token)
-
     const [selectedGalleryIds, setSelectedGalleryIds] = useState([])
 
     useEffect(() => {
@@ -47,7 +29,7 @@ export default function ReviewAboutGalleryScreen({ navigation }) {
             let myShops = []
             res.data.forEach(element => {
                 let galleryShops = element.get_shops.map(el => ({
-                    id: 0,
+                    id: el.id,
                     name: el.title,
                     address: el.address,
                     isSelected: false
@@ -69,6 +51,8 @@ export default function ReviewAboutGalleryScreen({ navigation }) {
             //datarka
             if (!value) {
                 setSearchValue(value)
+                setLoading(true)
+                getAllGalleries()
                 return
             }
             setLoading(true);
@@ -80,9 +64,11 @@ export default function ReviewAboutGalleryScreen({ navigation }) {
             search_text: myValue,
         }, token).then(([status, body]) => {
             if (status === 200) {
-                const myGalleries = body.data.data.map(e => ({
-                    id: e.id,
-                    //todo
+                const myGalleries = body.data.data.map(el => ({
+                    id: el.id,
+                    name: el.title,
+                    address: el.address,
+                    isSelected: false
                 }))
                 value ? setGalleries(myGalleries) : setGalleries([...galleries, ...myGalleries])
                 setNextUrl(body.data.next_page_url)
@@ -125,7 +111,7 @@ export default function ReviewAboutGalleryScreen({ navigation }) {
 
 
     return <View style={[Styles.container, { paddingTop: 20 }]}>
-        <SearchInput value={searchValue} onChangeValue={setSearchValue} placeholder={'Поиск...'} />
+        <SearchInput value={searchValue} onChangeValue={onSearch} placeholder={'Поиск...'} />
         {(loading ? (
             <Loading />
         ) : searchValue && galleries.length === 0 ? (
@@ -141,21 +127,21 @@ export default function ReviewAboutGalleryScreen({ navigation }) {
                 showsVerticalScrollIndicator={false}
                 style={{ paddingHorizontal: 20 }}
                 data={galleries}
-                renderItem={(item, i) => <GalleryItem galleryInfo={item.item} key={i} onPress={() => onSelectItem(i)} />}
+                renderItem={(item, i) => <GalleryItem galleryInfo={item.item} key={i} onPress={onSelectItem} />}
                 keyExtractor={(item, i) => i}
-                // onEndReached={handleLoadMore}
+                onEndReached={handleLoadMore}
                 onEndReachedThreshold={1}
                 ListFooterComponent={renderFooter}
             />
         ))}
         {selectedGalleryIds.length > 0 && < View style={Styles.absoluteButton}>
-            <Button text={'Далее'} backgroundColor={AppColors.GREEN_COLOR} onPress={() => navigation.navigate('LeaveAReviewScreen')} />
+            <Button text={'Далее'} backgroundColor={AppColors.GREEN_COLOR} onPress={() => navigation.navigate('LeaveAReviewScreen', {selectedIds: selectedGalleryIds, reviewType: 'Gallery'})} />
         </View>}
     </View >
 }
 
 function GalleryItem({ galleryInfo, onPress }) {
-    return <TouchableOpacity style={[Styles.flexRowJustifyBetween, { borderBottomWidth: 2, borderColor: AppColors.WHITE_SMOKE_COLOR, paddingVertical: 10, paddingRight: 5 }]} onPress={onPress}>
+    return <TouchableOpacity style={[Styles.flexRowJustifyBetween, { borderBottomWidth: 2, borderColor: AppColors.WHITE_SMOKE_COLOR, paddingVertical: 10, paddingRight: 5 }]} onPress={() => onPress(galleryInfo)}>
         <View>
             <Text style={Styles.blackSemiBold16}>{galleryInfo.name}</Text>
             <Text style={Styles.greyRegular14} >{galleryInfo.address}</Text>

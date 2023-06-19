@@ -7,7 +7,7 @@ import { Styles } from "../styles/Styles";
 import moment from 'moment';
 import SelectDropdown from 'react-native-select-dropdown'
 
-export default function OrderInput({ label, placeholder, value, setValue, addressButton, date, dropdown, phone, options, error }) {
+export default function OrderInput({ label, placeholder, value, setValue, addressButton, date, dropdown, phone, options, error, onPressAddress }) {
     const [openDatePicker, setOpenDatePicker] = useState(false)
     const [myDate, setMyDate] = useState(new Date())
 
@@ -28,7 +28,7 @@ export default function OrderInput({ label, placeholder, value, setValue, addres
     return <View>
         <Text style={Styles.blackSemiBold14}>{label}</Text>
         {addressButton ?
-            <TouchableOpacity style={[styles.input, error && { borderColor: AppColors.RED_COLOR }]}>
+            <TouchableOpacity style={[styles.input, error && { borderColor: AppColors.RED_COLOR }]} onPress={onPressAddress}>
                 <Text>{value}</Text>
             </TouchableOpacity>
             : dropdown ?
