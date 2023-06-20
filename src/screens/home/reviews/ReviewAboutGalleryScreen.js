@@ -20,11 +20,10 @@ export default function ReviewAboutGalleryScreen({ navigation }) {
     const [selectedGalleryIds, setSelectedGalleryIds] = useState([])
 
     useEffect(() => {
-        getAllGalleries()
+        onSearch()
     }, [])
 
     function getAllGalleries() {
-        //todotun
         getRequest('get_all_galleries').then(res => {
             let myShops = []
             res.data.forEach(element => {
@@ -41,26 +40,12 @@ export default function ReviewAboutGalleryScreen({ navigation }) {
         })
     }
 
-    function onSearch(value) {
+    function onSearch(value, loadmore) {
         let myValue = value
-        if (value) {
-            setSearchValue(value)
-        }
-        //load more-y chi
-        if (value != undefined) {
-            //datarka
-            if (!value) {
-                setSearchValue(value)
-                setLoading(true)
-                getAllGalleries()
-                return
-            }
-            setLoading(true);
-        } else {
-            myValue = searchValue
-        }
+        setSearchValue(value)
+        setLoading(true)
 
-        postRequestPaginationAuth(value ? firstPageUrl : nextUrl, {
+        postRequestPaginationAuth(loadmore ? nextUrl : firstPageUrl, {
             search_text: myValue,
         }, token).then(([status, body]) => {
             if (status === 200) {
@@ -70,7 +55,7 @@ export default function ReviewAboutGalleryScreen({ navigation }) {
                     address: el.address,
                     isSelected: false
                 }))
-                value ? setGalleries(myGalleries) : setGalleries([...galleries, ...myGalleries])
+                loadmore ? setGalleries([...galleries, ...myGalleries]) : setGalleries(myGalleries) 
                 setNextUrl(body.data.next_page_url)
             } else setGalleries([])
 
@@ -82,7 +67,7 @@ export default function ReviewAboutGalleryScreen({ navigation }) {
     const handleLoadMore = () => {
         if (nextUrl) {
             setIsLoading(true)
-            onSearch()
+            onSearch(undefined, 'loadmore')
         }
     };
 

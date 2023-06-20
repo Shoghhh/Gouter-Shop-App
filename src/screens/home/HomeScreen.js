@@ -155,7 +155,7 @@ export default function HomeScreen({ navigation }) {
         <Button
           text={'Весь каталог'}
           Icon={WhiteArrowRight}
-          onPress={() => navigation.navigate('CatalogNavigator')}
+          onPress={() => navigation.navigate('CatalogNavigator', {screen: 'CatalogScreen'})}
         />
       </View>
     </View>

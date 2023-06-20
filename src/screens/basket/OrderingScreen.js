@@ -62,6 +62,7 @@ export default function OrderingScreen({ navigation }) {
     })
     const [modalVisible, setModalVisible] = useState(false);
     const scrollRef = useRef()
+    const [orderLoading, setOrderLoading] = useState(false)
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
@@ -116,6 +117,7 @@ export default function OrderingScreen({ navigation }) {
     }
 
     async function placeOrder() {
+        setOrderLoading(true)
         const myToken = await AsyncStorage.getItem('token')
         const data = {
             address: deliveryAddress,
@@ -128,11 +130,13 @@ export default function OrderingScreen({ navigation }) {
             what_to_do_if_the_product_is_over: toDos[selectedToDo].text,
             comunication_type: communicationWays[selectedCommunicationWay].text
         }
-        
-        isValidData() && postRequestAuth('add_order', myToken, data).then(res => {
+        if(!isValidData()){
+            setOrderLoading(false)
+        } else postRequestAuth('add_order', myToken, data).then(res => {
             console.log(res)
             if(res.status){
                 setShowPopup(true)
+                setOrderLoading(false)
             }
         })
     }
@@ -232,7 +236,7 @@ export default function OrderingScreen({ navigation }) {
                 <Select data={toDos} selectedIndex={selectedToDo} setSelectedIndex={setSelectedToDo} />
                 <Text style={[Styles.blackSemiBold18, { marginBottom: 15 }]}>Укажите удобный способ коммуникации по заказу с Вами</Text>
                 <Select data={communicationWays} selectedIndex={selectedCommunicationWay} setSelectedIndex={setSelectedCommunicationWay} />
-                <Button text={'Оформить заказ'} marginBottom={20} onPress={placeOrder} />
+                <Button text={'Оформить заказ'} marginBottom={20} onPress={placeOrder} loading={orderLoading} />
                 <Text style={[Styles.greyRegular12, { textAlign: 'center', marginBottom: 20 }]}>{`Нажимая на кнопку <<Оформить заказ>> вы соглашаетесь с `} <Text style={{ color: AppColors.GREEN_COLOR }}>пользовательским соглашением</Text></Text>
             </ScrollView>}
         <Popup showPopup={showPopup} title={'Заказ успешно оформлен'} text={''} btnText={'Ок'} onPressBtn={onPressOk} />

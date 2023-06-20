@@ -9,6 +9,7 @@ import ForgotPasswordScreen from '../screens/profile/auth/ForgotPasswordScreen';
 import ForgotPasswordVerificationScreen from '../screens/profile/auth/ForgotPasswordVerificationScreen';
 import NewPasswordScreen from '../screens/profile/auth/NewPasswordScreen';
 import { FavoritesScreen } from '../screens/profile/FavoritesScreen';
+import ProductScreen from '../screens/catalog/ProductScreen';
 const Stack = createNativeStackNavigator();
 export const BasketNavigator = () => {
     return (
@@ -102,6 +103,17 @@ export const BasketNavigator = () => {
                     headerTransparent: true,
                     header: () => (
                         <Header navigation={navigation} title={'Избранное'} backIcon />
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="ProductScreen"
+                component={ProductScreen}
+                options={({ navigation, route }) => ({
+                    title: '',
+                    headerTransparent: true,
+                    header: () => (
+                        <Header navigation={navigation} title={''} shareIcon backIcon />
                     ),
                 })}
             />

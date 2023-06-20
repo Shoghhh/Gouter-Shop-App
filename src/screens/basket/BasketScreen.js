@@ -123,7 +123,7 @@ export default function BasketScreen({ navigation }) {
                     data={products}
                     numColumns={2}
                     renderItem={(item, i) => (
-                       isRefreshing ? null : <ProductItem
+                        isRefreshing ? null : <ProductItem
                             productInfo={item.item}
                             basketMode
                             incrementCount={incrementCount}

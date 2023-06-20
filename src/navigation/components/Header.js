@@ -18,7 +18,8 @@ export default function Header({ title, navigation, backIcon, searchIcon, onPres
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(true)
 
-    function onPressLogout() {
+    async function onPressLogout() {
+        const token = await AsyncStorage.getItem('token')
         getRequestAuth('logout_user', token).then(res => {
             setShowPopup(false);
             dispatch(deleteToken())
