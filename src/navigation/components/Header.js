@@ -33,7 +33,7 @@ export default function Header({ title, navigation, backIcon, searchIcon, onPres
             const token = await AsyncStorage.getItem('token')
             if (token) {
                 getAddress(token)
-            }
+            } else setLoading(false)
         });
         return unsubscribe;
     }, [navigation]);
@@ -45,9 +45,15 @@ export default function Header({ title, navigation, backIcon, searchIcon, onPres
             setLoading(false)
         })
     }
+    async function onPressAddress (){
+        const token = await AsyncStorage.getItem('token')
+
+        if(token) setModalVisible(true)
+        else navigation.navigate('Profile')
+    }
 
     return <View style={[styles.container, hideBorder && { borderBottomWidth: 0 }]}>
-        {showAddress ? <TouchableOpacity style={styles.addressContainer} onPress={() => setModalVisible(true)}>
+        {showAddress ? <TouchableOpacity style={styles.addressContainer} onPress={onPressAddress}>
             {!loading && <Text style={styles.addressText} numberOfLines={1}>{address ?? `Укажите адрес доставки`}</Text>}
         </TouchableOpacity> :
             <Text style={[Styles.blackSemiBold18, { marginBottom: 12, width: '58%', alignSelf: 'center', textAlign: 'center' }]} numberOfLines={1}>{title}</Text>}

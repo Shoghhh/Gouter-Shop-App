@@ -7,9 +7,9 @@ import HorizontalProductItem from "../../catalog/components/HorizontalProductIte
 import TitleAll from "./TitleAll";
 export default function ReviewsBlock({ navigation, data }) {
     return <View>
-        <TitleAll title={'Отзывы гостей'} onPressAll={() => navigation.navigate('ReviewsNavigator', { screen: 'ReviewsScreen' })} hideBottomMargin/>
-        <ScrollView horizontal style={{paddingLeft: 20, paddingVertical: 20, backgroundColor: AppColors.WHITE_SMOKE_COLOR  }} showsHorizontalScrollIndicator={false}>
-            {data.map((item, i) => <View style={styles.reviewContainer} key={i}>
+        <TitleAll title={'Отзывы гостей'} onPressAll={() => navigation.navigate('ReviewsNavigator', { screen: 'ReviewsScreen' })} hideBottomMargin />
+        <ScrollView horizontal style={{ paddingVertical: 20, backgroundColor: AppColors.WHITE_SMOKE_COLOR }} showsHorizontalScrollIndicator={false}>
+            {data.map((item, i) => <View style={[styles.reviewContainer, i == data.length - 1 && { marginRight: 10 }]} key={i}>
                 <View>
                     <Text style={Styles.blackSemiBold18}>{item.username}</Text>
                     <Text style={Styles.blackRegular13}>{item.comment}</Text>
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         backgroundColor: AppColors.WHITE_COLOR,
         paddingHorizontal: 15,
         paddingVertical: 20,
-        marginRight: 10,
+        marginLeft: 10,
         borderRadius: 10,
         justifyContent: 'space-between',
     }

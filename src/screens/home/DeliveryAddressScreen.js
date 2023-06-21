@@ -9,7 +9,7 @@ import {Styles} from '../../styles/Styles';
 import { postRequestAuth } from '../../api/RequestHelpers';
 import { useSelector } from 'react-redux';
 
-export default function DeliveryAddressScreen({modalVisible, setModalVisible, onSuccess}) {
+export default function DeliveryAddressScreen({modalVisible, onSuccess}) {
   const [selectedIndex, setSelectedIndex] = useState(1)
   const [longitude, setLongitude] = useState(4.326554)
   const [latitude, setLatitude] = useState(4.326554)

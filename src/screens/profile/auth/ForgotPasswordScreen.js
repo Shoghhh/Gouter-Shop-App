@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {Text, View} from 'react-native';
-import {postRequest} from '../../../api/RequestHelpers';
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
+import { postRequest } from '../../../api/RequestHelpers';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
-import {Styles} from '../../../styles/Styles';
+import { Styles } from '../../../styles/Styles';
 
-export default function ForgotPasswordScreen({navigation}) {
+export default function ForgotPasswordScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
@@ -28,8 +28,8 @@ export default function ForgotPasswordScreen({navigation}) {
         email: email,
       }).then(([status, body]) => {
         if (status === 200) {
-          navigation.navigate('ForgotPasswordVerificationScreen', {email});
-        } else if (401) {
+          navigation.navigate('ForgotPasswordVerificationScreen', { email });
+        } else if (status === 401) {
           setErrorMsg('Нет такого пользователя');
         } else if (status === 405) {
           setErrorMsg('Введите корректный адрес эл. почты.');
@@ -37,7 +37,7 @@ export default function ForgotPasswordScreen({navigation}) {
         setLoading(false)
       });
     }
-}
+  }
 
 
   const validateEmail = () => {
@@ -46,7 +46,7 @@ export default function ForgotPasswordScreen({navigation}) {
   };
 
   return (
-    <View style={[Styles.containerPadding, {paddingTop: 20}]}>
+    <View style={[Styles.containerPadding, { paddingTop: 20 }]}>
       <Input
         placeholder={'Электронная почта '}
         value={email}

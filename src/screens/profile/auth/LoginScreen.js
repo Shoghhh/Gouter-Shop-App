@@ -33,6 +33,7 @@ export default function LoginScreen({ navigation }) {
       email: email,
       password: pass,
     }).then(([status, data]) => {
+      console.log(status, data);
       if (status === 200) {
         dispatch(saveToken(data.token));
           navigation.popToTop();
