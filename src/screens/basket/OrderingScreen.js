@@ -219,7 +219,7 @@ export default function OrderingScreen({ navigation }) {
                 <OrderInput label={'Адрес доставки'} value={deliveryAddress ?? `Укажите адрес доставки`} setValue={setDeliveryAddress} addressButton error={errors.addressErr} onPressAddress={() => setModalVisible(true)} />
                 <OrderInput label={'Способ доставки'} value={selectedDeliveryMethod} setValue={setSelectedDeliveryMethod} dropdown options={deliveryMethods} error={errors.deliveryMethodErr} />
                 <OrderInput label={'Дата доставки'} value={date} setValue={setDate} date />
-                <OrderInput label={'Телефон'} value={phone} setValue={setPhone} phone placeholder={'+34 00 00 00 00'} error={errors.phoneErr} />
+                <OrderInput label={'Телефон'} value={phone} setValue={setPhone} phone  placeholder={'+34 (000) 000 - 000'} error={errors.phoneErr} />
                 <OrderInput label={'Имя'} value={name} setValue={setName} placeholder={'Имя Фамилия'} error={errors.nameErr} />
                 <OrderInput label={'Электронная почта'} value={email} setValue={setEmail} placeholder={'Электронная почта'} error={errors.emailErr || errors.emailErrMsg} />
                 {errors.emailErrMsg && (

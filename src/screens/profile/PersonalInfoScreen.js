@@ -153,7 +153,7 @@ export default function PersonalInfoScreen({ navigation }) {
                     onPressEdit={() => setCurrentEditingField('phone')}
                     isCurrentEditingField={currentEditingField == 'phone'}
                     error={phoneErr}
-                    placeholder={'+34 00 00 00 00'}
+                    placeholder={'+34 (000) 000 - 000'}
                 />
                 <Input
                     value={email}

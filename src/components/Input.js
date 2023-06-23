@@ -12,13 +12,16 @@ export default function Input({ placeholder, inputType, value, setValue, notEdit
     function formatPhone(value) {
         let x = value
             .replace(/\D/g, '')
-            .match(/(\d{0,2})(\d{0,2})(\d{0,2})(\d{0,2})(\d{0,2})/);
+            .match(/(\d{0,2})(\d{0,3})(\d{0,3})(\d{0,3})/);
         let myPhone = !x[2]
-            ? '+34 '
-            : '+34 ' + x[2] +
-            (x[3] ? ' - ' + x[3] : '') +
-            (x[4] ? ' - ' + x[4] : '') +
-            (x[5] ? ' - ' + x[5] : '');
+            ? '+34 ' + (x[1] != '34' ? x[1] : '')
+            : !x[3]
+                ? '+34 (' + x[2]
+                : '+34 (' +
+                x[2] +
+                ') ' +
+                (x[3] ? x[3] : '') +
+                (x[4] ? ' - ' + x[4] : '')
         setValue(myPhone);
     }
 
@@ -30,7 +33,7 @@ export default function Input({ placeholder, inputType, value, setValue, notEdit
             placeholder={placeholder}
             keyboardType={inputType === 'phone' || inputType === 'code' ? 'numeric' : 'default'}
             secureTextEntry={inputType === 'pass' && !isOpenEye ? true : false}
-            maxLength={inputType === 'code' ? 4 : inputType === 'phone' ? 21 : 255}
+            maxLength={inputType === 'code' ? 4 : inputType === 'phone' ? 19 : 255}
             placeholderTextColor={AppColors.GREY_COLOR}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}

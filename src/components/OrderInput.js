@@ -14,13 +14,16 @@ export default function OrderInput({ label, placeholder, value, setValue, addres
     function formatPhone(value) {
         let x = value
             .replace(/\D/g, '')
-            .match(/(\d{0,2})(\d{0,2})(\d{0,2})(\d{0,2})(\d{0,2})/);
+            .match(/(\d{0,2})(\d{0,3})(\d{0,3})(\d{0,3})/);
         let myPhone = !x[2]
-            ? '+34 '
-            : '+34 ' + x[2] +
-            (x[3] ? ' - ' + x[3] : '') +
-            (x[4] ? ' - ' + x[4] : '') +
-            (x[5] ? ' - ' + x[5] : '')
+            ? '+34 ' + (x[1] != '34' ? x[1] : '')
+            : !x[3]
+                ? '+34 (' + x[2]
+                : '+34 (' +
+                x[2] +
+                ') ' +
+                (x[3] ? x[3] : '') +
+                (x[4] ? ' - ' + x[4] : '')
         setValue(myPhone);
     }
 
@@ -72,7 +75,7 @@ export default function OrderInput({ label, placeholder, value, setValue, addres
                     onChangeText={phone ? formatPhone : setValue}
                     keyboardType={phone ? 'numeric' : 'default'}
                     style={[Styles.blackRegular12, styles.input,  error && { borderColor: AppColors.RED_COLOR }]}
-                    maxLength={phone ? 21 : 255}
+                    maxLength={phone ? 19 : 255}
                 />}
     </View>
 }
@@ -88,6 +91,5 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         justifyContent: 'center',
         backgroundColor: 'white',
-        // alignItems: 'center'
     }
 })
